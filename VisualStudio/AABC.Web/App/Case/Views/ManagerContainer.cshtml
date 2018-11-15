@@ -1,0 +1,80 @@
+﻿@using System.Web.Optimization
+
+<script type="text/javascript">
+
+    function tabInit(s, e) {
+        pcPage.PerformCallback();
+    }
+
+    function tabBeginCallback(s, e) {
+        e.customArgs["tabIndex"] = pcPage.GetActiveTabIndex();
+        e.customArgs["caseID"] = @ViewBag.CaseID;
+    }
+
+    function activeTabChanging(s, e) {
+        e.reloadContentOnCallback = true;
+    }
+</script>
+
+@Html.DevExpress().PageControl(
+    s => {
+
+        s.Name = "pcPage";
+        s.CallbackRouteValues = new { controller = "Case", action = "GetTab" };
+        s.EnableClientSideAPI = true;
+        s.ActivateTabPageAction = ActivateTabPageAction.Click;
+        s.EnableHotTrack = true;
+        s.SaveStateToCookies = false;
+        s.TabAlign = TabAlign.Left;
+        s.TabPosition = TabPosition.Top;
+        s.Width = Unit.Percentage(100);
+        s.SettingsLoadingPanel.Enabled = false;
+
+        s.TabPages.Add("Summary").SetContent(() => { ViewContext.Writer.Write(""); });
+        s.TabPages.Add("Providers").SetContent(() => { ViewContext.Writer.Write(""); });
+        s.TabPages.Add("Notes & Tracking").SetContent(() => { ViewContext.Writer.Write(""); });
+        s.TabPages.Add("Insurance").SetContent(() => { ViewContext.Writer.Write(""); });
+        s.TabPages.Add("Payment Plans").SetContent(() => { ViewContext.Writer.Write(""); });
+        s.TabPages.Add("Payments").SetContent(() => { ViewContext.Writer.Write(""); });
+        if (AABC.Web.Global.Default.User().HasPermission(AABC.Domain.Admin.Permissions.ProviderHoursView)) {
+            s.TabPages.Add("Time & Billing").SetContent(() => { ViewContext.Writer.Write(""); });
+        }
+        s.ClientSideEvents.Init = "tabInit";
+        s.ClientSideEvents.BeginCallback = "tabBeginCallback";
+        s.ClientSideEvents.ActiveTabChanging = "activeTabChanging";
+
+        s.ActiveTabIndex = ViewBag.TabIndex ?? 0;
+
+    }
+).GetHtml()
+
+@Html.DevExpress().PopupControl(s => {
+    s.Name = "pc-hours-entry";
+    s.Width = 850;
+    s.Height = 550;
+    s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    s.Modal = true;
+    s.AllowDragging = true;
+    s.HeaderText = "";
+    s.SetContent(() => {
+        Html.RenderPartial("~/App/HoursEntry/Views/HoursEntry.cshtml");
+    });
+}).GetHtml()
+
+@Html.DevExpress().PopupControl(s => {
+    s.Name = "pc-hours-entry-provider-select";
+    s.Width = 250;
+    s.Height = 150;
+    s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    s.Modal = true;
+    s.AllowDragging = true;
+    s.HeaderText = "";
+    s.SetContent(() => {
+        ViewContext.Writer.Write(Html.Action("ProviderSelect", "HoursEntry", new { caseID = ViewBag.CaseID }));
+    });
+}).GetHtml()
+
+
+

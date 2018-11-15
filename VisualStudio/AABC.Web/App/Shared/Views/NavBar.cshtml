@@ -1,0 +1,143 @@
+@using AABC.Web.Helpers
+
+<div class="leftPanel">
+
+    <script type="text/javascript">
+    function navBarItemClick(sender, e) {
+        //event = event || window.event || event.srcElement;
+        event = e.htmlEvent;
+        event.preventDefault();
+
+        LoadingPanel.Show();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("Navigate", "Home")',
+            data: { toController: e.item.group.name, toAction: e.item.name },
+            success: function (response) {
+                $("#MainPlaceholder").empty().append(response);
+                LoadingPanel.Hide();
+            },
+            error: function () {
+                LoadingPanel.Hide();
+                App.Dialogs.Error("We're sorry, we seem to have encountered an error trying to access that page.");
+            }
+        });
+
+        return false;
+    }
+    </script>
+
+    @* DXCOMMENT: Configure the left panel's menu *@
+    @Html.DevExpress().NavBar(settings => {
+    settings.Name = "LeftNavBar";
+    settings.AutoCollapse = true;
+    settings.EnableAnimation = true;
+    settings.AllowSelectItem = true;
+    settings.ItemLinkMode = ItemLinkMode.ContentBounds;
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.ClientSideEvents.ItemClick = "navBarItemClick";
+
+
+    settings.Groups.Add(group =>
+    {
+        group.Name = group.Text = "Home";
+        group.AddMenuItem("Dashboard", "Home", "Dashboard");
+        group.AddMenuItem("Tasks", "Home", "Tasks");
+        group.AddMenuItem("Hours Eligibility", "Home", "HoursEligibility");
+    });
+
+    settings.Groups.Add(group =>
+    {
+        group.Name = group.Text = "Referrals";
+        group.AddMenuItem("Search", "Referrals", "Search");
+        group.AddMenuItem("Follow Ups", "Referrals", "FollowUps");
+        group.AddMenuItem("Create New", "Referrals", "Create");
+    });
+
+    settings.Groups.Add(group =>
+    {
+        group.Name = group.Text = "Patients";
+        group.AddMenuItem("Search", "Patients", "Search");
+        group.AddMenuItem("Create New", "Patients", "Create");
+    });
+
+    settings.Groups.Add(group =>
+    {
+        group.Name = group.Text = "Providers";
+        group.AddMenuItem("Search", "Providers", "Search");
+        group.AddMenuItem("Create New", "Providers", "Create");
+        group.AddMenuItem("Payroll", "Providers", "Payroll");
+        group.AddMenuItem("Sub Types", "Providers", "ProviderSubTypes");
+    });
+
+    if (AABC.Web.Global.Default.User().HasPermission(AABC.Domain.Admin.Permissions.ProviderHoursView))
+    {
+        settings.Groups.Add(group =>
+        {
+            group.Name = group.Text = "Hours";
+            group.AddMenuItem("Scrub", "Hours", "Scrub");
+            group.AddMenuItem("Validate (General)", "Hours", "Validate");
+            group.AddMenuItem("Validate (MHD)", "Hours", "MaxPerDayPerPatient");
+            group.AddMenuItem("Edit", "Hours", "Edit");
+            group.AddMenuItem("Approval", "Hours", "Approval");
+            group.AddMenuItem("Reported", "Hours", "Reported");
+            group.AddMenuItem("Watch", "Hours", "Watch");
+            group.AddMenuItem("Finalizations", "Hours", "Finalizations");
+        });
+    }
+
+    settings.Groups.Add(group =>
+    {
+        group.Name = "OfficeStaff";
+        group.Text = "Office Staff";
+        group.AddMenuItem("Search", "OfficeStaff", "Search");
+        group.AddMenuItem("Create New", "OfficeStaff", "Create");
+    });
+
+
+    if (AABC.Web.Global.Default.User().HasPermission(AABC.Domain.Admin.Permissions.ProviderHoursView))
+    {
+        settings.Groups.Add(group =>
+        {
+            group.Name = "ExternalData";
+            group.Text = "External Data";
+            group.AddMenuItem("Catalyst - Has Data", "ExternalData", "CatalystHasData");
+            group.AddMenuItem("Catalyst - Timesheets", "ExternalData", "CatalystTimesheet");
+        });
+
+        settings.Groups.Add(group =>
+        {
+            group.Name = group.Text = "Reporting";
+            group.AddMenuItem("Reports", "Reporting", "Reports");
+            group.AddMenuItem("Authorizations", "Reporting", "Authorizations");
+        });
+    }
+
+    if (AABC.Web.Global.Default.User().HasPermission(AABC.Domain.Admin.Permissions.InsuranceEdit))
+    {
+        settings.Groups.Add(group =>
+        {
+            group.Name = group.Text = "Insurance";
+            group.AddMenuItem("Insurance Edit", "Insurance", "Index");
+        });
+    }
+
+    if (System.Configuration.ConfigurationManager.AppSettings["ServiceManagement.Enabled"] == "true")
+    {
+        settings.Groups.Add(group => 
+        {
+            group.Name = group.Text = "Services";
+            group.AddMenuItem("Service Manager", "Services", "Index");
+        });
+    }
+
+    settings.Groups.Add(group => 
+    {
+        group.Name = group.Text = "Staffing";
+        group.AddMenuItem("Manager", "Staffing", "Search");
+    });
+
+}).GetHtml()
+</div>

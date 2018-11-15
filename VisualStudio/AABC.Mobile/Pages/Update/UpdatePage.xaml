@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<control:LoggedInPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+			 			 xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+						 xmlns:extensions="clr-namespace:AABC.Mobile.MarkupExtensions;assembly=AABC.Mobile"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="AABC.Mobile.Pages.Update.UpdatePage"
+			 Title="Login"
+			 Padding="0">
+
+
+	<StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" >
+
+		<AbsoluteLayout HeightRequest="200" >
+			<BoxView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 0.5" BackgroundColor="#4085c0" />
+			<Image Source="{extensions:ImageResourceExtension Icon.png}" AbsoluteLayout.LayoutFlags="XProportional,YProportional" AbsoluteLayout.LayoutBounds="0.5, 0.75, 130, 130" />
+		</AbsoluteLayout>
+
+		<StackLayout Padding="10">
+			<Label Text="An update is required" Style="{StaticResource title}" />
+			<Button Text="Update" Command="{Binding Update}" Style="{StaticResource primary}" />
+		</StackLayout>
+
+	</StackLayout>
+
+</control:LoggedInPage>

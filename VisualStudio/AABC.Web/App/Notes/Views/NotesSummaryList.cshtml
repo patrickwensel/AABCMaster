@@ -1,0 +1,40 @@
+﻿@model AABC.Web.App.Models.NotesSummaryListVM
+<div id="notes-list-container">
+    @foreach (var e in Model.SummaryItems)
+    {
+        <div id="notesum_@e.ID">
+            <div class="notesum-heading">@e.Heading</div>
+            <div class="notesum-row">
+                <div class="notesum-correspondence">@e.CorrespondenceSummary</div>
+            </div>
+            @if (e.TaskItems != null && e.TaskItems.Count() > 0)
+            {
+                <ul class="notesum-tasks">
+                    @foreach (var task in e.TaskItems)
+                    {
+                        <li>
+                            @Html.DevExpress().CheckBox(
+                                s => {
+                                    s.Name = "NoteTaskItem_" + e.ID + "_" + task.ID;
+                                    s.Attributes.Add("noteID", e.ID.ToString());
+                                    s.Attributes.Add("taskID", task.ID.ToString());
+                                    s.Attributes.Add("sourceType", e.SourceType.ToString());
+                                    s.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { Notes.NotesList.ToggleTaskCheck(s, e); }";
+                                }).Bind(task.Completed).GetHtml()
+                            @task.Summary
+                        </li>
+                    }
+                </ul>
+            }
+            <div class="notesum-comments">
+                <p>@e.Comments</p>
+            </div>
+            <div class="notesum-comments">
+                @if (!string.IsNullOrEmpty(e.FollowupComments))
+                {
+                    <p>Followup Comments:<br />@e.FollowupComments</p>
+                }
+            </div>
+        </div>
+    }
+</div>

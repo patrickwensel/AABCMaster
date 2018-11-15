@@ -1,0 +1,61 @@
+﻿@model AABC.Web.App.Insurance.Models.InsuranceEditVM
+
+
+<h2>@Model.Name</h2>
+<hr />
+<div id="insurance-form-container">
+    @{Html.RenderAction("InsuranceForm", "Insurance", new { Id = Model.ID });}
+</div>
+
+<hr />
+<h2>Carriers</h2>
+<div id="carriers-grid-container"></div>
+
+<hr />
+<h2>Services</h2>
+<div id="services-grid-container"></div>
+
+<h2>Service Detail</h2>
+<div id="services-detail-container"></div>
+
+<hr />
+<h2>Authorization Match Rules</h2>
+<div id="auth-rules-grid-container"></div>
+
+<h2>Authorization Match Rule Detail</h2>
+<div id="auth-rules-detail-container"></div>
+
+@Html.DevExpress().PopupControl(pc => {
+    pc.Name = "CarrierEditPopup";
+    pc.Width = 100;
+    pc.AllowDragging = false;
+    pc.CloseAction = CloseAction.CloseButton;
+    pc.CloseOnEscape = true;
+    pc.PopupAnimationType = AnimationType.None;
+    pc.HeaderText = "Carrier";
+    pc.Modal = true;
+    pc.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    pc.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+
+    pc.SetContent(() => {
+        Html.DevExpress().TextBox(tb => {
+            tb.Name = "CarrierEditName";
+            tb.Width = 150;
+            tb.Properties.Caption = "Carrier Name";
+            tb.Properties.CaptionCellStyle.Width = 100;
+        }).Render();
+        ViewContext.Writer.Write("<div style='float: right; margin-top: 5px;'>");
+        Html.DevExpress().Button(bs => {
+            bs.Name = "btnSaveCarrierName";
+            bs.ControlStyle.CssClass = "button";
+            bs.Width = 80;
+            bs.Text = "OK";
+            bs.UseSubmitBehavior = false;
+        }).Render();
+        ViewContext.Writer.Write("</div>");
+    });
+}).GetHtml()
+
+<script type="text/javascript" id="dxss_239q587tvn293b3">
+    Insurance.Detail.Initialize(@Model.ID);
+</script>

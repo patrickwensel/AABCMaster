@@ -1,0 +1,200 @@
+﻿
+
+
+<script type="text/javascript" id="dxss_UniversalSearchScripts">
+
+    var universalSearchActiveType = "";
+    
+    function btnSelectClick(s, e) {
+        gvUniversalSearchSelect();
+    }
+
+    function gvUniversalSearchGenericResultsRowDblClick(s, e) {
+        gvUniversalSearchSelect();
+    }
+
+    function gvUniversalSearchSelect() {
+        var id = App.DevEx.GridView.GetFocusedRowKey(gvUniversalSearchGenericResults);
+        switch (universalSearchActiveType) {
+            case "patient":
+                App.Navigate("/Case/" + id + "/Manage/Summary");
+                break;
+            case "provider":
+                App.Navigate("/Providers/Edit/" + id);
+                break;
+            case "referral":
+                App.Navigate("/Referrals/Edit/" + id);
+                break;
+        }
+        App.Popup.Hide();
+    }
+
+    function btnCancelClick(s, e) {
+        App.Popup.Hide("cancelled");
+    }
+
+    function btnSearchPatientsClick(s, e) {
+        var s = tbSearchPatients.GetValue();
+        if (s != null && s != "") {
+            universalSearchActiveType = "patient";
+            getResults("patient", s);
+        }
+    }
+
+    function btnSearchProvidersClick(s, e) {
+        var s = tbSearchProviders.GetValue();
+        if (s != null && s != "") {
+            universalSearchActiveType = "provider";
+            getResults("provider", s);
+        }
+    }
+
+    function btnSearchReferralsClick(s, e) {
+        var s = tbSearchReferrals.GetValue();
+        if (s != null && s != "") {
+            universalSearchActiveType = "referral";
+            getResults("referral", s);
+        }
+    }
+
+
+    function getResults(type, term) {
+        $.ajax({
+            url: "/UniversalSearch/Search",
+            type: "POST",
+            data: { type: type, term: term },
+            success: function (r) {
+                if (r.substring(0, 4) == "ERR:") {
+                    App.Dialogs.Error(r.substring(5));
+                } else {
+                    var el = $("#UniversalSearchResultsGridContainer");
+                    el.hide(200, function () {
+                        el.empty().append(r);
+                        el.show(200);
+                        btnSelect.SetVisible(true);
+                    })
+                }
+            }
+        });
+    }
+
+</script>
+
+
+
+<form action="none" id="form-universal-search-input">
+    <div style="text-align: right; font-size: 0.8em;"><a href="#" id="lnkClose" onclick="App.Popup.Hide('cancelled'); return false;">close</a></div>
+    
+    <p>Enter the first or last name of the person you wish to search for</p>
+    <table>
+        <tr>
+            <td valign="bottom">
+               @Html.DevExpress().TextBox(
+                    s => {
+                        s.Name = "tbSearchPatients";
+                        s.Properties.Caption = "Patient";
+                        s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                    }
+               ).GetHtml()
+            </td>
+            <td style="padding-left: 2px;" valign="bottom">
+                @Html.DevExpress().Button(
+                    s => {
+                        s.Name = "btnSearchPatients";
+                        s.ClientSideEvents.Click = "btnSearchPatientsClick";
+                        s.Text = "Go";
+                    }
+                ).GetHtml()
+            </td>
+
+            <td style="padding-left: 15px;" valign="bottom">
+                @Html.DevExpress().TextBox(
+                    s => {
+                        s.Name = "tbSearchProviders";
+                        s.Properties.Caption = "Provider";
+                        s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                    }
+               ).GetHtml()
+            </td>
+            <td style="padding-left: 2px;" valign="bottom">
+                @Html.DevExpress().Button(
+                    s => {
+                        s.Name = "btnSearchProviders";
+                        s.ClientSideEvents.Click = "btnSearchProvidersClick";
+                        s.Text = "Go";
+                    }
+                ).GetHtml()
+            </td>
+
+            <td style="padding-left: 15px;" valign="bottom">
+                @Html.DevExpress().TextBox(
+                    s => {
+                        s.Name = "tbSearchReferrals";
+                        s.Properties.Caption = "Referral";
+                        s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                    }
+               ).GetHtml()
+            </td>
+            <td style="padding-left: 2px;" valign="bottom">
+                @Html.DevExpress().Button(
+                    s => {
+                        s.Name = "btnSearchReferrals";
+                        s.ClientSideEvents.Click = "btnSearchReferralsClick";
+                        s.Text = "Go";
+                    }
+                ).GetHtml()
+            </td>
+
+
+        </tr>
+    </table>
+
+</form>
+
+
+<div id="UniversalSearchResultsGridContainer" style="margin-top: 20px;"></div>
+
+<div id="UniversalSearchActionButtons" style="width: 100%; float: right; margin-top: 20px;">
+
+    <table>
+        <tr>
+            <td>
+                @Html.DevExpress().Button(
+                    s => {
+                        s.Name = "btnSelect";
+                        s.ClientSideEvents.Click = "btnSelectClick";
+                        s.Text = "Select";
+                        s.ClientVisible = false;
+                    }
+                ).GetHtml()
+            </td>
+            <td style="padding-left: 2px;">
+                @Html.DevExpress().Button(
+                    s => {
+                        s.Name = "btnCancel";
+                        s.ClientSideEvents.Click = "btnCancelClick";
+                        s.Text = "Cancel";
+                    }
+                ).GetHtml()
+            </tdstyle="padding-left:>
+        </tr>
+    </table>
+
+</div>
+
+
+<script type="text/javascript" id="dxss_UniversalSearchPostLoadScripts">
+
+    
+
+    function setDefaultFocus() {
+        window.setTimeout(function () {
+            tbSearchPatients.Focus();
+        }, 100)
+    }
+
+
+
+    setDefaultFocus();
+
+</script>

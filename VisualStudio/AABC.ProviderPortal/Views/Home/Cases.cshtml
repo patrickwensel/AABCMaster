@@ -1,0 +1,139 @@
+﻿@model AABC.ProviderPortal.Models.Home.MyCasesVM
+
+<div style="width: 100%; text-align: center; display: none;">
+    If you are experiencing issues with the hours entry system please <a href="https://providersold.appliedabc.com"><em>click here to use the old portal</em></a> for the time being.
+</div>
+
+<div class="section-expander" id="expander-referral-info">
+    <div class="section-expander-header">
+        <span>My Cases</span>
+    </div>
+    <div class="section-expander-content">
+
+        <p>Please select a case from the list below to apply hours to it.</p>
+        
+        <table style="width: 97%;">
+            <tr>
+                <td style="width: 175px;" valign="top">
+                    <span class="grid-psuedoheading">Cases</span>
+                    @Html.Partial("CasesGrid", Model.Cases)
+                </td>
+
+                <td valign="top" style="padding-left: 5px;">
+                    <span class="grid-psuedoheading">General hours for this Case</span>
+                    <div id="CaseGeneralHoursContainer"></div>
+                    
+                    <div id="CaseProvidersListContainer" style='display: none;'>
+                        <div  style="margin-top: 15px;"></div>
+                        <span class="grid-psuedoheading">Aide List</span>
+                        <p>Aides assigned to this case in the last two months:</p>
+                        <style>
+                            #aide-list-table td {
+                                padding-left: 20px;
+                            }
+                        </style>
+                        <table id="aide-list-table">
+                            @*<tr>
+                                <td>John Doe</td> 
+                                <td>john.doe@example.com</td> 
+                                <td>(555) 123-4567</td>                                 
+                            </tr>
+                            <tr>
+                                <td>John Doe</td>
+                                <td>john.doe@example.com</td>
+                                <td>(555) 123-4567</td>                                
+                            </tr>
+                            <tr>
+                                <td>John Doe</td>
+                                <td>john.doe@example.com</td>
+                                <td>(555) 123-4567</td>
+                            </tr>
+                            <tr>
+                                <td>John Doe</td>
+                                <td>john.doe@example.com</td>
+                                <td>(555) 123-4567</td>
+                            </tr>*@
+
+                        </table>
+                    </div>
+                </td>
+
+            </tr>
+        </table>
+        
+
+    </div>
+</div>
+
+<div class="clearfix"></div>
+<div class="spacer-10"></div>
+<div class="spacer-10"></div>
+
+
+<div class="section-expander" id="expander-referral-info">
+    <div class="section-expander-header">
+        <span>Hours Entry</span>
+    </div>
+    <div class="section-expander-content">
+
+        <div id="CaseHoursEntryContainer" style="padding-right: 32px;"></div>
+
+    </div>
+</div>
+
+
+<div class="section-expander" id="expander-referral-info">
+    <div class="section-expander-header">
+        <span>Hours Logs</span>
+    </div>
+    <div class="section-expander-content">
+
+        <div id="CaseHoursLogsContainer"></div>
+
+    </div>
+</div>
+
+<div class="clearfix"></div>
+<div class="spacer-10"></div>
+<div class="spacer-10"></div>
+
+
+<div id="HoursEntryPopupContainer">
+    @Html.DevExpress().PopupControl(s => {
+        s.Name = "pc-hours-entry";
+        s.Width = 850;
+        s.Height = 550;
+        s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        s.Modal = true;
+        s.AllowDragging = true;
+        s.HeaderText = "";
+        s.SetContent(() => {
+            Html.RenderPartial("~/Views/HoursEntry/HoursEntry.cshtml");
+        });
+}).GetHtml()
+</div>
+
+<div id="FinalizeValidationsPopupContainer">
+    @Html.DevExpress().PopupControl(s => {
+    s.Name = "fv-popup";
+    s.Width = 850;
+    s.Height = 550;
+    s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    s.Modal = true;
+    s.AllowDragging = true;
+    s.HeaderText = "";
+    s.SetContent(() => {
+        Html.RenderPartial("~/App/Finalize/Views/FinalizationFailures.cshtml");
+    });
+}).GetHtml()
+</div>
+
+
+
+<script type="text/javascript">
+    page.initialize(@Model.IsBCBA, @Model.ProviderID, '@Model.SigningSuccess');
+
+
+</script>

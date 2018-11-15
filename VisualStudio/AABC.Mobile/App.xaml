@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<prismUnity:PrismApplication xmlns="http://xamarin.com/schemas/2014/forms"
+					xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+					xmlns:prismUnity="clr-namespace:Prism.Unity;assembly=Prism.Unity.Forms"
+					xmlns:converters="clr-namespace:AABC.Mobile.Converters;assembly=AABC.Mobile"
+					xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+					x:Class="AABC.Mobile.App">
+	<Application.Resources>
+
+		<ResourceDictionary>
+			<Color x:Key="selectedFrameColor">#ff0000</Color>
+
+			<Color x:Key="selectedBackground">#f7d5d3</Color>
+			<Color x:Key="selectedText">#e0534d</Color>
+
+			<Color x:Key="disabledBackground">#cccccc</Color>
+			<Color x:Key="disabledText">#888888</Color>
+
+			<Color x:Key="normalText">#333333</Color>
+
+			<Color x:Key="separator">#f1f1f1</Color>
+
+			<Color x:Key="highlightBackgroundColor">#4085c0</Color>
+
+			<Color x:Key="emailTextColor">#4085c0</Color>
+
+			<Color x:Key="errorColor">#ff0000</Color>
+			
+
+
+			<Style x:Key="selectedFrame" TargetType="ContentView">
+				<Setter Property="BackgroundColor" Value="{StaticResource selectedFrameColor}" />
+			</Style>
+
+			<Style x:Key="title" TargetType="Label">
+				<Setter Property="FontSize" Value="Large" />
+				<Setter Property="HorizontalOptions" Value="Center" />
+			</Style>
+
+			<Style x:Key="subtitle" TargetType="Label">
+				<Setter Property="FontSize" Value="Medium" />
+				<Setter Property="HorizontalOptions" Value="Center" />
+				<Setter Property="TextColor" Value="#ffffff" />
+			</Style>
+
+			<Style x:Key="error" TargetType="Label">
+				<Setter Property="TextColor" Value="{StaticResource errorColor}" />
+			</Style>
+
+			<Style x:Key="validationError" TargetType="Label">
+				<Setter Property="TextColor" Value="{StaticResource normalText}" />
+				<Setter Property="HorizontalTextAlignment" Value="Center" />
+			</Style>
+
+			<Style x:Key="validationWarning" TargetType="Label">
+				<Setter Property="TextColor" Value="{StaticResource normalText}" />
+				<Setter Property="HorizontalTextAlignment" Value="Center" />
+			</Style>
+
+			<Style x:Key="validationMessage" TargetType="Label">
+				<Setter Property="TextColor" Value="{StaticResource normalText}" />
+				<Setter Property="HorizontalTextAlignment" Value="Center" />
+			</Style>
+
+			<Style x:Key="statusMessage" TargetType="Label">
+				<Setter Property="TextColor" Value="#ff0000" />
+				<Setter Property="FontSize" Value="Medium" />
+			</Style>
+
+			<Style x:Key="label" TargetType="Label">
+				<Setter Property="FontSize" Value="Medium" />
+				<Setter Property="HorizontalOptions" Value="Start" />
+				<Setter Property="TextColor" Value="{StaticResource normalText}" />
+			</Style>
+
+			<Style x:Key="info" TargetType="Label">
+				<Setter Property="FontSize" Value="Small" />
+				<Setter Property="HorizontalOptions" Value="Start" />
+			</Style>
+
+			<Style x:Key="cancel" TargetType="Button">
+				<Setter Property="TextColor" Value="{StaticResource normalText}" />
+				<Setter Property="BackgroundColor" Value="#d1d1d1" />
+			</Style>
+
+			<Style x:Key="primary" TargetType="Button">
+				<Setter Property="TextColor" Value="#ffffff" />
+				<Setter Property="BackgroundColor" Value="{StaticResource highlightBackgroundColor}" />
+			</Style>
+
+			<Style TargetType="ContentPage" ApplyToDerivedTypes="True">
+				<Setter Property="Padding" Value="10" />
+			</Style>
+
+			<Style TargetType="NavigationPage">
+				<Setter Property="BarBackgroundColor" Value="{StaticResource highlightBackgroundColor}" />
+				<Setter Property="BarTextColor" Value="#ffffff" />
+			</Style>
+
+			<Style TargetType="ListView">
+				<Setter Property="SeparatorColor" Value="#cccccc" />
+				<Setter Property="BackgroundColor" Value="White" />
+			</Style>
+
+			<Color x:Key="editBackground">#f5f8f9</Color>
+
+			<Style TargetType="DatePicker">
+				<Setter Property="BackgroundColor" Value="{StaticResource editBackground}" />
+			</Style>
+			<Style TargetType="TimePicker">
+				<Setter Property="BackgroundColor" Value="{StaticResource editBackground}" />
+			</Style>
+			<Style TargetType="Entry">
+				<Setter Property="BackgroundColor" Value="{StaticResource editBackground}" />
+			</Style>
+
+			<Style TargetType="Editor">
+				<Setter Property="HeightRequest" Value="160" />
+				<Setter Property="BackgroundColor" Value="{StaticResource editBackground}" />
+			</Style>
+
+			<Style TargetType="Picker">
+				<Setter Property="TextColor" Value="#ffffff" />
+				<Setter Property="BackgroundColor" Value="#629fd2" />
+			</Style>
+
+
+			<Style x:Key="pageTitle" TargetType="Label">
+				<Setter Property="FontSize" Value="Large" />
+				<Setter Property="HorizontalOptions" Value="Fill" />
+				<Setter Property="VerticalOptions" Value="Start" />
+				<Setter Property="BackgroundColor" Value="{StaticResource highlightBackgroundColor}" />
+				<Setter Property="TextColor" Value="#ffffff" />
+				<Setter Property="HorizontalTextAlignment" Value="Center" />
+				<Setter Property="VerticalTextAlignment" Value="Center" />
+				<Setter Property="FontAttributes" Value="Bold" />
+			</Style>
+
+			<Style x:Key="startSessionInfo" TargetType="Label">
+				<Setter Property="HorizontalOptions" Value="Center" />
+				<Setter Property="VerticalOptions" Value="Start" />
+				<Setter Property="FontSize" Value="Medium" />
+				<Setter Property="FontAttributes" Value="Bold" />
+			</Style>
+
+
+			<converters:BooleanNegationConverter x:Key="not" />
+			<converters:AnyConverter x:Key="any" />
+
+			<converters:TimeSpanToStringConverter x:Key="timeSpanToStringConverter" />
+			<converters:TimeSpanToTimeConverter x:Key="timeSpanToTimeConverter" />
+
+			<converters:MinutesToStringConverter x:Key="minutesToStringConverter" />
+			<converters:PatientNameConverter x:Key="patientNameConverter" />
+
+			<converters:GenderImageConverter x:Key="genderImageConverter" MaleImage="ButtonImages.UserMale.png" FemaleImage="ButtonImages.UserFemale.png" UnknownImage="ButtonImages.UserUnknown.png" />
+			<converters:GenderImageConverter x:Key="largeGenderImageConverter" MaleImage="ButtonImages.UserMaleLarge.png" FemaleImage="ButtonImages.UserFemaleLarge.png" UnknownImage="ButtonImages.UserUnknownLarge.png" />
+
+			<converters:ColorConverter x:Key="backgroundColorConverter" Default="White" Set="{StaticResource selectedBackground}" />
+			<converters:ColorConverter x:Key="textColorConverter" Default="{StaticResource normalText}" Set="{StaticResource selectedText}" />
+			<converters:ColorConverter x:Key="emailColorConverter" Default="{StaticResource normalText}" Set="{StaticResource emailTextColor}" />
+			<converters:ColorConverter x:Key="sessionColorConverter" Default="{StaticResource errorColor}" Set="{StaticResource normalText}" />
+			
+
+		</ResourceDictionary>
+
+	</Application.Resources>
+
+</prismUnity:PrismApplication>

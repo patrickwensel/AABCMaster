@@ -1,0 +1,16 @@
+﻿@model AABC.ProviderPortal.Models.Home.CaseHoursDetailVM
+
+@*@if (Model.IsSupervisor) {
+    @Html.DevExpress().CheckBox(
+        s => {
+            s.Name = "hoursLogShowAllHours";
+            s.Text = "Show All Providers";
+            s.Properties.ClientSideEvents.CheckedChanged = "ToggleLogShowAllProviders";
+            s.Checked = Model.ShowAllHours;
+        }
+    ).GetHtml()
+}
+
+<div class="spacer-10"></div>*@
+
+@Html.Partial("CaseHoursLogGrid", Model.Items)

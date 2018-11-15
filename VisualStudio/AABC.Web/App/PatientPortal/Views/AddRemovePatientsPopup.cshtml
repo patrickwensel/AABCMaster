@@ -1,0 +1,28 @@
+﻿@model AABC.Web.App.PatientPortal.Models.AddRemovePatientsVM
+
+<h3>Existing Patients</h3>
+<div id="current-patients-grid-container">
+    @Html.Partial("CurrentPatientsGridPartial", Model.CurrentPatients)
+</div>
+
+<div class="spacer-10"></div>
+
+<h3>All Patients</h3>
+<div id="patients-list-grid-container">
+    @Html.Partial("PatientsListGridPartial", Model.PatientsList)
+</div>
+
+<div class="spacer-10"></div>
+
+<div style="width: 100%; text-align: right">
+    @Html.DevExpress().Button(s => {
+        s.Name = "btnCloseAddRemovePatientsPopup";
+        s.Text = "Close";
+        s.Width = 100;
+        s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide(); }";
+    }).GetHtml()
+</div>
+
+<script type="text/javascript" id="dxss_304987t5m3v98tn7398b">
+    window.Admin.PatientPortal.Users.existing.addRemovePatients.initializePopup(@Model.LoginID);
+</script>

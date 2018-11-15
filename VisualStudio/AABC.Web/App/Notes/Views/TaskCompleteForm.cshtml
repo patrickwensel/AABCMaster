@@ -1,0 +1,108 @@
+﻿@model AABC.DomainServices.Notes.NoteTaskDTO
+@{
+    Layout = null;
+}
+@using (Html.BeginForm("TaskCompleteForm", ((string)ViewBag.SourceType) + "Notes", FormMethod.Post, new { id = "CaseNoteTaskCompleteForm" }))
+{
+    @Html.HiddenFor(model => model.ID);
+    @Html.HiddenFor(model => model.NoteID);
+    @Model.Description
+    <div class="spacer-10"></div>
+    @Html.DevExpress().Memo(i => {
+            i.Name = "Remarks";
+            i.Width = Unit.Percentage(100);
+            i.Properties.Rows = 6;
+            i.Properties.Caption = "Remarks";
+            i.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+            i.Properties.MaxLength = 2000;
+        }).Bind(Model.CompletedRemarks).GetHtml()
+    <div class="spacer-10"></div>
+    @Html.DevExpress().CheckBox(s => {
+            s.Name = "CreateFollowTask";
+            //s.Properties.ClientSideEvents.CheckedChanged = "function(s, e) { Notes.NotesList.ToggleTaskCheck(s, e); }";
+        }).GetHtml()
+    <span>Create a Follow Up Task</span>
+    <div class="spacer-10"></div>
+    @Html.DevExpress().ComboBox(s => {
+        s.Name = "AssignedTo";
+        s.Width = Unit.Pixel(125);
+        s.Properties.TextField = "CommonName";
+        s.Properties.ValueField = "ID";
+        s.Properties.ValueType = typeof(int);
+        s.Properties.TextFormatString = "{0} {1}";
+        s.Width = Unit.Pixel(150);
+        s.Properties.Columns.Add("CommonName", "Name", 100);
+        s.Properties.Caption = "Assigned To";
+        s.Properties.CaptionCellStyle.Width = 100;
+    }).BindList(Model.AssignedToList).GetHtml()
+    <div class="spacer-10"></div>
+    @Html.DevExpress().TextBox(s => {
+                    s.Name = "Description";
+                    s.Width = Unit.Percentage(100);
+                    s.Properties.Caption = "Description";
+                    s.Properties.CaptionCellStyle.Width = 100;
+                }).GetHtml()
+    <div class="spacer-10"></div>
+    @Html.DevExpress().DateEdit(s => {
+            s.Name = "DueDate";
+            s.Width = Unit.Pixel(100);
+            s.Properties.Caption = "Due Date";
+            s.Properties.CaptionCellStyle.Width = 100;
+        }).GetHtml()
+    <div style="float: right;">
+        <table>
+            <tr>
+                <td>
+                    @Html.DevExpress().Button(s => {
+                            s.Name = "btnzluOk";
+                            s.Width = 150;
+                            s.Text = "Ok - Complete Task";
+                            s.ClientSideEvents.Click = "function(s, e) { NoteTask.Task.Complete(); }";
+                        }).GetHtml()
+                </td>
+                <td style="padding-left: 5px;">
+                    @Html.DevExpress().Button(s => {
+                            s.Name = "btnzluCancel";
+                            s.Width = 75;
+                            s.Text = "Cancel";
+                            s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide('cancel'); }";
+                        }).GetHtml()
+                </td>
+            </tr>
+        </table>
+    </div>
+}
+<script type="text/javascript">
+    var sourceType = '@ViewBag.SourceType';
+    (function () {
+        var Interface = {
+            Task: {
+                Initialize: function (containerElementId) { taskEdit.initialize(containerElementId); },
+                Complete: function () { taskEdit.Complete(); }
+            }
+        };
+        var taskEdit = {
+            initialize: function (config) {
+                taskEdit.config = $.extend(true, new taskEdit.Config(), config);
+            },
+            config: null,
+            Config: function () {
+                return {
+                    parentID: null,
+                    notesID: null
+                };
+            },
+            Complete: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/" + sourceType + "Notes/TaskCompleteForm",
+                    data: $("#CaseNoteTaskCompleteForm").serialize(),
+                    success: function () {
+                        App.Popup.Hide();
+                    }
+                });
+            }
+        };   // end taskEdit
+        window.NoteTask = Interface;
+    })();
+</script>

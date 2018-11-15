@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+			 xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+			 xmlns:extensions="clr-namespace:AABC.Mobile.MarkupExtensions;assembly=AABC.Mobile"
+			 xmlns:v="clr-namespace:Xam.Plugin.Validators;assembly=Xam.Plugin.Validators"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="AABC.Mobile.Pages.Login.LoginPage"
+			 Title="Login"
+			 BackgroundColor="#4085c0"
+			 Padding="0">
+
+	<AbsoluteLayout BackgroundColor="White">
+		<StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" >
+
+			<AbsoluteLayout HeightRequest="200" >
+				<BoxView AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 0.5" BackgroundColor="#4085c0" />
+				<Image Source="{extensions:ImageResourceExtension Icon.png}" AbsoluteLayout.LayoutFlags="XProportional,YProportional" AbsoluteLayout.LayoutBounds="0.5, 0.75, 130, 130" />
+			</AbsoluteLayout>
+
+			<ScrollView>
+				<StackLayout Padding="10">
+
+					<Label Text="Therapist Login" TextColor="#4085c0" FontSize="Large"  FontAttributes="Bold" HorizontalTextAlignment="Center" />
+
+					<Label Text="User ID" Margin="0, 10, 0, 0" />
+					<Entry Text="{Binding Username}" v:Validation.Validator="{v:EntryRequired IsValid={Binding UsernameEntered}, ErrorLabel={Reference UsernameNotEntered} } }"/>
+					<Label x:Name="UsernameNotEntered" Text="Please enter a User ID" Style="{StaticResource error}" />
+
+					<Label Text="Password" Margin="0, 10, 0, 0" />
+					<Entry x:Name="PasswordEntry" Text="{Binding Password}" IsPassword="True" v:Validation.Validator="{v:EntryRequired IsValid={Binding PasswordEntered}, ErrorLabel={Reference PasswordNotEntered} } }"/>
+					<Label x:Name="PasswordNotEntered" Text="Please enter a password" Style="{StaticResource error}" />
+
+					<Label Text="{Binding Message}" Style="{StaticResource statusMessage}" />
+
+					<Button Text="Log in" Command="{Binding Login}" Style="{StaticResource primary}" />
+
+					<Button Text="Update" Command="{Binding Update}" Style="{StaticResource cancel}" IsVisible="{Binding UpdateAvailable}" />
+				</StackLayout>
+			</ScrollView>
+
+		</StackLayout>
+
+		<control:BusyOverlay AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" IsVisible="{Binding Busy}" />
+
+	</AbsoluteLayout>
+
+</ContentPage>

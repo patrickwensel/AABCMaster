@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<control:LoggedInPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+			 xmlns:extensions="clr-namespace:AABC.Mobile.MarkupExtensions;assembly=AABC.Mobile"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="AABC.Mobile.Pages.S2.CaseDetailsPage"
+			 Title="Patient Detail"
+			 x:Name="Form"
+ 			 NavigationPage.BackButtonTitle="Back"
+			 Padding="0">
+
+	<StackLayout Spacing="0">
+		<ScrollView>
+			<StackLayout>
+
+				<StackLayout BackgroundColor="#4085c0" Padding="0, 10, 0, 0" >
+					<Image Source="{Binding SelectedCase.Patient.Gender, Converter={StaticResource largeGenderImageConverter}}" HorizontalOptions="Center" VerticalOptions="Center" HeightRequest="100" WidthRequest="100" />
+					<Label HorizontalOptions="Center" Text="{Binding SelectedCase.Patient, Converter={StaticResource patientNameConverter}}" Style="{StaticResource pageTitle}"/>
+
+					<Label HorizontalOptions="Center" Text="{Binding DisplayCaseDetails.Location}" Style="{StaticResource subtitle}" />
+				</StackLayout>
+
+				<ListView x:Name="InformationList" ItemsSource="{Binding InformationList}" RowHeight="70">
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<ViewCell>
+								<Grid BackgroundColor="White" Margin="0" Padding="10" >
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+									</Grid.RowDefinitions>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="*" />
+										<ColumnDefinition Width="100" />
+									</Grid.ColumnDefinitions>
+
+									<Label Grid.Row="0" Grid.Column="0" Text="{Binding MainText}" TextColor="{StaticResource normalText}" FontAttributes="Bold" />
+									<Label Grid.Row="1" Grid.Column="0" Text="{Binding Subtext}" TextColor="{StaticResource normalText}" />
+									<Image Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Source="{Binding ImageSource}" Margin="5" >
+										<Image.GestureRecognizers>
+											<TapGestureRecognizer Command="{Binding BindingContext.InformationListCommand, Source={x:Reference Form} }" CommandParameter="{Binding .}" />
+										</Image.GestureRecognizers>
+									</Image>
+								</Grid>
+							</ViewCell>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+
+        <!-- temporarily removed per client request -->
+				<!--<ContentView VerticalOptions="FillAndExpand" BackgroundColor="#ffffff">
+					<control:IconButton Command="{Binding ViewInsuranceAndAuthorizations}" Text="Insurance &amp; Authorizations" ImageSource="Insurance.png" VerticalOptions="Center" />
+				</ContentView>-->
+
+			</StackLayout>
+		</ScrollView>
+	</StackLayout>
+</control:LoggedInPage>

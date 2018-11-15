@@ -1,0 +1,101 @@
+﻿@{ Layout = "~/Views/Shared/_lightLayout.cshtml"; }
+@model AABC.ProviderPortal.Models.ImpersonateModel
+
+
+<style type="text/css">
+    #login-container {
+        width: 350px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 150px;
+        border: 1px solid #303030;
+        border-radius: 6px;
+    }
+
+    .login-heading {
+        width: 100%;
+        height: 35px;
+        /* background: #2e3f4c !important;
+        background: -moz-linear-gradient(top, #303030 0%, #6e6e6e 100%) !important;
+        background: -webkit-linear-gradient(top, #303030 0%,#6e6e6e 100%) !important;
+        background: linear-gradient(to bottom, #303030 0%,#6e6e6e 100%) !important;
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#303030', endColorstr='#6e6e6e',GradientType=0 ) !important;
+        */
+        padding-top: 10px;
+    }
+
+    .login-content {
+        margin: 10px;
+    }
+</style>
+
+<div id="login-container">
+
+    <div class="login-heading">
+        <span style="font-size:large; margin-left: 10px;">
+            Impersonate User
+        </span>
+    </div>
+
+    <div class="login-content">
+
+        <div class="accountHeader">
+            <p>
+                Please enter your username and password, and the username you want to log in as.
+            </p>
+
+            @if (ViewBag.LoginError != null && ViewBag.LoginError == true)
+            {
+                <p style="color: red; margin-top: 20px; font-weight: 600;">Incorrect login</p>
+            }
+
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.DevExpress().Label(settings =>
+       {
+           settings.Name = "UserNameLabel";
+           settings.Text = "User Name";
+           settings.AssociatedControlName = "UserName";
+       }).GetHtml()
+
+            <div class="form-field">
+                @Html.EditorFor(m => m.UserName)
+                @Html.ValidationMessageFor(m => m.UserName)
+            </div>
+
+            @Html.DevExpress().Label(settings =>
+       {
+           settings.Name = "PasswordLabel";
+           settings.Text = "Password";
+           settings.AssociatedControlName = "Password";
+       }).GetHtml()
+            <div class="form-field">
+                @Html.EditorFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+            </div>
+
+            @Html.DevExpress().Label(settings =>
+       {
+           settings.Name = "ImpersonateUserLabel";
+           settings.Text = "Log In As";
+           settings.AssociatedControlName = "ImpersonateUser";
+       }).GetHtml()
+            <div class="form-field">
+                @Html.EditorFor(m => m.ImpersonateUser)
+                @Html.ValidationMessageFor(m => m.ImpersonateUser)
+            </div>
+
+            @Html.DevExpress().Button(settings =>
+       {
+           settings.Name = "Button";
+           settings.Text = "Log On";
+           settings.UseSubmitBehavior = true;
+       }).GetHtml()
+        }
+    </div>
+
+</div>

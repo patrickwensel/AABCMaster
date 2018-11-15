@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<control:LoggedInPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+			 			 xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+						 xmlns:extensions="clr-namespace:AABC.Mobile.MarkupExtensions;assembly=AABC.Mobile"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="AABC.Mobile.Pages.S2_1_1_4.SessionCompletePage"
+			 Title="Complete Session"
+			 Padding="0">
+	<StackLayout Spacing="30">
+
+		<Label Text="Thank You!" Style="{StaticResource pageTitle}" HeightRequest="80" />
+
+		<Image Source="{extensions:ImageResourceExtension ButtonImages.CompleteSession.png}" HorizontalOptions="Center" HeightRequest="50" />
+
+		<Label Text="Thank you for submitting your notes! Your session has been successfully logged." Margin="20, 0, 20, 0" />
+
+		<Button Text="OK" Command="{Binding OKCommand}" HorizontalOptions="FillAndExpand" Style="{StaticResource primary}" Margin="10, 0, 10, 0" />
+
+	</StackLayout>
+
+</control:LoggedInPage>

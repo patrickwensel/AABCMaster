@@ -1,0 +1,192 @@
+﻿@model AABC.Web.App.Hours.Models.ValidateVM
+
+@{ 
+    GridViewSettings s = new GridViewSettings();
+    s.Name = "gvHoursValidationResults";
+    s.KeyFieldName = "GridID";
+    s.Width = Unit.Percentage(100);
+    s.Height = Unit.Percentage(100);
+
+    s.SettingsBehavior.AllowSort = true;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = true;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    s.Settings.ShowFilterRow = true;
+    s.CallbackRouteValues = new { Controller="Hours", Action = "ScrubValidationGridCallback" };
+
+    s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    s.SettingsPager.PageSize = 200;
+
+
+    s.Settings.ShowTitlePanel = true;
+
+    s.SetTitlePanelTemplateContent(
+        c => {
+            string content = "<table style='width: 100%;'><tr><td style='width: 300px;'>";
+            ViewContext.Writer.Write(content);
+
+            Html.DevExpress().ComboBox(
+                cb => {
+                    cb.Name = "SelectedDate";
+                    cb.Properties.TextField = "Display";
+                    cb.Properties.ValueField = "Date";
+                    cb.Properties.ValueType = typeof(DateTime);
+                    cb.PreRender = (sender, e) => {
+                        AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model.SelectedDate, "Date");
+                    };
+                    cb.Properties.Caption = "Current Period";
+                }
+            ).BindList(Model.AvailableDates).Render();
+
+
+            ViewContext.Writer.Write("</td><td style='padding-left: 10px;'>");
+
+            ViewContext.Writer.Write("<table><tr><td>");
+
+            Html.DevExpress().Button(
+                b => {
+                    b.Name = "btnProcessValidation";
+                    b.Text = "Re-process Validation";
+                }
+            ).Render();
+
+            ViewContext.Writer.Write("</td></tr></table></td><td align='right'><table><tr><td>");
+
+
+            ViewContext.Writer.Write("</td></tr></table></td></tr></table>");
+
+
+        }
+    );
+
+
+
+
+
+
+    s.Columns.Add("Type").Width =35;
+
+    var col = s.Columns.Add("SourceDate", "Date");
+    col.PropertiesEdit.DisplayFormatString = "d";
+    col.Width = 75;
+
+    col = s.Columns.Add("SourcePatientLink");
+    col.Caption = "Patient";
+    col.FieldName = "SourcePatientName";
+    col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+    col.SetDataItemTemplateContent(
+        c => {
+            Html.DevExpress().HyperLink(
+                hl => {
+                    string caseID = DataBinder.Eval(c.DataItem, "SourceCaseID").ToString();
+                    hl.Name = "hlScrubValidationGridGotoPatient_" + caseID + "_" + DataBinder.Eval(c.DataItem, "GridID");
+                    hl.Properties.Text = DataBinder.Eval(c.DataItem, "SourcePatientName").ToString();
+                    hl.Properties.Target = "_blank";
+                    hl.NavigateUrl = "/Case/" + caseID + "/Manage/TimeAndBilling";
+                }
+            ).Render();
+        }
+    );
+    //col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("SourceProviderLink");
+    col.Caption = "Provider";
+    col.FieldName = "SourceProviderName";
+    col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+    col.SetDataItemTemplateContent(
+        c => {
+            Html.DevExpress().HyperLink(
+                hl => {
+                    string providerID = DataBinder.Eval(c.DataItem, "SourceProviderID").ToString();
+                    hl.Name = "hlScrubValidationGridGotoProvider_" + providerID + "_" + DataBinder.Eval(c.DataItem, "GridID");
+                    hl.Properties.Text = DataBinder.Eval(c.DataItem, "SourceProviderName").ToString();
+                    hl.Properties.Target = "_blank";
+                    hl.NavigateUrl = "/Providers/Edit/" + providerID;
+                }
+            ).Render();
+        }
+    );
+    //col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+
+
+    s.Columns.Add("SourceServiceCode", "Service").Width = 40;
+
+    col = s.Columns.Add("SourceTimeIn", "Time In");
+    col.PropertiesEdit.DisplayFormatString = "t";
+    col.Width = 75;
+
+    col = s.Columns.Add("SourceTimeOut", "Time Out");
+    col.PropertiesEdit.DisplayFormatString = "t";
+    col.Width = 75;
+
+    //s.Columns.Add("PartnerPatientName", "Patient");
+    //s.Columns.Add("PartnerProviderName", "Provider");
+
+    col = s.Columns.Add("SourcePatientLink");
+    col.Caption = "Patient";
+    col.FieldName = "PartnerPatientName";
+    col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+    col.SetDataItemTemplateContent(
+        c => {
+            Html.DevExpress().HyperLink(
+                hl => {
+                    var nullcheck = DataBinder.Eval(c.DataItem, "PartnerCaseID");
+                    string sourceCaseID = DataBinder.Eval(c.DataItem, "SourceCaseID").ToString();
+                    hl.Name = "hlScrubValidationGridGotoPatientPart_" + sourceCaseID + "_" + DataBinder.Eval(c.DataItem, "GridID");
+                    hl.Properties.Text = "";
+                    hl.NavigateUrl = "";
+                    if (nullcheck != null) {
+                        string caseID = DataBinder.Eval(c.DataItem, "PartnerCaseID").ToString();
+                        hl.Properties.Text = DataBinder.Eval(c.DataItem, "PartnerPatientName").ToString();
+                        hl.Properties.Target = "_blank";
+                        hl.NavigateUrl = "/Case/" + caseID + "/Manage/TimeAndBilling";
+                    }
+                }
+            ).Render();
+        }
+    );
+    //col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("PartnerProviderLink");
+    col.Caption = "Provider";
+    col.FieldName = "PartnerProviderName";
+    col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+    col.SetDataItemTemplateContent(
+        c => {
+            Html.DevExpress().HyperLink(
+                hl => {
+                    var nullcheck = DataBinder.Eval(c.DataItem, "PartnerCaseID");
+                    string sourceCaseID = DataBinder.Eval(c.DataItem, "SourceCaseID").ToString();
+                    hl.Name = "hlScrubValidationGridGotoProviderPart_" + sourceCaseID + "_" + DataBinder.Eval(c.DataItem, "GridID");
+                    if (nullcheck != null) {
+                        string providerID = DataBinder.Eval(c.DataItem, "PartnerProviderID").ToString();
+                        hl.Properties.Text = DataBinder.Eval(c.DataItem, "PartnerProviderName").ToString();
+                        hl.Properties.Target = "_blank";
+                        hl.NavigateUrl = "/Providers/Edit/" + providerID;
+                    }
+                }
+            ).Render();
+        }
+    );
+    //col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    s.Columns.Add("PartnerServiceCode", "Service").Width = 40;
+
+    col = s.Columns.Add("PartnerTimeIn", "Time In");
+    col.PropertiesEdit.DisplayFormatString = "t";
+    col.Width = 75;
+
+    col = s.Columns.Add("PartnerTimeOut", "Time Out");
+    col.PropertiesEdit.DisplayFormatString = "t";
+    col.Width = 75;
+
+}
+
+@Html.DevExpress().GridView(s).Bind(Model.Items).GetHtml()
+
+
+

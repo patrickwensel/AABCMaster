@@ -1,0 +1,6 @@
+﻿@model AABC.Web.Models.Patients.PatientVM
+
+@if (Model.HighRisk.GetValueOrDefault(false))
+{
+    <span style="position: relative;top:-2px;padding-left: 6px;">(High Risk)</span>
+}

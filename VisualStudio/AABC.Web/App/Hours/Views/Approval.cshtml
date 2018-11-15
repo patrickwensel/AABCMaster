@@ -1,0 +1,44 @@
+﻿@model AABC.Web.App.Hours.Models.EditVM
+
+<script type="text/javascript" src="~/client/scripts/app/hoursedit.v1.0.js" id="dxis_43987v693874b69476"></script>
+
+@Html.Hidden("hoursGridSelected")
+@Html.Partial("ApprovalGrid", Model)
+
+@Html.DevExpress().PopupControl(
+    s =>
+    {
+
+        s.Name = "hoursEditPopup";
+        s.PopupElementID = "hoursEditPopupAnchor";
+
+        s.ShowHeader = false;
+        s.ShowFooter = false;
+        s.PopupAnimationType = AnimationType.None;
+        s.CloseAnimationType = AnimationType.None;
+        s.AllowDragging = false;
+        s.AllowResize = false;
+        s.AppearAfter = 0;
+        s.DisappearAfter = 0;
+        s.Width = 500;
+
+        s.SettingsLoadingPanel.Enabled = false;
+
+        s.SetContent(() => { ViewContext.Writer.Write("<div id='hoursEditPopupContainer'>test</div>"); });
+
+    }
+).GetHtml()
+
+
+<div id="hoursEditPopupAnchor">
+    <div id="hoursEditPopupContainer"></div>
+</div>
+
+
+
+<script type="text/javascript">
+    HoursEdit.Initialize();
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+    });
+</script>

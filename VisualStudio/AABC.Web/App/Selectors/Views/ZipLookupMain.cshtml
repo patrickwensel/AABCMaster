@@ -1,0 +1,53 @@
+﻿@model AABC.Web.Models.Shared.ZipLookupVM
+
+@using (Html.BeginForm()) {
+
+
+    @Html.Partial("ZipLookupState", Model);
+    @Html.Partial("ZipLookupCity", Model);
+    @Html.Partial("ZipLookupCounty", Model);
+    
+    <div class="spacer-10"></div>
+
+    @Html.DevExpress().Memo(
+        s => {
+            s.Name = "zluZips";
+            s.Width = Unit.Percentage(100);
+            s.Properties.Rows = 6;
+            s.Properties.Caption = "Zip Codes";
+            s.Properties.CaptionCellStyle.Width = 100;
+            s.Properties.CaptionSettings.Position = EditorCaptionPosition.Left;
+        }
+    ).Bind(Model.zluZips).GetHtml()
+
+    <div class="spacer-10"></div>
+
+    <div style="float: right;">
+        <table>
+            <tr>
+                <td>
+                    @Html.DevExpress().Button(
+                        s => {
+                            s.Name = "btnzluOk";
+                            s.Width = 75;
+                            s.Text = "Ok";
+                            s.ClientSideEvents.Click = "function(s, e) { Zips.Select(); }";
+                        }
+                    ).GetHtml()
+                </td>
+                <td style="padding-left: 5px;">
+                    @Html.DevExpress().Button(
+                        s => {
+                            s.Name = "btnzluCancel";
+                            s.Width = 75;
+                            s.Text = "Cancel";
+                            s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide('cancel'); }";
+                        }
+                    ).GetHtml()
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+}

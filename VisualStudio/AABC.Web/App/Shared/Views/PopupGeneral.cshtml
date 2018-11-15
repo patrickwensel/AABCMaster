@@ -1,0 +1,28 @@
+﻿@model AABC.Web.Models.Shared.GeneralPopupVM
+
+@Html.DevExpress().PopupControl(s => {
+
+    s.Name = "PopupGeneral";
+    s.PopupElementID = "PopupAnchor";
+
+    s.Width = Model.Width;
+    s.Height = Model.Height;
+
+    s.AllowDragging = false;
+    s.AllowResize = false;
+    s.CloseAction = CloseAction.None;
+    s.ShowCloseButton = false;
+    s.CloseOnEscape = true;
+    s.PopupAnimationType = AnimationType.None;
+    s.Modal = true;
+    s.HeaderText = Model.Title;
+    s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    s.AllowDragging = Model.AllowDrag;
+    
+    s.SetContent(() => {
+        ViewContext.Writer.WriteLine("<div id='PopupGeneralContent'></div>");
+    });
+
+
+}).GetHtml()

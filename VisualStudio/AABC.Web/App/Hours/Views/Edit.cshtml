@@ -1,0 +1,30 @@
+﻿@model AABC.Web.App.Hours.Models.EditVM
+
+<script type="text/javascript" src="~/client/scripts/app/hoursedit.v1.0.js" id="dxis_43987v693874b69476"></script>
+
+@Html.Hidden("hoursGridSelected")
+@Html.Partial("EditGrid", Model)
+
+
+@Html.DevExpress().PopupControl(s => {
+    s.Name = "pc-hours-entry";
+    s.Width = 850;
+    s.Height = 550;
+    s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    s.Modal = true;
+    s.AllowDragging = true;
+    s.HeaderText = "";
+    s.SetContent(() => {
+        Html.RenderPartial("~/App/HoursEntry/Views/HoursEntry.cshtml");
+    });
+}).GetHtml()
+
+
+
+<script type="text/javascript">
+    HoursEdit.Initialize();
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+    });
+</script>

@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5ACC425B-AE61-4A66-9530-3B18898EC816}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AABC.DomainServices</RootNamespace>
+    <AssemblyName>AABC.DomainServices</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Integration|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Integration\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Authorizations\AuthHoursMatrix.cs" />
+    <Compile Include="Authorizations\Validations.cs" />
+    <Compile Include="Cases\CaseInsuranceValidationService.cs" />
+    <Compile Include="ContextProvider.cs" />
+    <Compile Include="Email\SMTP.cs" />
+    <Compile Include="HoursResolution\AuthorizationResolution.cs" />
+    <Compile Include="HoursResolution\CaseAndProviderValidations.cs" />
+    <Compile Include="HoursResolution\HoursNotesValidator.cs" />
+    <Compile Include="HoursResolution\CoreValidations.cs" />
+    <Compile Include="HoursResolution\HoursRemovalService.cs" />
+    <Compile Include="HoursResolution\IResolutionService.cs" />
+    <Compile Include="HoursResolution\Logging\HoursResolutionLoggingEntry.cs" />
+    <Compile Include="HoursResolution\Logging\HoursResolutionLoggingService.cs" />
+    <Compile Include="HoursResolution\Repositories\IResolutionServiceRepository.cs" />
+    <Compile Include="HoursResolution\Repositories\ResolutionServiceRepository.cs" />
+    <Compile Include="HoursResolution\ResolutionService.cs" />
+    <Compile Include="HoursResolution\ScheduleResolution.cs" />
+    <Compile Include="HoursResolution\SSGResolution.cs" />
+    <Compile Include="Hours\AuthResolver.cs" />
+    <Compile Include="Hours\BatchAuthResolver.cs" />
+    <Compile Include="Hours\CrossHoursValidation.cs" />
+    <Compile Include="Hours\HoursMultiNotes.cs" />
+    <Compile Include="Hours\PeriodMatrixByCase.cs" />
+    <Compile Include="Hours\HourService.cs" />
+    <Compile Include="Hours\DTO\HourEx.cs" />
+    <Compile Include="Hours\SocialSkillsGroup.cs" />
+    <Compile Include="Insurance\InsuranceManager.cs" />
+    <Compile Include="Integrations\Catalyst\HasDataResultItem.cs" />
+    <Compile Include="Integrations\Catalyst\HasData.cs" />
+    <Compile Include="Integrations\Catalyst\TimesheetImporter.cs" />
+    <Compile Include="Notes\BaseTasksService.cs" />
+    <Compile Include="Notes\BaseNotesService.cs" />
+    <Compile Include="Notes\ProviderNotesService.cs" />
+    <Compile Include="Notes\CaseNotesService.cs" />
+    <Compile Include="Notes\ProviderNoteTasksService.cs" />
+    <Compile Include="Notes\CaseNoteTasksService.cs" />
+    <Compile Include="Notes\Mapper.cs" />
+    <Compile Include="Notes\SourceType.cs" />
+    <Compile Include="Notes\NoteDetailsDTO.cs" />
+    <Compile Include="Notes\NoteFollowupSaveRequest.cs" />
+    <Compile Include="Notes\NoteDTO.cs" />
+    <Compile Include="Notes\IUserProvider.cs" />
+    <Compile Include="Notes\NoteTaskDTO.cs" />
+    <Compile Include="Notes\ReferralNotesService.cs" />
+    <Compile Include="Notes\ReferralNoteTasksService.cs" />
+    <Compile Include="Notes\TaskService.cs" />
+    <Compile Include="Patients\DTO\PatientEx.cs" />
+    <Compile Include="Patients\PatientService.cs" />
+    <Compile Include="Patients\SignInSummaryEx.cs" />
+    <Compile Include="Patients\SignInService.cs" />
+    <Compile Include="Patients\DTO\SignInEx.cs" />
+    <Compile Include="PaymentGateways\StripeForRBT.cs" />
+    <Compile Include="Payments\DatesGenerator.cs" />
+    <Compile Include="Payments\Gateways\IPaymentGateway.cs" />
+    <Compile Include="Payments\Gateways\Stripe.cs" />
+    <Compile Include="Payments\Gateways\StripeForRBT.cs" />
+    <Compile Include="Payments\Mapper.cs" />
+    <Compile Include="Payments\Models\BasePaymentVM.cs" />
+    <Compile Include="Payments\Models\PaymentChargeDto.cs" />
+    <Compile Include="Payments\Models\PaymentScheduleDTO.cs" />
+    <Compile Include="Payments\Models\PaymentWithScheduledDTO.cs" />
+    <Compile Include="Payments\OperationResult.cs" />
+    <Compile Include="Payments\PatientLoginInfo.cs" />
+    <Compile Include="Payments\PaymentChargeParameters.cs" />
+    <Compile Include="Payments\PaymentCreationParameters.cs" />
+    <Compile Include="Payments\PaymentManager.cs" />
+    <Compile Include="Payments\PaymentManagerConfiguration.cs" />
+    <Compile Include="Payments\Repositories\BaseRepository.cs" />
+    <Compile Include="Payments\Repositories\CreditCardRepository.cs" />
+    <Compile Include="Payments\Repositories\IPaymentChargeRepository.cs" />
+    <Compile Include="Payments\Repositories\IPaymentRepository.cs" />
+    <Compile Include="Payments\Repositories\IPaymentScheduleRepository.cs" />
+    <Compile Include="Payments\Repositories\IRepository.cs" />
+    <Compile Include="Payments\Repositories\PaymentChargeRepository.cs" />
+    <Compile Include="Payments\Repositories\PaymentRepository.cs" />
+    <Compile Include="Payments\Repositories\PaymentScheduleRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\ExtendedNotesTemplateResolver.cs" />
+    <Compile Include="Providers\HoursEntryResolver.cs" />
+    <Compile Include="Providers\ProviderEx.cs" />
+    <Compile Include="Providers\RemovalService.cs" />
+    <Compile Include="Providers\ProviderProvider.cs" />
+    <Compile Include="Providers\Services.cs" />
+    <Compile Include="PaymentGateways\Stripe.cs" />
+    <Compile Include="Referrals\ReferralAcceptanceService.cs" />
+    <Compile Include="Services\ServiceProvider.cs" />
+    <Compile Include="Sessions\SessionReport.cs" />
+    <Compile Include="Sessions\SessionReportConfiguration.cs" />
+    <Compile Include="Sessions\SessionReportFormatter.cs" />
+    <Compile Include="Sessions\SessionReportService.cs" />
+    <Compile Include="Staffing\IStaffingService.cs" />
+    <Compile Include="Staffing\StaffingService.cs" />
+    <Compile Include="TableExporter\TableExporter.cs" />
+    <Compile Include="Utils\AgeCalculator.cs" />
+    <Compile Include="Cases\CaseTimelineService.cs" />
+    <Compile Include="Utils\EnumHelper.cs" />
+    <Compile Include="Utils\ListItem.cs" />
+    <Compile Include="Utils\OnlyDateConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AABC.Data\AABC.Data.csproj">
+      <Project>{fe28a9ea-0e6f-4332-b86a-e6178a654986}</Project>
+      <Name>AABC.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AABC.Domain2\AABC.Domain2.csproj">
+      <Project>{1176f48d-ed61-451b-8bbf-88cd0d02586f}</Project>
+      <Name>AABC.Domain2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AABC.Domain\AABC.Domain.csproj">
+      <Project>{aac89b95-8f5d-43c3-81ff-0ad892f108a9}</Project>
+      <Name>AABC.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dymeng.Framework\Dymeng.Framework.csproj">
+      <Project>{8a84fce2-729e-4f18-b8c1-e8a5bfe56136}</Project>
+      <Name>Dymeng.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

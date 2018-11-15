@@ -1,0 +1,120 @@
+﻿@model AABC.Web.Models.Cases.TimeBillAddHoursVM
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "form-casetimebilladdhourspopup" })) {
+
+
+    @Html.DevExpress().ComboBox(
+         s => {
+             s.Name = "cahpProvider";
+             s.Properties.TextField = "CommonName";
+             s.Properties.ValueField = "ID";
+             s.Properties.ValueType = typeof(int);
+             //s.Properties.TextFormatString = "{0} - {1}";
+             s.Properties.Width = 200;
+             //s.Properties.Columns.Add("Provider", "Code", 35);
+             //s.Properties.Columns.Add("Name", "Name");
+             s.Properties.Caption = "Provider";
+             s.Properties.CaptionCellStyle.Width = 100;
+         }
+        ).BindList(Model.cahpProviderList).Bind(Model.cahpProvider).GetHtml()
+
+
+
+        @Html.DevExpress().DateEdit(
+             s => {
+                 s.Name = "cahpDate";
+                 s.Properties.Caption = "Date";
+                 s.Properties.CaptionSettings.Position = EditorCaptionPosition.Left;
+                 s.Properties.CaptionCellStyle.Width = 100;
+             }
+            ).Bind(Model.cahpDate).GetHtml()
+
+
+
+    @Html.DevExpress().TimeEdit(
+    s => {
+        s.Name = "cahpTimeIn";
+        s.Properties.Caption = "Time In";
+        s.Properties.CaptionCellStyle.Width = 100;
+    }
+).Bind(Model.cahpTimeIn).GetHtml()
+
+
+    @Html.DevExpress().TimeEdit(
+    s => {
+        s.Name = "cahpTimeOut";
+        s.Properties.Caption = "Time Out";
+        s.Properties.CaptionCellStyle.Width = 100;
+    }
+).Bind(Model.cahpTimeOut).GetHtml()
+
+
+
+    @Html.DevExpress().ComboBox(
+         s => {
+             s.Name = "cahpService";
+             s.Properties.TextField = "Code";
+             s.Properties.ValueField = "ID";
+             s.Properties.ValueType = typeof(int);
+             s.Properties.TextFormatString = "{0} - {1}";
+             s.Properties.Width = 300;
+             s.Properties.Columns.Add("Code", "Code", 35);
+             s.Properties.Columns.Add("Name", "Name");
+             s.Properties.Caption = "Service";
+             s.Properties.CaptionCellStyle.Width = 100;
+         }
+        ).BindList(Model.cahpServiceList).Bind(Model.cahpService).GetHtml()
+
+
+    @Html.DevExpress().TextBox(
+         s => {
+             s.Name = "cahpNotes";
+             s.Properties.Caption = "Notes";
+             s.Properties.CaptionCellStyle.Width = 100;
+             s.Width = 250;
+         }
+        ).Bind(Model.cahpNotes).GetHtml()
+
+    @Html.DevExpress().CheckBox(
+        s => {
+            s.Name = "cahpIsPayOrBillAdjustment";
+            s.Text = "Is Billing or Payroll Adjustment?";
+            s.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+        }
+    ).GetHtml()
+
+
+    <div class="spacer-10"></div>
+
+    <div style="float: right;">
+
+        <table>
+            <tr>
+                <td>
+                    @Html.DevExpress().Button(
+                    s => {
+                        s.Name = "btnCahpOk";
+                        s.Text = "Ok";
+                        s.Width = 75;
+                        s.ClientSideEvents.Click = "function(s, e) { TimeBill.Scrub.SubmitNew(); }";
+                    }
+               ).GetHtml()
+                </td>
+                <td>
+                    @Html.DevExpress().Button(
+                    s => {
+                        s.Name = "btnCahpCancel";
+                        s.Text = "Cancel";
+                        s.Width = 75;
+                        s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide('cancelled'); }";
+                    }
+               ).GetHtml()
+                </td>
+            </tr>
+
+        </table>
+
+    </div>
+
+
+}

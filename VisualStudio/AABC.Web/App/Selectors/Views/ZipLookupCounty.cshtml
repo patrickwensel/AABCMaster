@@ -1,0 +1,18 @@
+﻿@model AABC.Web.Models.Shared.ZipLookupVM
+
+@Html.DevExpress().ComboBox(
+    s => {
+        s.Name = "zluCounty";
+        s.CallbackRouteValues = new { Controller = "Selectors", Action = "ZipLookupCountyCallback" };
+
+        s.Properties.ValueType = typeof(string);
+
+        s.Properties.Width = 200;
+        s.Properties.Caption = "County";
+        s.Properties.CaptionCellStyle.Width = 100;
+        s.Properties.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['SelectedState'] = zluState.GetValue(); }";
+        s.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e) { Zips.GetZipsByCounty(s, e); }";
+        //s.SettingsLoadingPanel.Enabled = false;
+
+    }
+).BindList(Model.zluCountiesList).Bind(Model.zluCounty).GetHtml()

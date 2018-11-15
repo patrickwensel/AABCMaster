@@ -1,0 +1,100 @@
+﻿@model AABC.ProviderPortal.Models.Home.HoursCalendar.SchedulerDataObject
+
+<table style="width: 100%;">
+    <tr>
+        <td valign="top">
+            <p><span style="font-weight: 600;">Instructions</span> (<a onclick="toggleInstructions(); return false;" href="#"><span id="instructionsToggleState">show</span></a>)</p>
+            <div id="InstructionsContainer" style="display: none;">
+                <ol>
+
+                    <li>
+                        <span style="font-weight: 600;">Enter hours via Calendar</span>
+                        <ul>
+                            <li>Double click a blank area in a calendar day to enter new hours for that day</li>
+                            <li>Double click a white area in a calendar day to enter new hours based on a Catalyst session</li>
+                            <li>Double click a red (pending) entry if you need to edit that entry before it's committed</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <span style="font-weight: 600;">Ensure entered hours are committed</span>
+                        <ul>
+                            <li>Non-committed (pending) hours are shown red</li>
+                            <li>Use the <em>Save my Pending Hours</em> button to commit all pending hours</li>
+                            <li>Once committed, you will be unable to change your entries</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <span style="font-weight: 600;">When all of your hours for the month are entered, let us know by using the <em>Finalize Month</em> button</span>
+                        <ul>
+                            <li>This lets us know that you're all set so we can proceed with payment and billing</li>
+                            <li>If you forgot something and have to make an adjustment later, give us a call and we'll work them in</li>
+                        </ul>
+                    </li>
+                </ol>
+                <table style="margin-left: 25px;">
+                    <tr style="padding-bottom: 4px;">
+                        <td><span style="width: 27px; height: 16px; display: inline-block; box-sizing: border-box; border: 1px solid black; background-color: white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+                        <td style="padding-left: 5px;">Catalyst (preloaded from a Catalyst Session)</td>
+                    </tr>
+                    <tr style="padding-bottom: 4px;">
+                        <td><span style="width: 27px; height: 16px; display: inline-block; box-sizing: border-box; border: 1px solid black; background-color: indianred">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+                        <td style="padding-left: 5px;">Pending (not yet committed)</td>
+                    </tr>
+                    <tr style="padding-bottom: 4px;">
+                        <td><span style="width: 27px; height: 16px; display: inline-block; box-sizing: border-box; border: 1px solid black; background-color: lightgreen">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+                        <td style="padding-left: 5px;">Saved Hours (not yet Finalized)</td>
+                    </tr>
+                    <tr style="padding-bottom: 4px;">
+                        <td><span style="width: 27px; height: 16px; display: inline-block; box-sizing: border-box; border: 1px solid black; background-color: royalblue">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+                        <td style="padding-left: 5px;">Finalized (locked, cannot be edited)</td>
+                    </tr>
+                </table>
+                <div class="spacer-10"></div>
+            </div>
+        </td>
+        <td align="right" valign="bottom">
+
+            <table>
+                <tr>
+                    <td colspan="2">
+                        <p style="font-weight: 600">You have <span id="calendar-hours-count">0</span> total hours ready to be committed</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-right: 5px;">
+                        @Html.DevExpress().Button(
+                            s => {
+                                s.Name = "btnDownloadHours";
+                                s.Text = "Download Hours Record";
+                                s.ClientSideEvents.Click = "btnDownloadHoursClick";
+                            }
+                        ).GetHtml()
+                    </td>
+                    <td style="padding-right: 5px;">
+                        @Html.DevExpress().Button(
+                            s => {
+                                s.Name = "btnCommitPendingHours";
+                                s.Text = "Save my Pending Hours";
+                                s.ClientSideEvents.Click = "btnSavePendingHoursClick";
+                            }
+                        ).GetHtml()
+                    </td>
+                    <td>
+                        @Html.DevExpress().Button(
+                            s => {
+                                s.Name = "btnFinalizeMonth";
+                                s.Text = "Finalize Month";
+                                s.ClientSideEvents.Click = "btnFinalizeMonthClick";
+                            }
+                        ).GetHtml()
+                    </td>
+                </tr>
+            </table>
+            <div class="spacer-10"></div>
+        </td>
+    </tr>
+</table>
+
+<div id="case-hours-cal-wrapper">
+    @Html.Partial("CaseHoursEntryCalendar", Model)
+</div>

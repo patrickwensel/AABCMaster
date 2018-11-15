@@ -1,0 +1,17 @@
+﻿<script type="text/javascript" id="dxis_30948m3908476n39486" src="/Scripts/Pages/Insurance.js"></script>
+
+<div>
+    <div style="width: 300px; float:left;">
+        @Html.Action("List")
+    </div>
+    <div style="margin-left: 300px;">
+        <div id="insurance-detail-container" style="padding: 10px;"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+    });
+</script>
+

@@ -1,0 +1,121 @@
+﻿@model AABC.Web.Models.ProviderPortal.RegisterVM
+
+<script id="dxss_ProviderPortalRegisterPopupScripts" type="text/javascript">
+
+    function btnOkClicked(s, e) {
+
+        $.ajax({
+            url: '/ProviderPortal/RegisterProvider',
+            type: 'POST',
+            data: {
+                providerID: $('input[name="ProviderID"]').val(),
+                registerAction: $('input[name="RegisterAction"]').val(),
+                providerNumber: ProviderNumber.GetValue(),
+                password: Password.GetValue(),
+                email: Email.GetValue(),
+                sendEmail: SendEmail.GetValue()
+            },
+            //data: $("#form-register-popup").serialize(),
+            success: function (response) {
+                App.Popup.Hide(response);
+            },
+            error: function (error) {
+                App.Popup.Hide(error);
+            }
+        });
+
+    }
+
+    function btnCancelClicked(s, e) {
+        App.Popup.Hide('cancelled');
+    }
+
+
+</script>
+
+
+@using (Html.BeginForm("ProviderPortal", "RegisterPopup", new { id = "form-register-popup" })) {
+
+    @Html.HiddenFor(m => m.RegisterAction);
+    @Html.HiddenFor(m => m.ProviderID);
+
+    <div>
+
+                    <span style="font-weight: 600;">@Model.ProviderName</span><br /><br />
+
+
+                    @Html.DevExpress().TextBox(
+                        s => {
+                            s.Name = "ProviderNumber";
+                            s.Width = 150;
+                            s.Properties.Caption = "Login Number";
+                            s.Properties.CaptionCellStyle.Width = 100;
+                            //s.Enabled = true;
+                        }
+                    ).Bind(Model.ProviderNumber).GetHtml()
+
+                    @Html.DevExpress().TextBox(
+                        s => {
+                            s.Name = "Password";
+                            s.Width = 150;
+                            s.Properties.Caption = "Password";
+                            s.Properties.CaptionCellStyle.Width = 100;
+                        }
+                    ).Bind(Model.Password).GetHtml()
+                
+                    @Html.DevExpress().TextBox(
+                        s => {
+                            s.Name = "Email";
+                            s.Width = 150;
+                            s.Properties.Caption = "Email";
+                            s.Properties.CaptionCellStyle.Width = 100;
+                        }
+                    ).Bind(Model.Email).GetHtml()
+
+                                    @Html.DevExpress().CheckBox(
+                        s => {
+                            s.Name = "SendEmail";
+                            s.Text = "Email Password?";
+                            s.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+                        }
+                    ).Bind(Model.SendEmail).GetHtml()
+
+        
+
+        <div class="spacer-10"></div>
+
+        <div>
+            <table style="margin-left: 100px;">
+                <tr>
+                    <td>
+
+                        @Html.DevExpress().Button(
+                    s => {
+                        s.Name = "btnCancel";
+                        s.UseSubmitBehavior = false;
+                        s.ClientSideEvents.Click = "btnCancelClicked";
+                        s.Text = "Cancel";
+                        s.Width = 80;
+                    }
+                ).GetHtml()
+                    </td>
+                    <td>
+                        @Html.DevExpress().Button(
+                    s => {
+                        s.Name = "btnOk";
+                        s.UseSubmitBehavior = false;
+                        s.ClientSideEvents.Click = "btnOkClicked";
+                        s.Text = "OK";
+                        s.Width = 80;
+                    }
+                ).GetHtml()
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+
+
+}

@@ -1,0 +1,78 @@
+﻿@model AABC.Web.App.Hours.Models.WatchVM
+
+<script type="text/javascript" src="~/Scripts/Pages/HoursWatch.js" id="dxis_HoursWatchPageScripts"></script>
+
+<div style="padding: 10px;">
+
+    <div id="target-date-container">
+
+        @Html.DevExpress().ComboBox(
+            cb => {
+                cb.Name = "SelectedDate";
+                cb.Properties.TextField = "Display";
+                cb.Properties.ValueField = "Date";
+                cb.Properties.ValueType = typeof(DateTime);
+                cb.PreRender = (sender, e) => {
+                    AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, ViewBag.SelectedDate, "Date");
+                };
+                cb.Properties.Caption = "Current Period";
+                cb.Properties.ClientSideEvents.ValueChanged = "function(s, e) { HoursWatch.refreshAllGrids(); }";
+            }
+        ).BindList(ViewBag.AvailableDates).GetHtml()
+
+    </div>
+
+    <div id="hours-watch-grids-loading" style="color: red; display: none;"><em>Loading Data...</em></div>
+
+    <table style="width: 100%">
+
+        <tr>
+            <td style="width: 50%;">
+                <div style="min-height: 300px;">
+                    <h3>Cases without BCBA Hours</h3>
+                    <div id="missing-bcba-grid-container"></div>
+                </div>
+            </td>
+            <td>
+                <div style="min-height: 300px;">
+                    <h3>Cases without Aide Hours</h3>
+                    <div id="missing-aide-grid-container"></div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 50%;">
+                <div style="min-height: 300px;">
+                    <h3>Cases without BCBA Supervision</h3>
+                    <div id="no-supervision-grid-container"></div>
+                </div>
+            </td>
+            <td>
+                <div style="min-height: 300px;">
+                    <h3>Auth'd Cases without Hours</h3>
+                    <div id="no-hours-grid-container"></div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div style="min-height: 300px;">
+                    <h3>No Billed Hours</h3>
+                    <div id="no-billed-hours-grid-container"></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+    <div id="hours-detail-container"></div>
+
+</div>
+
+
+<script type="text/javascript">
+    HoursWatch.Initialize();
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+    });
+</script>

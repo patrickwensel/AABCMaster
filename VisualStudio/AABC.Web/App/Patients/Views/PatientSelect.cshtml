@@ -1,0 +1,23 @@
+﻿@model AABC.Web.App.PatientPortal.Models.AddRemovePatientsVM
+
+<h3>Patients</h3>
+<div  id="patients-list-grid-container">
+    @{Html.RenderAction("PatientSelectGrid");}
+</div>
+<div class="spacer-10"></div>
+
+<div style="width: 100%; text-align: right">
+    @Html.DevExpress().Button(s => {
+        s.Name = "btnCloseAddRemovePatientsPopup";
+        s.Text = "Close";
+        s.Width = 100;
+        s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide(); }";
+    }).GetHtml()
+</div>
+
+
+<script type="text/javascript" id="dxss_wf0m4f7wo484gm7w111">
+    $(document).ready(function(){
+        window.Patient.Select.initialize();
+    })
+</script>

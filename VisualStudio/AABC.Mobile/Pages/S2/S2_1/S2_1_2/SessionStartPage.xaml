@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<control:LoggedInPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+			 xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+			 xmlns:extensions="clr-namespace:AABC.Mobile.MarkupExtensions;assembly=AABC.Mobile"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="AABC.Mobile.Pages.S2_1_2.SessionStartPage"
+			 Title="{Binding SelectedCase.Patient, Converter={StaticResource patientNameConverter}}"
+			 x:Name="Form"
+			 Padding="0"
+			 BackgroundColor="{StaticResource separator}"
+			 NavigationPage.BackButtonTitle="Back"
+			 >
+
+	<StackLayout Spacing="0" >
+		<Label Text="Pre-check a session" Style="{StaticResource pageTitle}" HeightRequest="100" />
+		<control:IconButton Command="{Binding StartPreCheckClickedCommand}" Text="Start Pre-Check" ImageSource="Check.png" Disabled="{Binding StartPreCheckAvailable, Converter={StaticResource not}}" DisabledText="Pre-check is not available when off-line" Margin="0, 0, 0, 10" />
+
+		<ContentView BackgroundColor="{StaticResource separator}" Padding="5, 10, 5, 5" >
+			<Label Text="Start Pre-Checked Session" />
+		</ContentView>
+
+		<ListView x:Name="Cases" ItemsSource="{Binding CaseValidations}" RowHeight="75" VerticalOptions="Start" >
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<ViewCell>
+						<Grid Padding="5, 5, 5, 5">
+							<Grid.GestureRecognizers>
+								<TapGestureRecognizer Command="{Binding BindingContext.StartSessionCommand, Source={x:Reference Form} }" CommandParameter="{Binding .}" />
+							</Grid.GestureRecognizers>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*" />
+								<ColumnDefinition Width="*" />
+							</Grid.ColumnDefinitions>
+
+							<Label Grid.Column="0" Grid.Row="0" Text="{Binding DateOfService, StringFormat='{0:MM/dd}'}" FontAttributes="Bold" />
+							<Label Grid.Column="1" Grid.Row="0" Text="{Binding StartTime, Converter={StaticResource timeSpanToTimeConverter}}" FontAttributes="Bold" HorizontalTextAlignment="End" />
+
+							<Label Grid.Column="0" Grid.Row="1" Text="{Binding ServiceDescription, StringFormat='{0}'}" />
+							<Label Grid.Column="1" Grid.Row="1" Text="{Binding Duration, StringFormat='{0}', Converter={StaticResource timeSpanToStringConverter} }" HorizontalTextAlignment="End" />
+
+						</Grid>
+					</ViewCell>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+
+	</StackLayout>
+
+</control:LoggedInPage>

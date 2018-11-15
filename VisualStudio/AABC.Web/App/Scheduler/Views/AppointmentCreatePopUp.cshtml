@@ -1,0 +1,120 @@
+﻿@model AABC.Web.App.Scheduler.Models.AppointmentCreateViewModel
+
+@using (Html.BeginForm(null, null, FormMethod.Post))
+{
+
+    @Html.HiddenFor(m => m.CaseId);
+    @Html.HiddenFor(m => m.ProviderId);
+    @Html.HiddenFor(m => m.AppointmentType)
+    <div id="appointmentTypeSelector">
+        @Html.DevExpress().Button(
+            s =>
+            {
+                s.Name = "createNonRecurringAppointmentBtn";
+                s.Text = "Create Appointment";
+                s.ClientSideEvents.Click = "openPopUpForNonRecurringAppointmentCreation";
+                s.Width = 75;
+            }
+        ).GetHtml()
+        @Html.DevExpress().Button(
+            s =>
+            {
+                s.Name = "createRecurringAppointmentBtn";
+                s.Text = "Create Recurring Appointment";
+                s.ClientSideEvents.Click = "openPopUpForRecurringAppointmentCreation";
+                s.Width = 75;
+            }
+        ).GetHtml()
+        @Html.DevExpress().Button(
+            s =>
+            {
+                s.Name = "btnCancelSelection";
+                s.Text = "Cancel";
+                s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide('cancelled'); }";
+                s.Width = 75;
+            }
+        ).GetHtml()
+    </div>
+    <div id="appointmentEditor" style="display:none;">
+        <table>
+            <tr>
+                <td>
+                    @Html.DevExpress().DateEdit(
+                    s =>
+                    {
+                        s.Name = "date";
+                        s.Properties.Caption = "Date";
+                        s.Properties.CaptionCellStyle.Width = 100;
+                    }
+                ).Bind(Model.Date).GetHtml()
+                </td>
+                <td>
+                    <span class="validation-label-inline" id="errHoursEditByDate_DateMustBePast">Date must be supplied</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DevExpress().TimeEdit(
+                    s =>
+                    {
+                        s.Name = "startTime";
+                        s.Properties.Caption = "Start Time";
+                        s.Properties.CaptionCellStyle.Width = 100;
+                    }
+                ).Bind(Model.StartTime).GetHtml()
+                </td>
+                <td>
+                    <span class="validation-label-inline" id="errHoursEditByDate_TimeGeneral">Times must be supplied and Start Time must not be later than End Time</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DevExpress().TimeEdit(
+                    s =>
+                    {
+                        s.Name = "endTime";
+                        s.Properties.Caption = "End Time";
+                        s.Properties.CaptionCellStyle.Width = 100;
+                    }
+                ).Bind(Model.EndTime).GetHtml()
+                </td>
+                <td></td>
+            </tr>
+
+        </table>
+
+        <div class="spacer-10"></div>
+
+        <div style="margin-left:106px;">
+            <table>
+                <tr>
+                    <td>
+                        @Html.DevExpress().Button(
+                         s =>
+                         {
+                             s.Width = 75;
+                             s.Name = "btnchedpOK";
+                             s.Text = "Ok";
+                             s.ClientSideEvents.Click = "CreateAppointment";
+                         }
+                     ).GetHtml()
+                    </td>
+                    <td style="padding-left: 5px;">
+                        @Html.DevExpress().Button(
+                         s =>
+                         {
+                             s.Name = "btnchedpCancel";
+                             s.Text = "Cancel";
+                             s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide('cancelled'); }";
+                             s.Width = 75;
+                         }
+                     ).GetHtml()
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+}
+

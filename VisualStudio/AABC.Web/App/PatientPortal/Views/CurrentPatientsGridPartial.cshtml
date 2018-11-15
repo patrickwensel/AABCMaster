@@ -1,0 +1,25 @@
+﻿@model List<AABC.Web.App.PatientPortal.Models.CurrentPatientListItem>
+
+@Html.DevExpress().GridView(s => {
+
+    s.Name = "CurrentPatientsGrid";
+    s.KeyFieldName = "ID";
+
+    s.CallbackRouteValues = new { Controller = "PatientPortal", Action = "CurrentPatientsGridCallback" };
+
+    s.Columns.Add(column => {
+        column.Caption = " ";
+        column.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        //column.Width = 52;
+        column.SetDataItemTemplateContent(c => {
+            string itemID = DataBinder.Eval(c.DataItem, "ID").ToString();
+
+            ViewContext.Writer.Write("<a href='#/RemovePatient' data-dym-link='remove-patient', id='remove-patient-" + itemID + "'>Remove</a>");
+
+        });
+
+    });
+
+    s.Columns.Add("Name").Width = 200;
+
+}).Bind(Model).GetHtml()

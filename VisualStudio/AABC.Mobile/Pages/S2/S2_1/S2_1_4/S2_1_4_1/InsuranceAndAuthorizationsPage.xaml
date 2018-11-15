@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<control:LoggedInPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+			 xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="AABC.Mobile.Pages.S2_1_4.InsuranceAndAuthorizationsPage"
+			 Title="Insurance &amp; Auth"
+			 BackgroundColor="#f1f1f1" 
+			 Padding="0">
+
+	<StackLayout Spacing="0">
+		<ScrollView>
+			<StackLayout>
+				<Label Text="ACTIVE INSURANCE" HorizontalOptions="Fill" Margin="10, 20, 10, 0" />
+				<ContentView BackgroundColor="White">
+					<Label Text="{Binding SelectedCase.ActiveInsurance.InsuranceName}" FontSize="Large" FontAttributes="Bold" Margin="10, 10, 0, 10" />
+				</ContentView>
+
+				<Label Text="ACTIVE AUTHORIZATIONS" HorizontalOptions="Fill" Margin="10, 20, 10, 0" />
+				<ListView x:Name="InformationList" ItemsSource="{Binding SelectedCase.ActiveAuthorizations}" RowHeight="60" BackgroundColor="White" >
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<ViewCell>
+								<StackLayout Orientation="Horizontal" Margin="15, 15, 10, 10" >
+									<Label Text="{Binding Name}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="StartAndExpand" />
+									<Label Text="{Binding TimeRemainingMinutes, Converter={StaticResource minutesToStringConverter}}" HorizontalOptions="EndAndExpand" />
+								</StackLayout>
+							</ViewCell>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+
+			</StackLayout>
+		</ScrollView>
+	</StackLayout>
+
+</control:LoggedInPage>

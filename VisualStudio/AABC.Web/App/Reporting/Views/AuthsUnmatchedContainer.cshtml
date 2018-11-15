@@ -1,0 +1,7 @@
+﻿@model List<AABC.Data.V2.DTOs.AppliedAuthorizationAndInsuranceMismatchItem>
+
+
+<p>These results show cases whose authorizations don't match with what the insurance has on file for authorizations.</p>
+<p>If an authorization is listed here, it doesn't exist as an Initial or Secondary authorization for any of the insurance match rules.</p>
+
+@Html.Partial("AuthsUnmatchedGrid", Model)

@@ -1,0 +1,83 @@
+﻿@model AABC.Web.Models.DataLists.AuthDetailVM
+
+<h4>Edit Selected Auth</h4>
+@using (Html.BeginForm("AuthEdit", "DataLists", FormMethod.Post, new { id = "form-data-list-auth-edit" })) {
+
+    @Html.HiddenFor(m => m.AuthDetailEditID)
+
+    @Html.DevExpress().TextBox(
+        s => {
+            s.Name = "AuthDetailEditCode";
+            s.Width = 100;
+            s.Properties.Caption = "Code";
+            s.Properties.CaptionCellStyle.Width = 100;
+        }
+    ).Bind(Model.AuthDetailEditCode).GetHtml()
+
+    @Html.DevExpress().TextBox(
+        s => {
+            s.Name = "AuthDetailEditDescription";
+            s.Width = Unit.Percentage(100);
+            s.Properties.Caption = "Description";
+            s.Properties.CaptionCellStyle.Width = 100;
+        }
+    ).Bind(Model.AuthDetailEditDescription).GetHtml()
+
+    @Html.DevExpress().Button(
+        s => {
+            s.Name = "btnEditSubmit";
+            s.Text = "Submit";
+            s.Width = 100;
+            s.ControlStyle.CssClass = "caption-align-button";
+            s.UseSubmitBehavior = false;
+            s.ClientSideEvents.Click = "authDetailEditSubmit";
+        }
+    ).GetHtml()
+
+}
+
+<h4>Create New Auth</h4>
+
+@using (Html.BeginForm("AuthCreate", "DataLists", FormMethod.Post, new { id = "form-data-list-auth-create" })) {
+
+    @Html.DevExpress().TextBox(
+        s => {
+            s.Name = "AuthDetailCreateCode";
+            s.Width = 100;
+            s.Properties.Caption = "Code";
+            s.Properties.CaptionCellStyle.Width = 100;
+        }
+    ).GetHtml()
+
+    @Html.DevExpress().TextBox(
+        s => {
+            s.Name = "AuthDetailCreateDescription";
+            s.Width = Unit.Percentage(100);
+            s.Properties.Caption = "Description";
+            s.Properties.CaptionCellStyle.Width = 100;
+        }
+    ).GetHtml()
+
+    @Html.DevExpress().Button(
+        s => {
+            s.Name = "btnCreateSubmit";
+            s.Text = "Create";
+            s.Width = 100;
+            s.ControlStyle.CssClass = "caption-align-button";
+            s.UseSubmitBehavior = false;
+            s.ClientSideEvents.Click = "authDetailCreateSubmit";
+        }
+    ).GetHtml()
+
+}
+
+<h4>Delete Selected Auth</h4>
+@Html.DevExpress().Button(
+        s => {
+            s.Name = "btnDeleteSubmit";
+            s.Text = "Delete";
+            s.Width = 100;
+            s.ControlStyle.CssClass = "caption-align-button";
+            s.ClientSideEvents.Click = "authDetailDeleteSubmit";
+        }
+    ).GetHtml()

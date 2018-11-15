@@ -1,0 +1,216 @@
+﻿@model AABC.Web.Models.Cases.SummaryVM
+
+
+<script id="dxss_ManageGeneralHoursScripts" type="text/javascript">
+
+    function btnAddAuthClicked() {
+        var caseID = getCaseID();
+        App.LoadingPanel.AutoPanel.SupressSingle();
+        App.Popup.Show({
+            url: "/Case/CreateCaseAuthBase",
+            data: {
+                caseID: caseID
+            },
+            options: {
+                width: 700,
+                height: 500,
+                title: "Add General Hours",
+                allowDrag: true
+            },
+            finished: function () {
+                App.LoadingPanel.AutoPanel.SupressSingle();
+                $.ajax({
+                    url: "/Case/" + caseID + "/Manage/Summary",
+                    type: 'GET',
+                    success: function (r) {
+                        $('#' + App.Content.ContentElementID).empty().append(r);
+                    }
+                });
+            },
+            error: function () {
+                App.Dialogs.Error();
+            }
+        });
+    }
+
+
+    function btnEditAuthClicked() {
+        var caseID = getCaseID();
+        var authID = getAuthID();
+        if (authID) {
+            App.LoadingPanel.AutoPanel.SupressSingle();
+            App.Popup.Show({
+                url: "/Case/GeneralHoursEdit",
+                data: {
+                    caseID: caseID,
+                    authID: authID
+                },
+                options: {
+                    width: 700,
+                    height: 500,
+                    title: "Edit General Hours",
+                    allowDrag: true
+                },
+                finished: function () {
+                    // todo: problem: this gets executed after save, but also after closing without saving
+                    App.LoadingPanel.AutoPanel.SupressSingle();
+                    $.ajax({
+                        url: "/Case/" + caseID + "/Manage/Summary",
+                        type: 'GET',
+                        success: function (r) {
+                            $('#' + App.Content.ContentElementID).empty().append(r);
+                        }
+                    })
+                },
+                error: function () {
+                    App.Dialogs.Error();
+                }
+            });
+        }
+    }
+
+
+    function btnRemoveAuthClicked() {
+        var authID = getAuthID();
+        if (authID) {
+            App.Dialogs.ConfirmDelete({
+                message: "Are you sure you want to remove this Authorization?  Any hours (both general and Provider hours) will be removed as well.",
+                confirmed: function () {
+                    removeAuth(getCaseID(), authID);
+                }
+            });
+        }
+    }
+
+
+    function btnChangeFilterClicked() {
+        var caseID = getCaseID();
+        var showHistory = getShowHistory();
+        var url = !showHistory ? "/Case/GeneralHoursGridCallback" : "/Case/AllAuthsGridCallback";
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: {
+                caseID: caseID
+            }
+        }).done(function (r) {
+            $('#hours-grid-container').empty().append(r);
+            setShowHistory(!showHistory);
+        });
+    }
+
+
+    function removeAuth(caseID, authID) {
+        App.LoadingPanel.AutoPanel.SupressSingle();
+        $.ajax({
+            type: 'POST',
+            url: '/Case/DeleteAuth',
+            data: {
+                caseID: caseID,
+                authID: authID
+            },
+            success: function (response) {
+                // refresh list and recalc status
+                $('#' + App.Content.ContentElementID).empty().append(response);
+            },
+            error: function () {
+                App.Dialogs.Error();
+            }
+        });
+    }
+
+
+    function getShowHistory() {
+        return $('input#showHistory').val() == "false" ? true : false;
+    }
+
+
+    function setShowHistory(val) {
+        btnChangeFilter.SetText(!val ? "Show Active" : "Show History");
+        $('input#showHistory').val(!val ? "true" : "false");
+    }
+
+
+    function getCaseID() {
+        return $('input[name="ID"]').val();
+    }
+
+
+    function getAuthID() {
+        if ($("#gvGeneralHours")[0]) {
+            return App.DevEx.GridView.GetFocusedRowKey(gvGeneralHours);
+        } else if ($("#gvAuthGrid")[0]) {
+            return App.DevEx.GridView.GetFocusedRowKey(gvAuthGrid);
+        }
+    }
+
+    window.gridBeginCallback = function (s, e) {
+        e.customArgs["caseID"] = getCaseID();
+    }
+
+</script>
+<input type="hidden" id="showHistory" value="false" />
+@if (Model.HasAuthorizations)
+{
+    <div id="hours-grid-container">
+        <div class="grid-header-note-minor">@*<p>Showing Active Authorizations in date range @Model.Range.Start.ToShortDateString() - @Model.Range.End.ToShortDateString()</p>*@</div>
+        @Html.Action("GeneralHoursGridCallback", Model.ID)
+        @*@Html.Partial("ManageGeneralHoursBilled", Model.BilledGridItems)*@
+        <div class="spacer-10"></div>
+    </div>
+}
+else
+{
+    <p>No Authorizations on file</p>
+}
+
+<table style="margin-top: 5px;">
+    <tr>
+        <td>
+            @Html.DevExpress().Button(s =>
+       {
+           s.Name = "btnAddNewAuth";
+           s.Text = "Add Auth";
+           s.ImagePosition = ImagePosition.Left;
+           s.Images.Image.IconID = "actions_newproducts_16x16devav";
+           s.Width = 100;
+           s.ClientSideEvents.Click = "btnAddAuthClicked";
+       }).GetHtml()
+        </td>
+        <td style="padding-left: 5px;">
+            @Html.DevExpress().Button(s =>
+       {
+           s.Name = "btnEditAuth";
+           s.Text = "Edit";
+           s.ImagePosition = ImagePosition.Left;
+           s.Images.Image.IconID = "actions_edit_16x16devav";
+           s.Width = 100;
+           s.ClientVisible = Model.HasAuthorizations;
+           s.ClientSideEvents.Click = "btnEditAuthClicked";
+       }).GetHtml()
+        </td>
+        <td style="padding-left: 5px;">
+            @Html.DevExpress().Button(s =>
+       {
+           s.Name = "btnRemoveAuth";
+           s.Text = "Remove";
+           s.ImagePosition = ImagePosition.Left;
+           s.Images.Image.IconID = "edit_delete_16x16office2013";
+           s.Width = 100;
+           s.ClientVisible = Model.HasAuthorizations;
+           s.ClientSideEvents.Click = "btnRemoveAuthClicked";
+       }).GetHtml()
+        </td>
+        <td style="padding-left: 5px;">
+            @Html.DevExpress().Button(s =>
+       {
+           s.Name = "btnChangeFilter";
+           s.Text = "Show All";
+           s.ImagePosition = ImagePosition.Left;
+           s.Width = 100;
+           s.ClientVisible = Model.HasAuthorizations;
+           s.ClientSideEvents.Click = "btnChangeFilterClicked";
+       }).GetHtml()
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,18 @@
+﻿@model AABC.Web.Models.Shared.ZipLookupVM
+
+@Html.DevExpress().ComboBox(
+    s => {
+        s.Name = "zluCity";
+        s.CallbackRouteValues = new { Controller = "Selectors", action = "ZipLookupCityCallback" };
+
+        s.Properties.ValueType = typeof(string);
+
+        s.Properties.Width = 200;
+        s.Properties.Caption = "City";
+        s.Properties.CaptionCellStyle.Width = 100;
+        s.Properties.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['SelectedState'] = zluState.GetValue(); }";
+        s.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e) { Zips.GetZipsByCity(s, e); }";
+        //s.SettingsLoadingPanel.Enabled = false;
+        
+    }
+).BindList(Model.zluCitiesList).Bind(Model.zluCity).GetHtml()

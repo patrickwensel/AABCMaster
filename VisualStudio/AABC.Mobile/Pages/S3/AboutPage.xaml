@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<control:LoggedInPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+			 xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="AABC.Mobile.Pages.S3.AboutPage"
+			 Title="About"
+			 Padding="0">
+
+	<AbsoluteLayout BackgroundColor="White">
+		<StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" >
+
+			<Label Text="Applied ABC Provider App" HeightRequest="100"  Style="{StaticResource pageTitle}" HorizontalTextAlignment="Center"/>
+
+			<StackLayout Padding="10" Spacing="10">
+				<Label Text="This app is provided by Applied Behavioral Health Counseling." />
+				<Label Text="{Binding VersionNumber, StringFormat='Current Version: {0}'}" />
+				<Label Text="{Binding ServerVersion, StringFormat='Server Version: {0}'}" />
+				<Button Text="Check For Updates" Command="{Binding CheckForUpdate}" />
+				<Label Text="Please report any feedback to info@appliedabc.com" TextColor="{Binding CanSendEmail, Converter={StaticResource emailColorConverter}}">
+					<Label.GestureRecognizers>
+						<TapGestureRecognizer Command="{Binding SendEmail}" />
+					</Label.GestureRecognizers>
+				</Label>
+				<Button Text="Open User Guide" Command="{Binding OpenUserGuide}" />
+				<!--<Label Text="Developed by Dymeng Services, Inc." FontSize="Small" />-->
+			</StackLayout>
+
+		</StackLayout>
+		<control:BusyOverlay AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" IsVisible="{Binding Busy}" />
+
+	</AbsoluteLayout>
+
+</control:LoggedInPage>

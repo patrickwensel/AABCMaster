@@ -1,0 +1,26 @@
+﻿@model AABC.Web.App.Referrals.Models.ReferralsListVM
+
+<div id="grid-list-new">@Html.Partial("ListGrid", Model)</div>
+
+<script type="text/javascript" id="dxss_cn24983t79bt8">
+    function rowDoubleClick(s, e) {
+        var id = s.GetSelectedKeysOnPage()[0];
+        LoadingPanel.Show();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("Edit", "Referrals")',
+            data: { id: id }
+        }).done(function (response) {
+            $("#" + App.Content.ContentElementID).empty().append(response);
+        }).fail(function (response) {
+            App.Dialogs.Error("We're sorry, but we couldn't seem to load the Edit form for this referral.");
+        }).always(function () {
+            LoadingPanel.Hide();
+        });
+    }
+</script>
+<script type="text/javascript">
+    $(function () {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+    });
+</script>

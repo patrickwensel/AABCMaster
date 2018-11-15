@@ -1,0 +1,58 @@
+@model AABC.Web.App.Models.DashboardYakovVM
+
+<div style="padding: 10px;">
+
+    @Html.DevExpress().ComboBox(
+        cb => {
+            cb.Name = "DashboardInsuranceDateSelected";
+            cb.Properties.TextField = "Display";
+            cb.Properties.ValueField = "Date";
+            cb.Properties.ValueType = typeof(DateTime);
+            cb.PreRender = (sender, e) => {
+                AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model.SelectedDate, "Date");
+            };
+            cb.Properties.Caption = "Period";
+            cb.Properties.CaptionCellStyle.Width = 100;
+            cb.Width = 100;
+        }
+    ).BindList(Model.AvailableDates).GetHtml()
+
+    <div style="height: 5px;">&nbsp;</div>
+
+    @*@Html.DevExpress().ComboBox(
+        cb => {
+            cb.Name = "DashboardInsuranceSelector";
+            cb.Properties.ValueField = "Name";
+            cb.Properties.TextField = "Name";
+            cb.Properties.ValueType = typeof(string);
+            cb.Properties.Caption = "Insurance";
+            cb.Properties.CaptionCellStyle.Width = 100;
+            cb.Width = 250;
+        }
+    ).BindList(Model.InsuranceList).GetHtml()*@
+
+    @Html.DevExpress().ComboBox(
+        s => {
+            s.Name = "DashboardInsurance2Selector";
+            s.Properties.ValueField = "ID";
+            s.Properties.TextField = "Name";
+            s.Properties.ValueType = typeof(int);
+            s.Properties.Caption = "Insurance";
+            s.Properties.CaptionCellStyle.Width = 100;
+            s.Width = 250;
+        }
+    ).BindList(Model.Insurance2List).GetHtml()
+    
+    <div class="spacer-10"></div>
+
+    <div style="margin-left: 105px;" id="dash-insurance-grid">Please select an insurance to view costs per period</div>
+
+</div>
+
+
+<script id="dxss_34098620v3bm76" type="text/javascript">
+    $.getScript("/client/scripts/app/dashboard-yakov.v1.0.js", function () {
+        DBY.Initialize();
+        App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+    });
+</script> 

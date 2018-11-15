@@ -1,0 +1,40 @@
+﻿@model List<AABC.Web.Models.ExternalData.Catalyst.StudentAttendanceFailureItem>
+
+
+@if (Model.Count == 0) {
+
+    <p><em>No failures for this import.</em></p>
+
+} else {
+
+    @Html.DevExpress().GridView(
+        s => {
+            s.Name = "gvCatalystStudentAttendanceReportImportFailures";
+
+
+            s.SettingsPager.PageSize = 5000;
+            s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+            s.Width = Unit.Percentage(100);
+
+            s.CallbackRouteValues = new { Controller = "ExternalData", Action = "CatalystResultsFailuresGridCallback" };
+
+            var col = s.Columns.Add("colPatient");
+            col.Caption = "Patient";
+            col.FieldName = "PatientName";
+
+            col = s.Columns.Add("colDate");
+            col.Caption = "Date";
+            col.FieldName = "Date";
+            col.PropertiesEdit.DisplayFormatString = "d";
+
+            col = s.Columns.Add("colProvider");
+            col.Caption = "Provider(s)";
+            col.FieldName = "ProviderInitials";
+
+            col = s.Columns.Add("colError");
+            col.Caption = "Error Message";
+            col.FieldName = "ErrorMessage";
+        }
+    ).Bind(Model).GetHtml()
+
+}

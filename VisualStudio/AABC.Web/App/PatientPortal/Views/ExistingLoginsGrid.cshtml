@@ -1,0 +1,109 @@
+﻿@model AABC.Web.App.PatientPortal.Models.ExistingVM
+
+@Html.DevExpress().GridView(
+    s => {
+
+        s.Name = "ExistingPortalLoginsGrid";
+        s.KeyFieldName = "ID";
+
+        s.Width = Unit.Percentage(100);
+        s.Height = Unit.Percentage(100);
+
+        s.SettingsBehavior.AllowSort = false;
+        s.SettingsBehavior.AllowGroup = false;
+        s.SettingsBehavior.AllowFocusedRow = false;
+        s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        s.Settings.ShowFilterRow = true;
+        s.CallbackRouteValues = new { Action = "ExistingPortalLoginsGridCallback" };
+
+        s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+        s.SettingsPager.PageSize = 200;
+
+        s.Settings.ShowTitlePanel = true;
+
+        s.SetTitlePanelTemplateContent(
+            c => {
+                string content = "<table style='width: 100%; text-align: right;'><tr><td align='right'>";
+                ViewContext.Writer.Write(content);
+
+                Html.DevExpress().Button(bs => {
+                    bs.Name = "addLoginViaExistingHeaderButton";
+                    bs.Text = "Add Login";
+                }).Render();
+
+                ViewContext.Writer.Write("</td></tr></table>");
+            });
+
+
+
+        s.Columns.Add(column => {
+            column.Caption = "Actions";
+            column.UnboundType = DevExpress.Data.UnboundColumnType.String;
+            column.Width = 52;
+            column.Settings.AllowAutoFilter = DefaultBoolean.False;
+            column.SetDataItemTemplateContent(c => {
+                string itemID = DataBinder.Eval(c.DataItem, "ID").ToString();
+                string email = DataBinder.Eval(c.DataItem, "Email").ToString();
+                string button = Html.DevExpress().Button(b => {
+                    b.Images.Image.Url = "~/Content/Images/actionlist-med-light-16.png";
+                    b.Name = "pmButton" + itemID;
+                    b.Text = "";
+                    b.ControlStyle.CssClass = "action-button";
+                }).GetHtml().ToHtmlString();
+
+                string popup = Html.DevExpress().PopupMenu(menu => {
+                    menu.Name = "pmActions" + itemID;
+                    menu.PopupElementID = "pmButton" + itemID;
+                    menu.ClientSideEvents.ItemClick = "function(s, e) {window.Admin.PatientPortal.Users.existing.popupMenuClick(s, e, '" + email + "'); }";
+                    menu.PopupAction = PopupAction.LeftMouseClick;
+
+                    menu.Items.Add(i => {
+                        i.Text = "Toggle Activation On/Off";
+                        i.Name = "ToggleActivation";
+                    });
+
+                    menu.Items.Add(i => {
+                        i.Text = "Reset Password";
+                        i.Name = "ResetPassword";
+                    });
+
+                    menu.Items.Add(i =>
+                    {
+                        i.Text = "Edit";
+                        i.Name = "Edit";
+                    });
+
+                    menu.Items.Add(i => {
+                        i.Text = "Add/Remove Patients";
+                        i.Name = "AddRemovePatients";
+                    });
+
+                }).GetHtml().ToHtmlString();
+
+            });
+        });
+
+        var col = s.Columns.Add("Active");
+        col.ColumnType = MVCxGridViewColumnType.CheckBox;
+        col.Width = 50;
+
+        col = s.Columns.Add("Email");
+        col.Width = 200;
+
+        col = s.Columns.Add("FirstName");
+        col.Width = 100;
+
+        col = s.Columns.Add("LastName");
+        col.Width = 100;
+
+        col = s.Columns.Add("PatientsConcat");
+        col.Caption = "Assigned Patients";
+        col.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+
+
+
+
+
+    }
+).Bind(Model.Items).GetHtml()

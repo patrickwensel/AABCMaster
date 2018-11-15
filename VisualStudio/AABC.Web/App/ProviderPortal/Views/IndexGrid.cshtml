@@ -1,0 +1,146 @@
+﻿@model AABC.Web.Models.ProviderPortal.UserVM
+
+@Html.DevExpress().GridView(s => {
+    s.Name = "gridProviderUserList";
+    s.KeyFieldName = "ID";
+    //s.Settings.ShowTitlePanel = true;
+    //s.SetTitlePanelTemplateContent(
+    //    c => {
+    //        Html.RenderPartial("GridTitlePane", Model.ListBase.GridTitlePanelSettings);
+    //    });
+    s.Width = Unit.Percentage(100);
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    s.Settings.VerticalScrollableHeight = 500;
+    //s.ClientSideEvents.Init = "function(s, e) { App.Content.GridViews.InitializeForStretchHeight(s); }";
+    //s.ClientSideEvents.EndCallback = "function(s, e) { App.Content.GridViews.StretchHeight(s); }";
+    s.SettingsPager.PageSize = 1000;
+    s.SettingsBehavior.AllowSort = true;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = true;
+    s.SettingsBehavior.AllowSelectByRowClick = true;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    s.SettingsBehavior.AllowDragDrop = false;
+    s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+    s.Settings.ShowFilterRow = true;
+    s.CallbackRouteValues = new { Controller = "ProviderPortal", Action = "GridCallback" };
+
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colFirstName";
+        col.FieldName = "FirstName";
+        col.Caption = "First Name";
+        col.Width = 125;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colLastName";
+        col.FieldName = "LastName";
+        col.Caption = "Last Name";
+        col.Width = 125;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colEmail";
+        col.FieldName = "Email";
+        col.Caption = "Email";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colPhone";
+        col.FieldName = "Phone";
+        col.Caption = "Phone";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colUserNumber";
+        col.FieldName = "ProviderNumber";
+        col.Caption = "Login ID";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 80;
+    });
+
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "RegisterLink";
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.Caption = "Registration";
+        col.Width = 75;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.SetDataItemTemplateContent(
+            c => {
+                var key = int.Parse(c.KeyValue.ToString());
+                var item = ((IEnumerable<AABC.Web.Models.ProviderPortal.UserItem>)c.Grid.DataSource).SingleOrDefault(m=> m.ID == key);
+                if (item.IsActive)
+                {
+                    ViewContext.Writer.Write(Html.ActionLink("Unregister", "Unregister", "ProviderPortal", new { providerID = item.ID }, new { onclick = "lnkRegisterClick(this, event);", name = "hlReg_Unregister_" + item.ID.ToString() }));
+                }
+                else
+                {
+                    ViewContext.Writer.Write(Html.ActionLink("Register", "Register", "ProviderPortal", new { providerID = item.ID }, new { onclick = "lnkRegisterClick(this, event);", name = "hlReg_Register_" + item.ID.ToString() }));
+                }
+            });
+    });
+
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "ResetPasswordLink";
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.Caption = "Reset Password";
+        col.Width = 100;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.SetDataItemTemplateContent(c => {
+            var key = int.Parse(c.KeyValue.ToString());
+            var item = ((IEnumerable<AABC.Web.Models.ProviderPortal.UserItem>)c.Grid.DataSource).SingleOrDefault(m => m.ID == key);
+            if (item.IsActive)
+            {
+                ViewContext.Writer.Write(Html.ActionLink("Reset Password", "ResetPassword", "ProviderPortal", new { providerID = item.ID }, new { onclick = "lnkResetPasswordClick(this, event);", name = "hlResetPassword_" + item.ID.ToString() }));
+            }
+        });
+    });
+
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "ToggleAppAccessLink";
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.Caption = "Mobile App Access";
+        col.Width = 150;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.SetDataItemTemplateContent(c => {
+            var key = int.Parse(c.KeyValue.ToString());
+            var item = ((IEnumerable<AABC.Web.Models.ProviderPortal.UserItem>)c.Grid.DataSource).SingleOrDefault(m => m.ID == key);
+            if (item.IsActive)
+            {
+                if (item.HasAppAccess)
+                {
+                    ViewContext.Writer.Write(Html.ActionLink("Revoke", "RevokeAppAccess", "ProviderPortal", new { providerID = item.ID }, new { onclick = "lnkToggleAppAccessClick(this, event);", name = "hlToggleAppAccess_Revoke_" + item.ID.ToString() }));
+                }
+                else
+                {
+                    ViewContext.Writer.Write(Html.ActionLink("Grant", "GrantAppAccess", "ProviderPortal", new { providerID = item.ID }, new { onclick = "lnkToggleAppAccessClick(this, event);", name = "hlToggleAppAccess_Grant_" + item.ID.ToString() }));
+                }
+            }
+        });
+    });
+}).Bind(Model.Items).GetHtml()

@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AAC89B95-8F5D-43C3-81FF-0AD892F108A9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AABC.Domain</RootNamespace>
+    <AssemblyName>AABC.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Integration|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Integration\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Web.v16.1, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Admin\UserOption.cs" />
+    <Compile Include="Admin\UserPermission.cs" />
+    <Compile Include="Cases\AuthorizationClass.cs" />
+    <Compile Include="Cases\AuthorizationStatus.cs" />
+    <Compile Include="Cases\CaseAuthorization.cs" />
+    <Compile Include="Cases\CaseAuthorizationGeneralHours.cs" />
+    <Compile Include="Cases\CaseAuthorizationHours.cs" />
+    <Compile Include="Cases\CaseProvider.cs" />
+    <Compile Include="Cases\CaseProviderNote.cs" />
+    <Compile Include="Cases\CaseTask.cs" />
+    <Compile Include="Cases\Service.cs" />
+    <Compile Include="Cases\MonthlyPeriods.cs" />
+    <Compile Include="Cases\ProviderHoursMonthFinalization.cs" />
+    <Compile Include="Cases\TimeScrubOverviewItem.cs" />
+    <Compile Include="Catalyst\NoDataByProviderAndCase.cs" />
+    <Compile Include="DomainHelpers.cs" />
+    <Compile Include="Email\SMTPAccount.cs" />
+    <Compile Include="General\GuardianRelationship.cs" />
+    <Compile Include="Hours\HoursDownload.cs" />
+    <Compile Include="Hours\Note.cs" />
+    <Compile Include="Hours\NoteTemplate.cs" />
+    <Compile Include="Hours\NoteTemplateGroup.cs" />
+    <Compile Include="Notes\Note.cs" />
+    <Compile Include="Notes\Task.cs" />
+    <Compile Include="Payment\Card.cs" />
+    <Compile Include="Payment\Charge.cs" />
+    <Compile Include="Payment\Payment.cs" />
+    <Compile Include="ProviderPortal\ProviderPortalUser.cs" />
+    <Compile Include="Cases\Authorizations.cs" />
+    <Compile Include="Cases\Case.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="General\Geographic.cs" />
+    <Compile Include="General\Language.cs" />
+    <Compile Include="OfficeStaff\OfficeStaff.cs" />
+    <Compile Include="Patients\Patient.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\Provider.cs" />
+    <Compile Include="Referrals\Referral.cs" />
+    <Compile Include="Admin\OptionGroup.cs" />
+    <Compile Include="Admin\PermissionGroup.cs" />
+    <Compile Include="Admin\Option.cs" />
+    <Compile Include="Admin\Permission.cs" />
+    <Compile Include="Admin\User.cs" />
+    <Compile Include="Services\ServiceLocation.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AABC.Domain2\AABC.Domain2.csproj">
+      <Project>{1176f48d-ed61-451b-8bbf-88cd0d02586f}</Project>
+      <Name>AABC.Domain2</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,169 @@
+﻿<form>
+    <h1 style="color: #4b4b57; font-size: large; font-weight: 200;">
+        ID :
+        <!-- ko if: isNew -->
+        <strong>( New )</strong>
+        <!-- /ko -->
+        <!-- ko ifnot: isNew -->
+        <strong data-bind="text:id"></strong>
+        <!-- /ko -->
+    </h1>
+    <div class="form-section-content-col1">
+        <div class="form-group">
+            <label for="insuranceId">Insurance</label>
+            <select id="insuranceId" class="dxeButtonEdit_Aqua" data-bind="value:insuranceId,
+                options:$parent.insurances,
+                optionsText:'text',
+                optionsValue:'value',
+                optionsCaption:''"></select>
+        </div>
+        <div class="form-group">
+            <label for="insuranceCarrierId">Carrier</label>
+            <select id="insuranceCarrierId" class="dxeButtonEdit_Aqua" data-bind="value:insuranceCarrierId,
+                options:$parent.localCarriers,
+                optionsText:'text',
+                optionsValue:'value',
+                optionsCaption:'',
+                valueAllowUnset:true,
+                enable:$parent.canSelectCarrier"></select>
+        </div>
+        <div class="form-group">
+            <label for="memberName">Member Name</label>
+            <input type="text" id="memberName" class="dxeButtonEdit_Aqua" data-bind="value:memberName" />
+        </div>
+        <div class="form-group">
+            <label for="memberId">Member ID</label>
+            <input type="text" id="memberId" class="dxeButtonEdit_Aqua" data-bind="value:memberId" />
+        </div>
+        <div class="form-group">
+            <label for="primaryCardholderName">Cardholder Name</label>
+            <input type="text" id="primaryCardholderName" class="dxeButtonEdit_Aqua" data-bind="value:primaryCardholderName" />
+        </div>
+        <div class="form-group">
+            <label for="datePlanEffective">Effective Date</label>
+            <input type="text" id="datePlanEffective" class="dxeButtonEdit_Aqua" placeholder="mm/dd/yyyy" data-bind="cleave:{ value:datePlanEffective, options: $parent.cleaveOptions }" />
+        </div>
+        <div class="form-group">
+            <label for="datePlanTerminated">Termination Date</label>
+            <input type="text" id="datePlanTerminated" class="dxeButtonEdit_Aqua" placeholder="mm/dd/yyyy" data-bind="cleave:{ value:datePlanTerminated, options: $parent.cleaveOptions }" />
+        </div>
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="hardshipWaiverLike" data-bind="checked:hardshipWaiverLike" />
+                Interested in Hardship Waiver?
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="hardshipWaiverApplied" data-bind="checked:hardshipWaiverApplied" />
+                Hardship Applied For?
+            </label>
+        </div>
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="hardshipWaiverApproved" data-bind="checked:hardshipWaiverApproved" />
+                Hardship Approved?
+            </label>
+        </div>
+        <div class="form-group">
+            <label for="otherNotes">Other notes</label>
+            <textarea id="otherNotes" class="dxeMemo_Aqua" data-bind="value:otherNotes"></textarea>
+        </div>
+    </div>
+    <div class="form-section-content-col2">
+        <div class="form-group">
+            <label for="fundingType">Funding Type</label>
+            <select id="fundingType" class="dxeButtonEdit_Aqua" data-bind="value:fundingType,
+                options:$parent.fundingTypes,
+                optionsText:'text',
+                optionsValue:'value',
+                optionsCaption:''"></select>
+        </div>
+        <div class="form-group">
+            <label for="benefitType">Benefit Type</label>
+            <select id="benefitType" class="dxeButtonEdit_Aqua" data-bind="value:benefitType,
+                options:$parent.benefitTypes,
+                optionsText:'text',
+                optionsValue:'value',
+                optionsCaption:''"></select>
+        </div>
+        <div class="form-group">
+            <label for="coPayAmount">Copay Amount</label>
+            <input type="text" id="coPayAmount" class="dxeButtonEdit_Aqua" data-bind="value:coPayAmount,numeric" />
+        </div>
+        <div class="form-group">
+            <label for="coInsuranceAmount">Coinsurance Amt</label>
+            <input type="text" id="coInsuranceAmount" class="dxeButtonEdit_Aqua" data-bind="value:coInsuranceAmount,numeric" />
+        </div>
+        <div class="form-group">
+            <label for="deductibleTotal">Deductible</label>
+            <input type="text" id="deductibleTotal" class="dxeButtonEdit_Aqua" data-bind="value:deductibleTotal,numeric" />
+        </div>
+        <!-- ko ifnot: isNew -->
+        <div class="form-section" data-bind="validationOptions:{insertMessages:false}">
+            <div class="form-section-header"><span>Max Out of Pocket</span></div>
+            <div class="form-section-content">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="maxOutOfPocketEffectiveDate">Effective Date</label>
+                        <input type="text" id="maxOutOfPocketEffectiveDate" class="dxeButtonEdit_Aqua" placeholder="mm/dd/yyyy" data-bind="cleave:{ value:$root.maxOutOfPocket.effectiveDate, options: $root.cleaveOptions }" />
+                    </div>
+                    <div class="form-group">
+                        <label for="maxOutOfPocketMaxOutOfPocket">Amount</label>
+                        <input type="text" id="maxOutOfPocketMaxOutOfPocket" class="dxeButtonEdit_Aqua" data-bind="value:$root.maxOutOfPocket.maxOutOfPocket,numeric" />
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:$parent.addMaxOutOfPocket, enable:$root.maxOutOfPocket.isValid">
+                            <div class="dxb">
+                                <span class="dx-vam">
+                                    <!-- ko ifnot: $root.isMaxOutOfPocketOnEdit -->
+                                    Add
+                                    <!-- /ko -->
+                                    <!-- ko if: $root.isMaxOutOfPocketOnEdit -->
+                                    Save
+                                    <!-- /ko -->
+                                </span>
+                            </div>
+                        </button>
+                        <!-- ko if: $root.isMaxOutOfPocketOnEdit -->
+                        <button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:$parent.cancelEditMaxOutOfPocket">
+                            <div class="dxb">
+                                <span class="dx-vam">
+                                    Cancel
+                                </span>
+                            </div>
+                        </button>
+                        <!-- /ko -->
+                    </div>
+                </div>
+                <br/>
+                <!-- ko if: maxOutOfPocket().length > 0 -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="dxgvHeader_Aqua">Effective Date</th>
+                            <th class="dxgvHeader_Aqua">Max Out Of Pocket</th>
+                            <th class="dxgvHeader_Aqua"></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach:maxOutOfPocket">
+                        <tr>
+                            <td class="dxgv dx-ac"><span data-bind="text:moment(effectiveDate()).format('L')"></span></td>
+                            <td class="dxgv dx-ac"><span data-bind="text:maxOutOfPocket"></span></td>
+                            <td class="dxgv dx-ac">
+                                <button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:$root.editMaxOutOfPocket"><div class="dxb"><span class="dx-vam">Edit</span></div></button>
+                                <button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:$root.deleteMaxOutOfPocket"><div class="dxb"><span class="dx-vam">Delete</span></div></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- /ko -->
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
+    <div class="clearfix">
+        <button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:$parent.save, enable:isValid"><div class="dxb"><span class="dx-vam">Save</span></div></button>
+    </div>
+</form>

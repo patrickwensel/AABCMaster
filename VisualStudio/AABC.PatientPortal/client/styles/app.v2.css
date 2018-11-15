@@ -1,0 +1,92 @@
+﻿
+
+.space-5 {
+    margin: 5px 0;
+}
+.space-10 {
+    margin: 10px 0;
+}
+
+
+.text-disabled {
+    color: #d8d8d8;
+}
+
+
+table.dataTable tbody>tr.selected {
+    background-color: #8cd9c9;
+}
+
+.control-label {
+    padding-top: 2px !important;
+}
+
+div.ibox-title h5>small {
+    padding-left: 2em;
+}
+
+.month-signoff-list {
+    list-style-type: none;
+    padding-left: 0px;
+}
+
+.month-signoff-list li {
+    border-bottom: 1px solid #c4c4c4;
+    padding: 0.5em;    
+}
+
+.month-signoff-list li:first-of-type {
+    border-top: 1px solid #c4c4c4;
+}
+
+.signoff-datestamp {
+    font-weight: 600;
+}
+
+.home-patient-list {
+    list-style-type: none;
+    padding-left: 0px;
+}
+
+.home-patient-list li {
+    border-radius: 0.25em;
+    padding: 0.5em;  
+    padding-top: 1em;
+    padding-bottom: 1em;  
+    margin-top: 0.25em;
+}
+
+
+
+.home-patient-list li:hover {
+    background-color: #47c2a9;
+    cursor: pointer;
+}
+
+.home-patient-list .child-selected {
+    background-color: #bae8de;
+}
+
+.label-report {
+    opacity: .3;
+    width: 115px;
+}
+
+.label-report:hover {
+    opacity: .8;
+    cursor: pointer;
+}
+
+.label-reported {
+    width: 115px;
+    cursor: default;
+}
+
+.label-reported:hover{
+  background-color: #ed5565;
+  border-color: #ed5565;
+}
+
+.report-hours-header{
+    font-weight: 600;
+}

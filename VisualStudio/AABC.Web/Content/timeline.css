@@ -1,0 +1,172 @@
+﻿.timeline {
+    position: relative;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    --uiTimelineMainColor: var(--timelineMainColor, #e2f0ff);
+    --uiTimelineSecondaryColor: var(--timelineSecondaryColor, #a3c0e8);
+}
+
+    .timeline:before {
+        position: absolute;
+        top: 0;
+        width: 4px;
+        height: 100%;
+        content: '';
+        background-color: #a3c0e8;
+    }
+
+.timeline__group {
+    position: relative;
+}
+
+    .timeline__group:not(:first-of-type) {
+        margin-top: 4rem;
+    }
+
+.timeline__year,
+.timeline__month_header,
+.timeline__date {
+    display: block;
+    box-sizing: border-box;
+    width: 70px;
+    padding: 5px 10px;
+    text-align: center;
+    color: #2c4d79;
+    border: 1px solid #a3c0e8;
+    background-color: #e2f0ff;
+}
+
+.timeline__year,
+.timeline__month_header {
+    margin-bottom: 10px;
+}
+
+.timeline__year {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.timeline__box {
+    position: relative;
+}
+
+    .timeline__box:not(:last-of-type) {
+        margin-bottom: 30px;
+    }
+
+.timeline__date_wrapper {
+    position: absolute;
+    left: 0;
+    margin-bottom: 10px;
+}
+
+    .timeline__date_wrapper:before {
+        position: absolute;
+        z-index: 0;
+        top: 50%;
+        left: 0;
+        width: 130%;
+        height: 2px;
+        content: '';
+        background-color: #a3c0e8;
+    }
+
+.timeline__date {
+    position: relative;
+    min-height: 40px;
+}
+
+.timeline__day {
+    font-weight: 700;
+    display: block;
+}
+
+.timeline__month {
+    display: block;
+    text-transform: uppercase;
+}
+
+.timeline__item {
+    clear: both;
+}
+
+    .timeline__item .bullet {
+        font-size: 24px;
+        line-height: 0;
+    }
+
+    .timeline__item.CaseNotes .bullet {
+        color: yellow;
+    }
+
+    .timeline__item.StaffingLogParentContactLog .bullet {
+        color: red;
+    }
+
+.timeline__post {
+    position: relative;
+    overflow: auto;
+    box-sizing: border-box;
+    min-height: 40px;
+    padding: 5px 10px;
+    border-left: 3px solid var(--uiTimelineMainColor);
+    border-radius: 2px;
+    background-color: white;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 1px 2px 0 rgba(0, 0, 0, .24);
+}
+
+@media screen and (min-width: 641px) {
+    .timeline:before {
+        left: 35px;
+    }
+
+    .timeline__group {
+        padding-top: 55px;
+    }
+
+    .timeline__box {
+        padding-left: 80px;
+    }
+
+        .timeline__box:before {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+}
+
+@media screen and (max-width: 640px) {
+    .timeline:before {
+        left: 0;
+    }
+
+    .timeline__group {
+        padding-top: 40px;
+    }
+
+    .timeline__box {
+        padding-top: 70px;
+        padding-left: 20px;
+    }
+
+        .timeline__box:before {
+            top: 90px;
+        }
+
+    .timeline__date {
+        top: 0;
+    }
+}
+
+.timeline {
+    --timelineMainColor: #e2f0ff;
+}
+
+.timeline__item_time {
+    float: left;
+    margin-right: 10px;
+}
+
+.timeline__item_body {
+    float: left;
+}

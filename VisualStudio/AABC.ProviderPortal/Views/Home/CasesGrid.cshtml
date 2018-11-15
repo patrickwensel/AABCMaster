@@ -1,0 +1,23 @@
+﻿
+@model List<AABC.ProviderPortal.Models.Home.MyCasesCaseItem>
+
+
+@Html.DevExpress().GridView(
+    s => {
+        s.Name = "gridCases";
+        s.KeyFieldName = "CaseID";
+        s.Width = Unit.Percentage(98);
+
+        s.SettingsBehavior.AllowSort = true;
+        s.SettingsBehavior.AllowFocusedRow = true;
+
+        s.CallbackRouteValues = new { Controller = "Home", Action = "CasesGridCallback" };
+
+        s.ClientSideEvents.FocusedRowChanged = "gvCaseFocusedRowChanged";
+
+        var col = s.Columns.Add("colPatientName");
+        col.FieldName = "PatientName";
+        col.Caption = "Patient Name";
+
+    }
+).Bind(Model).GetHtml()

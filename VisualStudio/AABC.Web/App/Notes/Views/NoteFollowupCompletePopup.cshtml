@@ -1,0 +1,45 @@
+﻿@model AABC.DomainServices.Notes.NoteFollowupSaveRequest
+
+@using (Ajax.BeginForm("FollowupComplete", ((string)ViewBag.SourceType) + "Notes",
+    new AjaxOptions()
+    {
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "notesum_" + Model.NoteID,
+        OnSuccess = "Notes.NotesList.FollowupCompleteClose"
+    }))
+{
+    @Html.HiddenFor(m => m.NoteID)
+    @Html.DevExpress().Memo(s =>
+    {
+        s.Name = "FollowupComment";
+        s.Properties.Caption = "Followup Comments";
+        s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+        s.Properties.Rows = 12;
+        s.Width = Unit.Percentage(100);
+    }).Bind(Model.FollowupComment).GetHtml()
+    <div style="float: right;">
+        <table>
+            <tr>
+                <td>
+                    @Html.DevExpress().Button(s =>
+                    {
+                        s.Name = "FollowupOkButton";
+                        s.Text = "Ok";
+                        s.Width = 75;
+                        s.UseSubmitBehavior = true;
+                    }).GetHtml()
+                </td>
+                <td>
+                    @Html.DevExpress().Button(s =>
+                    {
+                        s.Name = "FollowupCancelButton";
+                        s.Text = "Cancel";
+                        s.Width = 75;
+                        s.UseSubmitBehavior = false;
+                        s.ClientSideEvents.Click = "function(s, e) {App.Popup.Hide('cancelled'); }";
+                    }).GetHtml()
+                </td>
+            </tr>
+        </table>
+    </div>
+}

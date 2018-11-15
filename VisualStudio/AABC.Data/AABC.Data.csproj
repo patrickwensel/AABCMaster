@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FE28A9EA-0E6F-4332-B86A-E6178A654986}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AABC.Data</RootNamespace>
+    <AssemblyName>AABC.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Integration|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Integration\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Mappings\AuthorizationMappings.cs" />
+    <Compile Include="Mappings\CaseMappings.cs" />
+    <Compile Include="Mappings\OfficeStaffMapping.cs" />
+    <Compile Include="Mappings\PatientMappings.cs" />
+    <Compile Include="Mappings\ProviderPortalMappings.cs" />
+    <Compile Include="Mappings\WebUserMappings.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AllLanguage.cs" />
+    <Compile Include="Models\AuthCode.cs" />
+    <Compile Include="Models\Case.cs" />
+    <Compile Include="Models\CaseAuthClass.cs" />
+    <Compile Include="Models\CaseAuthCode.cs" />
+    <Compile Include="Models\CaseAuthCodeGeneralHour.cs" />
+    <Compile Include="Models\CaseAuthHour.cs" />
+    <Compile Include="Models\CaseAuthHoursNote.cs" />
+    <Compile Include="Models\CaseAuthHoursStatus.cs" />
+    <Compile Include="Models\CaseBillingReport.cs" />
+    <Compile Include="Models\CaseMonthlyPeriod.cs" />
+    <Compile Include="Models\CaseMonthlyPeriodProviderFinalization.cs" />
+    <Compile Include="Models\CasePayableReport.cs" />
+    <Compile Include="Models\CaseProvider.cs" />
+    <Compile Include="Models\CaseProviderNote.cs" />
+    <Compile Include="Models\CaseStatus.cs" />
+    <Compile Include="Models\CaseStatusReason.cs" />
+    <Compile Include="Models\CaseTask.cs" />
+    <Compile Include="Models\CommonLanguage.cs" />
+    <Compile Include="Models\CoreEntityModel.cs" />
+    <Compile Include="Models\GuardianRelationship.cs" />
+    <Compile Include="Models\HoursNoteTemplate.cs" />
+    <Compile Include="Models\HoursNoteTemplateGroup.cs" />
+    <Compile Include="Models\HoursProviderCost.cs" />
+    <Compile Include="Models\Insurance.cs" />
+    <Compile Include="Models\ISO639_2_Lang.cs" />
+    <Compile Include="Models\Language.cs" />
+    <Compile Include="Models\LanguageStrengthType.cs" />
+    <Compile Include="Models\Number.cs" />
+    <Compile Include="Models\Patient.cs" />
+    <Compile Include="Models\Provider.cs" />
+    <Compile Include="Models\ProviderInsuranceBlacklist.cs" />
+    <Compile Include="Models\ProviderLanguage.cs" />
+    <Compile Include="Models\ProviderPortalUser.cs" />
+    <Compile Include="Models\ProviderServiceZipCode.cs" />
+    <Compile Include="Models\ProviderType.cs" />
+    <Compile Include="Models\ProviderTypeService.cs" />
+    <Compile Include="Models\Referral.cs" />
+    <Compile Include="Models\ReferralChecklist.cs" />
+    <Compile Include="Models\ReferralChecklistItem.cs" />
+    <Compile Include="Models\ReferralDismissalReason.cs" />
+    <Compile Include="Models\ReferralEmail.cs" />
+    <Compile Include="Models\ReferralSetting.cs" />
+    <Compile Include="Models\ReferralSourceType.cs" />
+    <Compile Include="Models\ReferralStatus.cs" />
+    <Compile Include="Models\Service.cs" />
+    <Compile Include="Models\ServiceLocation.cs" />
+    <Compile Include="Models\SettingValueType.cs" />
+    <Compile Include="Models\SMTPAccount.cs" />
+    <Compile Include="Models\Sprocs\CaseTimeScrubOverview.cs" />
+    <Compile Include="Models\Sprocs\CatalystNoDataByProviderAndCase.cs" />
+    <Compile Include="Models\Sprocs\HoursScrubSummaryProvidersLists.cs" />
+    <Compile Include="Models\Sprocs\PeriodHoursMatrixByCase.cs" />
+    <Compile Include="Models\Sprocs\HoursDetailedByPeriod.cs" />
+    <Compile Include="Models\Staff.cs" />
+    <Compile Include="Models\WebOption.cs" />
+    <Compile Include="Models\WebOptionGroup.cs" />
+    <Compile Include="Models\WebPermission.cs" />
+    <Compile Include="Models\WebPermissionGroup.cs" />
+    <Compile Include="Models\WebUser.cs" />
+    <Compile Include="Models\WebUserOption.cs" />
+    <Compile Include="Models\WebUserPermission.cs" />
+    <Compile Include="Models\ZipCode.cs" />
+    <Compile Include="Services\CacheService.cs" />
+    <Compile Include="Mappings\GeneralMappings.cs" />
+    <Compile Include="Mappings\ProviderMappings.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CaseService.cs" />
+    <Compile Include="Services\CatalystService.cs" />
+    <Compile Include="Services\DataListService.cs" />
+    <Compile Include="Services\EmailService.cs" />
+    <Compile Include="Services\HoursService.cs" />
+    <Compile Include="Services\ProviderPortalService.cs" />
+    <Compile Include="Services\ProviderService.cs" />
+    <Compile Include="Services\ServicesService.cs" />
+    <Compile Include="Services\WebUserService.cs" />
+    <Compile Include="Services\ZipCodeService.cs" />
+    <Compile Include="V2\CoreContext.cs" />
+    <Compile Include="V2\DTOs\AppliedAuthorizationAndInsuranceMismatchItem.cs" />
+    <Compile Include="V2\DTOs\ProviderPortalUserAdminListItem.cs" />
+    <Compile Include="V2\DTOs\WatchCaseResultItem.cs" />
+    <Compile Include="V2\Mappings\AuthorizationMappings.cs" />
+    <Compile Include="V2\Mappings\BaseNoteTypeConfiguration.cs" />
+    <Compile Include="V2\Mappings\BaseNoteTaskTypeConfiguration.cs" />
+    <Compile Include="V2\Mappings\CaseMappings.cs" />
+    <Compile Include="V2\Mappings\CatalystMappings.cs" />
+    <Compile Include="V2\Mappings\SessionReportConfigurationTypeConfiguration.cs" />
+    <Compile Include="V2\Mappings\InfrastructureMappings.cs" />
+    <Compile Include="V2\Mappings\InsuranceMappings.cs" />
+    <Compile Include="V2\Mappings\ProviderMappings.cs" />
+    <Compile Include="V2\Mappings\ReferralMappings.cs" />
+    <Compile Include="V2\Mappings\SessionReportTypeConfiguration.cs" />
+    <Compile Include="V2\Procedures\CatalystProcedures.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AABC.Domain2\AABC.Domain2.csproj">
+      <Project>{1176f48d-ed61-451b-8bbf-88cd0d02586f}</Project>
+      <Name>AABC.Domain2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AABC.Domain\AABC.Domain.csproj">
+      <Project>{aac89b95-8f5d-43c3-81ff-0ad892f108a9}</Project>
+      <Name>AABC.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dymeng.Framework\Dymeng.Framework.csproj">
+      <Project>{8a84fce2-729e-4f18-b8c1-e8a5bfe56136}</Project>
+      <Name>Dymeng.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

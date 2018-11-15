@@ -1,0 +1,100 @@
+﻿@model List<AABC.Shared.Web.App.HoursEntry.Models.ProviderSelectListItem>
+
+<script type="text/javascript" id="dxss_ProviderSelectPopupScripts">
+
+    function btnSelectProviderOKClick() {
+
+        var caseID = caseIDProvider();
+        var providerID = App.DevEx.GetControl("ProviderSelectProviderList").GetValue();
+
+        if (providerID == null) {
+            alert('Please select a provider');
+            return;
+        }
+
+        var cancelCallback = function () {
+            App.DevEx.GetControl("pc-hours-entry").Hide();
+        }
+
+        var successCallback = function () {
+            App.DevEx.GetControl("pc-hours-entry").Hide();
+            try {
+                TimeBill.Scrub.Grid.Object.Refresh();
+            } catch (err) {
+                window.location.reload(true);
+            }
+        }
+
+        $.ajax({
+            url: '/HoursEntry/GetNewEntryDataTemplate',
+            type: 'GET',
+            data: {
+                caseID: caseID,
+                providerID: providerID
+            }
+        }).done(function (data) {
+            var vm = new window.aabc.hoursEntry.HoursEntryVM(data, cancelCallback, successCallback);
+            var root = document.getElementById('hours-entry-container-pp');
+            App.DevEx.GetControl("pc-hours-entry-provider-select").Hide();
+            ko.cleanNode(root);
+            ko.applyBindings(vm, root);
+            App.DevEx.GetControl("pc-hours-entry").Show();
+        }).fail(function () {
+            alert("We're sorry, we ran into an error with that.  Please contact your administrator if the issue persists.");
+        });
+    }
+
+    function btnSelectProviderCancelClick() {
+        var popup = App.DevEx.GetControl("pc-hours-entry-provider-select").Hide();
+    }
+
+</script>
+
+<div>
+
+    <h3>Select Provider for the hours addition</h3>
+
+    @Html.DevExpress().ComboBox(
+        s => {
+            s.Name = "ProviderSelectProviderList";
+            s.Properties.TextField = "Name";
+            s.Properties.ValueField = "ID";
+            s.Properties.TextFormatString = "({0}) {1}";
+            s.Width = 200;
+            s.Properties.Columns.Add("Type", "Type", 50);
+            s.Properties.Columns.Add("Name", "Name", 200);
+            s.Properties.Caption = "Provider List";
+            s.Properties.CaptionCellStyle.Width = 100;
+        }
+    ).BindList(Model).GetHtml()
+
+    <div style="text-align:right; width: 100%; margin-top: 15px; margin-left: auto; margin-right: 0;">
+        <table>
+            <tr>
+                <td>
+                    @Html.DevExpress().Button(
+                        s => {
+                            s.Name = "btnOk";
+                            s.Text = "OK";
+                            s.UseSubmitBehavior = false;
+                            //s.Width = 100;
+                            s.ClientSideEvents.Click = "btnSelectProviderOKClick";
+                        }
+                    ).GetHtml()
+                </td>
+                <td>
+                    @Html.DevExpress().Button(
+                        s => {
+                            s.Name = "btnCancel";
+                            s.Text = "Cancel";
+                            s.UseSubmitBehavior = false;
+                            //s.Width = 100;
+                            s.ClientSideEvents.Click = "btnSelectProviderCancelClick";
+                        }
+                    ).GetHtml()
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>

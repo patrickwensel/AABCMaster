@@ -1,0 +1,12 @@
+﻿@model AABC.Web.Models.Providers.PayrollVM
+    
+<script type="text/javascript" src="~/Scripts/Pages/Payroll.js" id="dxis_PayrollPageScripts"></script>
+
+@Html.Partial("PayrollGrid", Model.Items)
+
+<script type="text/javascript">
+    Payroll.Initialize();
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+    });
+</script>

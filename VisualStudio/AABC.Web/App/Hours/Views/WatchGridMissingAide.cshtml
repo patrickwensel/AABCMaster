@@ -1,0 +1,28 @@
+﻿@model List<AABC.Web.App.Hours.Models.WatchCaseResultItem>
+
+@Html.DevExpress().GridView(
+    s => {
+
+        s.Name = "WatchGridMissingAideHours";
+        s.KeyFieldName = "CaseID";
+
+        s.SettingsPager.PageSize = 200;
+        s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+        s.Settings.VerticalScrollableHeight = 250;
+        s.SettingsBehavior.AllowSort = false;
+        s.Width = 500;
+        s.SettingsBehavior.AllowFocusedRow = true;
+
+        s.ClientSideEvents.RowDblClick = "HoursWatch.gridViewDoubleClick";
+
+        s.Columns.Add("FirstName");
+        s.Columns.Add("LastName");
+        s.Columns.Add("ProviderFirstName");
+        s.Columns.Add("ProviderLastName");
+
+        var col = s.Columns.Add("Comments");
+        col.Caption = " ";
+        col.Width = 25;
+
+    }
+).Bind(Model).GetHtml()

@@ -1,0 +1,14 @@
+﻿@model AABC.Web.Models.ExternalData.Catalyst.StudentAttendanceImportResults
+
+<div style="width: 100%;">
+    <h2>Import Results</h2>
+
+    <h4>Successes</h4>
+    @Html.Partial("CatalystImportResultsSuccessesGrid", Model.SuccessItems)
+
+    <h4>Failures</h4>
+    @Html.Partial("CatalystImportResultsFailuresGrid", Model.FailureItems)
+
+</div>
+
+<div style="margin-top: 15px; width: 100%; text-align: right;">@Html.DevExpress().Button(s => { s.Width = 100; s.Name = "btnPopupClose"; s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide();  }"; s.Text = "Ok"; }).GetHtml()</div>

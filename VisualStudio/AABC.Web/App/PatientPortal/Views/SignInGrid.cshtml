@@ -1,0 +1,41 @@
+﻿@model List<AABC.DomainServices.Patients.SignInSummaryEx>
+@Html.DevExpress().GridView(
+    s => {
+
+        s.Name = "SignInSummaryGrid";
+        s.KeyFieldName = "UserId";
+
+        s.Width = Unit.Percentage(50);
+        s.Height = Unit.Percentage(50);
+
+        s.SettingsBehavior.AllowSort = false;
+        s.SettingsBehavior.AllowGroup = false;
+        s.SettingsBehavior.AllowFocusedRow = false;
+        s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        s.Settings.ShowFilterRow = true;
+
+        s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+        s.SettingsPager.PageSize = 200;
+
+        s.Settings.ShowTitlePanel = true;
+
+        var col = s.Columns.Add("Email");
+        col.Width = 200;
+
+        col = s.Columns.Add("FirstName");
+        col.Width = 100;
+
+        col = s.Columns.Add("LastName");
+        col.Width = 100;
+
+        col = s.Columns.Add("Count");
+        col.Caption = "Sign Ins";
+        col.Width = 100;
+
+        col = s.Columns.Add("LastSignIn");
+        col.Caption = "Last Sign In";
+        col.Width = 200;
+
+    }
+).Bind(Model).GetHtml()

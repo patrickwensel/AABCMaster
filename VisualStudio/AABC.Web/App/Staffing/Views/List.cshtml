@@ -1,0 +1,19 @@
+﻿@model AABC.Web.App.Staffing.Models.StaffingListVM
+
+<script type="text/javascript">
+    function OnCellDblClick(visibleIndex, fieldName) {
+        var ctl = App.DevEx.GetControl("gridList");
+        var id = ctl.GetRowKey(visibleIndex);
+        window.location.href = '/Staffing/Manage/' + id;
+    }
+</script>
+
+<div id="grid-list">@Html.Partial("ListGrid", Model)</div>
+<div id="DialogAnchor"></div>
+
+
+<script type="text/javascript">
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+    });
+</script>

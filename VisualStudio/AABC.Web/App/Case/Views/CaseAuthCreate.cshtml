@@ -1,0 +1,219 @@
+﻿@model AABC.Web.Models.Cases.AuthCreateVM
+
+<script id="dxss_generalHoursEditScripts" type="text/javascript">
+
+    $(function () {
+        $('#form-popup-submitcaseauthbase').submit(function () {
+            $.ajax({
+                url: "/Case/SubmitCaseAuthBase",
+                type: "POST",
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response == "ok") {
+                        PopupGeneral.Hide();
+                    } else {
+                        App.Dialogs.Error();
+                    }
+                },
+                error: function () {
+                    App.Dialogs.Error();
+                }
+            });
+            return false;
+        });
+    });
+
+
+    function btnPopupSaveNewAuthClick(s, e) {
+
+        var code = App.DevEx.GetControl("NewAuth.Code").GetValue();
+        var desc = App.DevEx.GetControl("NewAuth.Description").GetValue();
+
+        $.ajax({
+            url: "/Case/CreateAuth",
+            type: 'POST',
+            data: {
+                authCode: code,
+                authDescription: desc
+            },
+            success: function () {
+                App.DevEx.GetControl("NewAuth.Code").SetValue(null);
+                App.DevEx.GetControl("NewAuth.Description").SetValue(null);
+            }
+        });
+
+    }
+
+    function OnStartDateChange(s, e) {
+        var d = moment(s.GetDate()).add(7, 'days').toDate();
+        var DetailEndDate = App.DevEx.GetControl("Detail.EndDate");
+        DetailEndDate.SetMinDate(d);
+
+        var endDate = DetailEndDate.GetDate();
+        if (endDate < d) {
+            DetailEndDate.SetDate(d);
+        }
+        
+
+    }
+
+</script>
+
+
+@using (Html.BeginForm("SubmitCaseAuthBase", "Case", FormMethod.Post, new { id = "form-popup-submitcaseauthbase" })) {
+
+    @Html.HiddenFor(m => m.Detail.CaseAuthorizationID);
+    @Html.HiddenFor(m => m.ViewHelper.CaseID);
+    
+    <div class="form-section">
+        <div class="form-section-header"><span>Case Authorization Information</span></div>
+        <div class="form-section-content">
+            <div class="form-section-content-col1">
+
+                @Html.DevExpress().ComboBox(
+                     s => {
+                         s.Name = "Detail.AuthClass.ID";
+                         s.Properties.Caption = "Auth Class";
+                         s.Properties.CaptionCellStyle.Width = 100;
+                         s.Properties.TextField = "Code";
+                         s.Properties.ValueField = "ID";
+                         s.Properties.ValueType = typeof(int);
+                         s.Properties.Columns.Add("Code", "Code", 50);
+                         s.Properties.Columns.Add("Name", "Name", 150);
+                         s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRender(sender, Model.Detail.AuthClass);
+                     }
+                 ).BindList(Model.ViewHelper.AuthClasses).Bind(Model.Detail.AuthClass.ID).GetHtml()
+
+                @Html.DevExpress().ComboBox(
+                     s => {
+                         s.Name = "Detail.ID";
+                         s.Properties.Caption = "Auth Code";
+                         s.Properties.CaptionCellStyle.Width = 100;
+                         s.Properties.TextField = "Code";
+                         s.Properties.ValueField = "ID";
+                         s.Properties.ValueType = typeof(int);
+                         s.Properties.Columns.Add("Code", "Code", 50);
+                         s.Properties.Columns.Add("Description", "Description", 250);
+                         s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRender(sender, Model.Detail);
+                     }
+                 ).BindList(Model.ViewHelper.Authorizations).Bind(Model.Detail.ID).GetHtml()
+
+            </div>
+
+            <div class="form-section-content-col2">
+
+                @Html.DevExpress().DateEdit(
+                     s => {
+                         s.Name = "Detail.StartDate";
+                         s.Properties.Caption = "Start Date";
+                         s.Properties.CaptionCellStyle.Width = 100;
+                         s.Properties.ClientSideEvents.DateChanged = "function(s,e) { OnStartDateChange(s, e);}";
+                     }
+                 ).Bind(Model.Detail.StartDate).GetHtml()
+            
+                        @Html.DevExpress().DateEdit(
+                     s => {
+                         s.Name = "Detail.EndDate";
+                         s.Properties.Caption = "End Date";
+                         s.Properties.CaptionCellStyle.Width = 100;
+                     }
+                 ).Bind(Model.Detail.EndDate).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                     s => {
+                         s.Name = "Detail.TotalHoursApproved";
+                         s.Properties.Caption = "Total Hours";
+                         s.Properties.CaptionCellStyle.Width = 100;
+
+                     }
+                 ).Bind(Model.Detail.TotalHoursApproved).GetHtml()
+
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+        
+
+    <div class="form-section" style="margin-top: 15px;">
+        <div class="form-section-header"><span>Actions</span></div>
+        <div class="form-section-content">
+            <div class="form-section-content-col1" style="text-align: right;">
+
+                <table>
+                    <tr>
+                        <td>
+                            @Html.DevExpress().Button(
+                                 s => {
+                                     s.Name = "btnPopupSave";
+                                     s.Text = "Save & Close";
+                                     s.Width = 100;
+                                     s.UseSubmitBehavior = true;
+                                 }
+                             ).GetHtml()
+                        </td>
+                        <td>
+                            @Html.DevExpress().Button(
+                                 s => {
+                                     s.Name = "btnPopupCancel";
+                                     s.Text = "Cancel";
+                                     s.Width = 100;
+                                     s.ClientSideEvents.Click = "function(s, e) { PopupGeneral.Hide(); }";
+                                 }
+                             ).GetHtml()
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="form-section" style="margin-top: 50px;">
+        <div class="form-section-header"><span>Add Authorization Code</span></div>
+        <div class="form-section-content">
+            <div class="form-section-content-col1" style="text-align: right;">
+
+            
+                <table>
+                    <tr>
+                        <td>
+                            @Html.DevExpress().TextBox(
+                                 s => {
+                                     s.Name = "NewAuth.Code";
+                                     s.Properties.Caption = "Code";
+                                     s.Width = 100;
+                                 }
+                             ).GetHtml()
+                                            </td>
+                                            <td>
+                                                @Html.DevExpress().TextBox(
+                                 s => {
+                                     s.Name = "NewAuth.Description";
+                                     s.Properties.Caption = "Description";
+                                     s.Width = 250;
+                                 }
+                             ).GetHtml()
+                                            </td>
+                                            <td>
+                                                @Html.DevExpress().Button(
+                                 s => {
+                                     s.Name = "btnPopupSaveNewAuth";
+                                     s.Text = "Add";
+                                     s.Width = 100;
+                                     s.ClientSideEvents.Click = "btnPopupSaveNewAuthClick";
+                                 }
+                             ).GetHtml()
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+}
+

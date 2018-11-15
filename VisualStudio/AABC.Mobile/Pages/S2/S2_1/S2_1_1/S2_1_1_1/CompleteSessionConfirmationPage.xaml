@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<control:LoggedInPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+			 			 xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+						 prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="AABC.Mobile.Pages.S2_1_1_1.CompleteSessionConfirmationPage"
+			 Title="Complete Session"
+			 NavigationPage.BackButtonTitle="Back"
+			 Padding="0">
+
+    <StackLayout>
+
+		<StackLayout Orientation="Vertical" HeightRequest="100" HorizontalOptions="Fill" BackgroundColor="{StaticResource highlightBackgroundColor}" Padding="0, 10, 0, 0" >
+			<Label Text="Important:" Style="{StaticResource pageTitle}" HorizontalTextAlignment="Center" />
+			<Label Text="Read and Confirm" Style="{StaticResource pageTitle}" HorizontalTextAlignment="Center" FontAttributes="Bold" />
+		</StackLayout>
+
+		<ScrollView>
+			<StackLayout Padding="10" Spacing="10">
+				<Label Text="(some notice about how the session is completing and requires notes and signoff after this page)" 
+					LineBreakMode="WordWrap"
+					VerticalOptions="CenterAndExpand" 
+					HorizontalOptions="CenterAndExpand" />
+
+				<Button Text="Confirm &amp; Complete" Command="{Binding ConfirmAndCompleteCommand}" Style="{StaticResource primary}" />
+				<Button Text="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource cancel}" />
+			</StackLayout>
+		</ScrollView>
+
+	</StackLayout>
+	
+</control:LoggedInPage>

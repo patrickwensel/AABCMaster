@@ -1,0 +1,191 @@
+﻿@model AABC.PatientPortal.App.Home.Models.HomeVM
+
+
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Parent Portal (<span data-bind="text: activeChildName"></span>) <small data-bind="visible: showChildName()"><a data-bind="click: changeChild">Change Child</a></small></h2>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+
+<!-- NO GROUPS TO DISPLAY -->
+<div data-bind="visible: hasMonthlyGroups() == false">
+    <div id="hoursMainContent" class="wrapper wrapper-content animated fadeInRight">
+        <div class="row" id="month-group-header-set-container">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="alert alert-warning">No Data Available!</div>
+                    <div><p>We don't have anything on file for this patient yet.  Please check back later.</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- GROUPS DISPLAY -->
+<div data-bind="visible: hasMonthlyGroups()">
+
+    <div class="alert alert-info alert-dismissable space-10">
+        <p>Welcome to the Parent Portal.  Please use the green 'Approve These Hours' button to approve all hours for that month.</p>
+        <p>If there's a problem with anything, you can use the red 'Report an Issue' button to send us a message about it so we can correct it.</p>
+    </div>
+
+    <div class="alert alert-warning alert-dismissable space-10">
+        <p>Please Note</p>
+        <p>The Direct Services by the ABA Aide are the hours that would occur in your home with you present.  The other hours may or may not be in your home:</p>
+        <ul>
+            <li><em>Treatment Planning - </em> this is what the BCBA does from his or her own home, reviewing the treatment plan, goals and making adjustments to the plan to get the best outcomes on a weekly basis</li>
+            <li><em>Assessment - </em> this is the assessment done by the BCBA initially and much of the assessment is done writing the report.  Some of the assessment hours are done at your home with you and your child, and some is done at the BCBA's own home or office as they are writing the report and creating the initial treatment plan</li>
+            <li><em>Direct Supervision - </em> this could occur either inside or outsite your home when the BCBA is training the ABA Aide on the programs to work with your child</li>
+        </ul>
+    </div>
+
+    <!-- GROUPS LOOP -->
+    <div data-bind="foreach: monthlyGroups" class="clearfix">
+
+        <div class="col-lg-12">
+
+            <div class="ibox float-e-margins" data-bind="attr: { id: 'group-ibox-' + groupID()}">
+
+                <div data-bind="attr: { id: 'group-ibox-title-' + groupID}" class="ibox-title ibox-title-monthgroup">
+
+                    <h5 data-bind="text: groupMonthDisplay"></h5>
+                    
+                    <div class="ibox-content">
+
+                        <!-- TOP OF GROUP -->
+                        <div class="hours-approval-container" data-bind="visible: hours().length > 5">
+                            <div class="alert alert-success" data-bind="visible: isFullyApproved">This month has been approved!</div>
+                            <div class="pull-right" data-bind="visible: isFullyApproved() == false">
+                                <span style="padding-right: 1em;"><small data-bind="text: approveStatusMessage"></small></span>
+                                <button data-bind="enable: canApprove, click: approveHours" class="btn btn-primary pull-right">Approve These Hours</button>
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <!-- HOURS LIST -->
+                        <div class="hours-list clearfix">
+
+                            <ul class="month-signoff-list" data-bind="foreach: hours">
+
+                                <li>
+                                    <div class="container-fluid">
+                                        <div class="col-sm-9">
+                                            <div class="signoff-datestamp" data-bind="text: timestampDisplay"></div>
+                                            <div data-bind="text: detailDisplay"></div>
+                                        </div>
+                                        <div class="col-sm-3" style="text-align: right;">
+                                            <div class="pull-right">
+                                                <div data-bind="visible: isReportable, click: reportHours" class="label label-danger label-report">Report an Issue</div>
+                                                <div data-bind="visible: isReported" class="label label-danger label-reported">Issue Reported</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+
+
+                        <!-- BOTTOM OF GROUP -->
+                        <div class="hours-approval-container">
+                            <div class="alert alert-success" data-bind="visible: isFullyApproved">This month has been approved!</div>
+                            <div class="pull-right" data-bind="visible: isFullyApproved() == false">
+                                <span style="padding-right: 1em;"><small data-bind="text: approveStatusMessage"></small></span>
+                                <button data-bind="enable: canApprove, click: approveHours" class="btn btn-primary pull-right">Approve These Hours</button>
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="clearfix"></div>
+
+</div>
+
+
+
+
+
+<!-- CHILD SELECTOR MODAL -->
+<div id="child-selector-modal" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h2>Select Child</h2>
+                        <ul class="home-patient-list" data-bind="foreach: patients">
+                            <li data-bind="text: name, css: { 'child-selected': active }, click: selectChild.bind($data, id)"></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- REPORT HOURS MODAL -->
+<div class="modal fade" id="reportHoursModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="report-hours-header" id="reportHoursTitle">Modal title</span><br />
+                <span id="reportHoursDetail">Modal detail</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="comment">Message:</label>
+                    <textarea class="form-control" rows="5" id="reportHoursComment"></textarea>
+                    <input type="hidden" id="reportHoursID" value="0" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button id="reportHoursSubmitButton" type="button" class="ladda-button btn btn-danger" data-style="expand-left">Report Hours</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Styles {
+    @Styles.Render("~/plugins/laddaStyles")    
+}
+
+@section Scripts {
+
+    @Scripts.Render("~/app/home")
+    @Scripts.Render("~/plugins/ladda")
+    
+
+    <script type="text/javascript">
+
+        (function () {
+
+            var model = @Html.Raw(Json.Encode(Model));
+            var vm = new aabc.home.HomeViewModel(model);
+
+        })();
+
+    </script>
+
+}

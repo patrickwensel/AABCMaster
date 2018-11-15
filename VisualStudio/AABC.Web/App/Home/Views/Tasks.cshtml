@@ -1,0 +1,31 @@
+<div style="padding: 10px;">
+    <h1>Tasks</h1>
+    <table style="width: 100%;">
+        <tr>
+            <td valign="top">
+                <h3>To-do List</h3>
+                <div id="divHomeTasks">
+                    @{Html.RenderAction("TaskUserDashboardTodoGrid", "Home");}
+                </div>
+
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <h3>Recently Completed</h3>
+                <div id="divHomeTasksCompleted">
+                    @{Html.RenderAction("TaskUserDashboardCompletedGrid", "Home");}
+                </div>
+
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript" id="dxss_w4089vtu5u2m03489">
+    $.getScript("/Scripts/Pages/TaskHomeDashboard.js", function () {
+        TaskHomeDashboard.Todo.Initialize();
+        App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+    });
+    $.getScript('/client/scripts/app/notes.v1.0.js', function () { });
+</script>

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<control:LoggedInPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+						 xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="AABC.Mobile.Pages.S1.SettingsPage"
+			 Title="Settings"
+			 Padding="0">
+
+	<StackLayout>
+
+		<Label Text="App Settings" HeightRequest="100"  Style="{StaticResource pageTitle}" HorizontalTextAlignment="Center"/>
+
+		<StackLayout Padding="10" Spacing="10">
+
+			<Label Text="Use the settings options below to configure your app" />
+
+			<Label Text="No app settings currently available" Margin="0, 20, 0, 0" />
+
+		</StackLayout>
+
+	</StackLayout>
+
+</control:LoggedInPage>

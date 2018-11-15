@@ -1,0 +1,804 @@
+﻿@model AABC.Web.App.Referrals.Models.ReferralEditVM
+<style type="text/css">
+	#checklist-items-container {
+		margin-left: 40px;
+		margin-right: 40px;
+		margin-top: 30px;
+		margin-bottom: 10px;
+	}
+
+	.actions-content {
+		margin-left: 40px;
+		margin-right: 40px;
+	}
+</style>
+
+<div class="new-layout">
+	<div class="section-expander" id="expander-referral-info">
+		<div class="section-expander-header">
+			<span>Referral Information</span>
+		</div>
+		<div class="section-expander-content">
+			<div id="referral-edit-page"  style="width:70%;float:left;display:none" data-bind="visible:true">
+				<div class="form-section">
+					<div class="form-section-header"><span>Status Information</span></div>
+					<div class="form-section-content">
+                        <div class="form-section-content-col1">
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select id="status" class="dxeButtonEdit_Aqua form-control-fixed-width" data-bind="value:data.status,
+										options: statuses,
+										optionsValue:'value',
+										optionsText:'text'"></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dateCreated">Date Created</label>
+                                <input id="dateCreated" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:moment(data.dateCreated()).format('LLL'),disable:true" />
+                            </div>
+                            <div class="form-group">
+                                <label for="statusNotes">Status Notes</label>
+                                <textarea id="statusNotes" class="dxeMemo_Aqua" style="width:350px;height:50px;" data-bind="value:data.statusNotes"></textarea>
+                            </div>
+                            <!-- ko if: data.isDismissed -->
+                            <div class="form-group">
+                                <label for="dismissalReasonTypeId">Dismissal Reason Type</label>
+                                <select id="dismissalReasonTypeId" class="dxeButtonEdit_Aqua form-control-fixed-width" data-bind="value: data.dismissalReasonTypeId,
+									options: dismissalReasonTypes,
+									optionsValue:'value',
+									optionsText:'text',
+									optionsCaption:''"></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dismissalReason">Dismissal Reason</label>
+                                <input id="dismissalReason" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.dismissalReason" />
+                            </div>
+                            <div class="form-group">
+                                <label for="dismissalReasonNotes">Dismissal Reason Notes</label>
+                                <textarea id="dismissalReasonNotes" class="dxeMemo_Aqua" style="width:350px;height:50px;" data-bind="value:data.dismissalReasonNotes"></textarea>
+                            </div>
+                            <!-- /ko -->
+                            <div class="form-group">
+                                <label style="margin-left: 150px;">
+                                    <input type="checkbox" data-bind="checked:data.followUp" />
+                                    Follow Up
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="followUpDate">Follow Up Date</label>
+                                <input id="followUpDate" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="datepicker:data.followUpDate, datepickerOptions: followUpDateDatePickerOptions" />
+                            </div>
+
+                        </div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="form-section">
+					<div class="form-section-header"><span>Source &amp; Staff Information</span></div>
+					<div class="form-section-content">
+						<div class="form-section-content-col1">
+							<div class="form-group">
+								<label for="sourceTypeId">Source Type</label>
+								<select id="sourceTypeId" class="dxeButtonEdit_Aqua" data-bind="value: data.sourceTypeId,
+						options: sourceTypes,
+						optionsValue:'value',
+						optionsText:'text'"></select>
+							</div>
+							<div class="form-group">
+								<label for="sourceName">Source Name</label>
+								<input id="sourceName" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.sourceName" />
+							</div>
+							<div class="form-group">
+								<label for="referrerNotes">Referrer Notes</label>
+								<textarea id="referrerNotes" class="dxeMemo_Aqua" style="width:350px;height:50px;" data-bind="value:data.referrerNotes"></textarea>
+							</div>
+						</div>
+						<div class="form-section-content-col2">
+							<div class="form-group">
+								<label for="assignedStaffId">Assigned Staff</label>
+								<select id="assignedStaffId" class="dxeButtonEdit_Aqua" data-bind="value: data.assignedStaffId,
+									options: officeStaff,
+									optionsValue:'value',
+									optionsText:'text',
+									optionsCaption:''"></select>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+
+				<div class="section-expander clearfix" id="expander-patient-info">
+					<div class="section-expander-header">
+						<span>Patient Information</span>
+					</div>
+					<div class="section-expander-content">
+						<div class="form-section">
+							<div class="form-section-content">
+								<div class="form-section-content-col1">
+									<div class="form-group">
+										<label for="lastName">Last Name</label>
+										<input id="lastName" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.lastName" />
+									</div>
+									<div class="form-group">
+										<label for="firstName">First Name</label>
+										<input id="firstName" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.firstName" />
+									</div>
+									<div class="form-group">
+										<label for="dateOfBirth">Date of Birth</label>
+										<input id="dateOfBirth" type="text" class="dxeTextBox_Aqua form-control-fixed-width" placeholder="mm/dd/yyyy" data-bind="cleave: { value:data.dateOfBirth, options: dobMaskOptions }" />
+									</div>
+								</div>
+								<div class="form-section-content-col2">
+									<div class="form-group">
+										<label for="primaryLanguage">Language</label>
+										<select id="primaryLanguage" class="dxeButtonEdit_Aqua form-control-fixed-width" data-bind="value: data.primaryLanguage,
+											options: languages,
+											optionsValue:'value',
+											optionsText:'text',
+											optionsCaption:''"></select>
+									</div>
+									<div class="form-group">
+										<label for="servicesRequested">Services Requested</label>
+										<input id="servicesRequested" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.servicesRequested" />
+									</div>
+									<div class="form-group">
+										<label for="areaOfConcern">Area of Concern</label>
+										<textarea id="areaOfConcern" class="dxeMemo_Aqua" style="width:350px;height:50px;" data-bind="value:data.areaOfConcern"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-section">
+						<div class="form-section-header"><span>Guardian &amp; Physician Info</span></div>
+						<div class="form-section-content">
+							<div class="form-section-content-col1">
+								<h4>Guardian #1</h4>
+								<div class="form-group">
+									<label for="guardianLastName">Last Name</label>
+									<input id="guardianLastName" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardianLastName" />
+								</div>
+								<div class="form-group">
+									<label for="guardianFirstName">First Name</label>
+									<input id="guardianFirstName" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardianFirstName" />
+								</div>
+								<div class="form-group">
+									<label for="guardianRelationshipId">Relationship</label>
+									<select id="guardianRelationshipId" class="dxeButtonEdit_Aqua form-control-fixed-width" data-bind="value: data.guardianRelationshipId,
+											options: guardianRelationships,
+											optionsValue:'value',
+											optionsText:'text',
+											optionsCaption:''"></select>
+								</div>
+								<div class="form-group">
+									<label for="guardianEmail">Email</label>
+									<input id="guardianEmail" type="email" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardianEmail" />
+								</div>
+								<div class="form-group">
+									<label for="guardianCellPhone">Cell Phone</label>
+									<input id="guardianCellPhone" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardianCellPhone" />
+								</div>
+								<div class="form-group">
+									<label for="guardianHomePhone">Home Phone</label>
+									<input id="guardianHomePhone" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardianHomePhone" />
+								</div>
+								<div class="form-group">
+									<label for="guardianWorkPhone">Work Phone</label>
+									<input id="guardianWorkPhone" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardianWorkPhone" />
+								</div>
+								<div class="form-group">
+									<label for="guardianNotes">Notes</label>
+									<textarea id="guardianNotes" class="dxeMemo_Aqua" style="width:350px;height:50px;" data-bind="value:data.guardianNotes"></textarea>
+								</div>
+							</div>
+							<div class="form-section-content-col2">
+								<h4>Guardian #3</h4>
+								<div class="form-group">
+									<label for="guardian3LastName">Last Name</label>
+									<input id="guardian3LastName" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardian3LastName" />
+								</div>
+								<div class="form-group">
+									<label for="guardian3FirstName">First Name</label>
+									<input id="guardian3FirstName" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardian3FirstName" />
+								</div>
+								<div class="form-group">
+									<label for="guardian3RelationshipId">Relationship</label>
+									<select id="guardian3RelationshipId" class="dxeButtonEdit_Aqua form-control-fixed-width" data-bind="value: data.guardian3RelationshipId,
+											options: guardianRelationships,
+											optionsValue:'value',
+											optionsText:'text',
+											optionsCaption:''"></select>
+								</div>
+								<div class="form-group">
+									<label for="guardian3Email">Email</label>
+									<input id="guardian3Email" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardian3Email" />
+								</div>
+								<div class="form-group">
+									<label for="guardian3CellPhone">Cell Phone</label>
+									<input id="guardian3CellPhone" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardian3CellPhone" />
+								</div>
+								<div class="form-group">
+									<label for="guardian3HomePhone">Home Phone</label>
+									<input id="guardian3HomePhone" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardian3HomePhone" />
+								</div>
+								<div class="form-group">
+									<label for="guardian3WorkPhone">Work Phone</label>
+									<input id="guardian3WorkPhone" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardian3WorkPhone" />
+								</div>
+								<div class="form-group">
+									<label for="guardian3Notes">Notes</label>
+									<textarea id="guardian3Notes" class="dxeMemo_Aqua" style="width:350px;height:50px;" data-bind="value:data.guardian3Notes"></textarea>
+								</div>
+							</div>
+							<div class="form-section-content-col1">
+								<h4>Guardian #2</h4>
+								<div class="form-group">
+									<label for="guardian2LastName">Last Name</label>
+									<input id="guardian2LastName" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardian2LastName" />
+								</div>
+								<div class="form-group">
+									<label for="guardian2FirstName">First Name</label>
+									<input id="guardian2FirstName" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardian2FirstName" />
+								</div>
+								<div class="form-group">
+									<label for="guardian2RelationshipId">Relationship</label>
+									<select id="guardian2RelationshipId" class="dxeButtonEdit_Aqua form-control-fixed-width" data-bind="value: data.guardian2RelationshipId,
+											options: guardianRelationships,
+											optionsValue:'value',
+											optionsText:'text',
+											optionsCaption:''"></select>
+								</div>
+								<div class="form-group">
+									<label for="guardian2Email">Email</label>
+									<input id="guardian2Email" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardian2Email" />
+								</div>
+								<div class="form-group">
+									<label for="guardian2CellPhone">Cell Phone</label>
+									<input id="guardian2CellPhone" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardian2CellPhone" />
+								</div>
+								<div class="form-group">
+									<label for="guardian2HomePhone">Home Phone</label>
+									<input id="guardian2HomePhone" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardian2HomePhone" />
+								</div>
+								<div class="form-group">
+									<label for="guardian2WorkPhone">Work Phone</label>
+									<input id="guardian2WorkPhone" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.guardian2WorkPhone" />
+								</div>
+								<div class="form-group">
+									<label for="guardian2Notes">Notes</label>
+									<textarea id="guardian2Notes" class="dxeMemo_Aqua" style="width:350px;height:50px;" data-bind="value:data.guardian2Notes"></textarea>
+								</div>
+							</div>
+							<div class="form-section-content-col2">
+								<h4>Physician</h4>
+								<div class="form-group">
+									<label for="physicianName">Name</label>
+									<input id="physicianName" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.physicianName" />
+								</div>
+								<div class="form-group">
+									<label for="physicianAddress">Address</label>
+									<input id="physicianAddress" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.physicianAddress" />
+								</div>
+								<div class="form-group">
+									<label for="physicianPhone">Phone</label>
+									<input id="physicianPhone" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.physicianPhone" />
+								</div>
+								<div class="form-group">
+									<label for="physicianFax">Fax</label>
+									<input id="physicianFax" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.physicianFax" />
+								</div>
+								<div class="form-group">
+									<label for="physicianEmail">Email</label>
+									<input id="physicianEmail" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.physicianEmail" />
+								</div>
+								<div class="form-group">
+									<label for="physicianContact">Contact</label>
+									<input id="physicianContact" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.physicianContact" />
+								</div>
+								<div class="form-group">
+									<label for="physicianNotes">Notes</label>
+									<textarea id="physicianNotes" class="dxeMemo_Aqua" style="width:350px;height:50px;" data-bind="value:data.physicianNotes"></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-section">
+						<div class="form-section-header"><span>Contact Information</span></div>
+						<div class="form-section-content">
+							<div class="form-section-content-col1">
+								<div class="form-group">
+									<label for="email">Email</label>
+									<input id="email" type="email" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.email" />
+								</div>
+								<div class="form-group">
+									<label for="phone">Phone</label>
+									<input id="phone" type="tel" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.phone" />
+								</div>
+							</div>
+							<div class="form-section-content-col2">
+
+								<div class="form-group">
+									<label for="address1">Address 1</label>
+									<input id="address1" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.address1" />
+								</div>
+								<div class="form-group">
+									<label for="address2">Address 2</label>
+									<input id="address2" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.address2" />
+								</div>
+								<div class="form-group">
+									<label for="city">City</label>
+									<input id="city" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.city" />
+								</div>
+								<div class="form-group">
+									<label for="state">State</label>
+									<select id="state" class="dxeButtonEdit_Aqua form-control-fixed-width" data-bind="value: data.state,
+										options: states,
+										optionsValue:'value',
+										optionsText:'text',
+										optionsCaption:''"></select>
+								</div>
+								<div class="form-group">
+									<label for="zipCode">Zip</label>
+									<input id="zipCode" type="text" class="dxeTextBox_Aqua" data-bind="value:data.zipCode" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+
+				<div class="section-expander clearfix" id="expander-insurance-info">
+					<div class="section-expander-header">
+						<span>Insurance Information</span>
+					</div>
+					<div class="section-expander-content">
+						<div class="form-section">
+							<div class="form-section-content">
+								<div class="form-section-content-col1">
+									<div class="form-group">
+										<label for="companyName">Company Name</label>
+										<input id="companyName" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.companyName" />
+									</div>
+									<div class="form-group">
+										<label for="insuranceCompany">Insurance Company</label>
+										<select id="insuranceCompany" class="dxeButtonEdit_Aqua" data-bind="value: data.insuranceCompanyId,
+										options: insuranceCompanies,
+										optionsValue:'value',
+										optionsText:'text',
+										optionsCaption:''"></select>
+									</div>
+									<div class="form-group">
+										<label for="fundingType">Funding Type</label>
+										<select id="fundingType" class="dxeButtonEdit_Aqua form-control-fixed-width" title="Select an insurance to have this field enabled" data-bind="value: data.fundingType,
+										options: insuranceFundingTypes,
+										optionsValue:'value',
+										optionsText:'text',
+										optionsCaption:'',
+										enable:data.insuranceCompanyId"></select>
+									</div>
+									<div class="form-group">
+										<label for="benefitType">Benefit Type</label>
+										<select id="benefitType" class="dxeButtonEdit_Aqua form-control-fixed-width" title="Select an insurance to have this field enabled" data-bind="value: data.benefitType,
+										options: insuranceBenefitTypes,
+										optionsValue:'value',
+										optionsText:'text',
+										optionsCaption:'',
+										enable:data.insuranceCompanyId"></select>
+									</div>
+									<div class="form-group">
+										<label for="coPayAmount">CoPay Amount</label>
+										<input id="coPayAmount" type="text" class="dxeTextBox_Aqua form-control-fixed-width" title="Select an insurance to have this field enabled" data-bind="value:data.coPayAmount,
+										enable:data.insuranceCompanyId" />
+									</div>
+									<div class="form-group">
+										<label for="coInsuranceAmount">CoInsurance Amount</label>
+										<input id="coInsuranceAmount" type="text" class="dxeTextBox_Aqua form-control-fixed-width" title="Select an insurance to have this field enabled" data-bind="value:data.coInsuranceAmount,
+										enable:data.insuranceCompanyId" />
+									</div>
+									<div class="form-group">
+										<label for="deductibleTotal">Deductible</label>
+										<input id="deductibleTotal" type="text" class="dxeTextBox_Aqua form-control-fixed-width" title="Select an insurance to have this field enabled" data-bind="value:data.deductibleTotal,
+										enable:data.insuranceCompanyId" />
+									</div>
+									<div class="form-group">
+										<label for="memberId">Member ID</label>
+										<input id="memberId" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.memberId" />
+									</div>
+									<div class="form-group">
+										<label for="primaryCardholderName">Cardholder Name</label>
+										<input id="primaryCardholderName" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.primaryCardholderName" />
+									</div>
+									<div class="form-group">
+										<label for="primaryCardholderDateOfBirth">Cardholder DOB</label>
+										<input id="primaryCardholderDateOfBirth" type="text" class="dxeTextBox_Aqua form-control-fixed-width" placeholder="mm/dd/yyyy" data-bind="cleave: { value:data.primaryCardholderDateOfBirth, options: dobMaskOptions }" />
+									</div>
+									<div class="form-group">
+										<label for="companyProviderPhone">Provider Phone</label>
+										<input id="companyProviderPhone" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:data.companyProviderPhone" />
+									</div>
+									<div class="form-group">
+										<label for="benefitCheck">Benefit Check</label>
+										<textarea id="benefitCheck" class="dxeMemo_Aqua" style="width:350px;height:200px;" data-bind="value:data.benefitCheck"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+
+				<div class="section-expander clearfix" id="expander-insurance-info">
+					<div class="section-expander-header">
+						<span>Patient Status</span>
+					</div>
+					<div class="section-expander-content">
+						<div class="form-section">
+							<div class="form-section-content">
+								<div class="form-section-content-col1">
+									<div class="form-group">
+										<label for="insuranceStatus">Insurance Status</label>
+										<select id="insuranceStatus" class="dxeButtonEdit_Aqua" data-bind="value:data.insuranceStatus,
+									options: insuranceStatuses,
+									optionsValue:'value',
+									optionsText:'text',
+									optionsCaption:''"></select>
+									</div>
+									<div class="form-group">
+										<label for="intakeStatus">Intake Status</label>
+										<select id="intakeStatus" class="dxeButtonEdit_Aqua form-control-fixed-width" data-bind="value:data.intakeStatus,
+									options: intakeStatuses,
+									optionsValue:'value',
+									optionsText:'text',
+									optionsCaption:''"></select>
+									</div>
+									<div class="form-group">
+										<label for="rxStatus">Rx Status</label>
+										<select id="rxStatus" class="dxeButtonEdit_Aqua form-control-fixed-width" data-bind="value:data.rxStatus,
+									options: rxStatuses,
+									optionsValue:'value',
+									optionsText:'text',
+									optionsCaption:''"></select>
+									</div>
+									<div class="form-group">
+										<label for="insuranceCardStatus">Insurance Card Status</label>
+										<select id="insuranceCardStatus" class="dxeButtonEdit_Aqua form-control-fixed-width" data-bind="value:data.insuranceCardStatus,
+									options: insuranceCardStatuses,
+									optionsValue:'value',
+									optionsText:'text',
+									optionsCaption:''"></select>
+									</div>
+									<div class="form-group">
+										<label for="evaluationStatus">Evaluation Status</label>
+										<select id="evaluationStatus" class="dxeButtonEdit_Aqua form-control-fixed-width" data-bind="value:data.evaluationStatus,
+									options: evaluationStatuses,
+									optionsValue:'value',
+									optionsText:'text',
+									optionsCaption:''"></select>
+									</div>
+									<div class="form-group">
+										<label for="policyBookStatus">Policy Book Status</label>
+										<select id="policyBookStatus" class="dxeButtonEdit_Aqua form-control-fixed-width" data-bind="value:data.policyBookStatus,
+									options: policyBookStatuses,
+									optionsValue:'value',
+									optionsText:'text',
+									optionsCaption:''"></select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+
+				<div class="section-expander clearfix" id="expander-checklist-info">
+					<div class="section-expander-header">
+						<span>Checklist Items</span>
+					</div>
+					<div class="section-expander-content">
+						<table>
+							<thead>
+								<tr>
+									<th>&nbsp;</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody data-bind="foreach:data.checklist">
+								<tr>
+									<td>
+										<input type="checkbox" data-bind="checked:isComplete" />
+									</td>
+									<td>
+										<span data-bind="text:checklistItemDescription"></span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+
+				<div class="section-expander clearfix" id="expander-actions-info">
+					<div class="section-expander-header">
+						<span>Actions</span>
+					</div>
+					<div class="section-expander-content section-expander-content-last">
+						<div class="actions-content">
+							<button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:save"><div class="dxb"><span class="dx-vam">Save</span></div></button>
+							<button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:markInactive"><div class="dxb"><span class="dx-vam">Mark Inactive</span></div></button>
+							<button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:deleteR"><div class="dxb"><span class="dx-vam">Delete</span></div></button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div style="width:30%;float:left">
+				@if (Model.ReferralId.HasValue)
+				{
+					@Html.Partial("~/App/Notes/Views/NoteList.cshtml", new AABC.Web.App.Notes.Models.NoteListVM { Source = "Referral", ParentID = Model.ReferralId.Value })
+				}
+			</div>
+		</div>
+	</div>
+	<div id="DialogConfirmAnchor"></div>
+</div>
+
+<script type="text/javascript">
+
+	/* these are global variables and functions that the delete confirmation model assumes exists */
+	var DialogConfirmResult = null;
+	var activeModelID = null;
+	function DialogConfirmClosed() {
+		if (DialogConfirmResult == "button1") {
+			$.ajax({
+				type: "POST",
+				url: '@Url.Action("Delete", "Referrals")',
+				data: { id: activeModelID }
+			}).done(function (response) {
+				activeModelID = null;
+				$("#" + App.Content.ContentElementID).empty().append(response);
+				App.Dialogs.MessageBox("Delete successful", App.Dialogs.Icons.Ok);
+			}).fail(function () {
+				App.Dialogs.Error("We're sorry, but we seem to have run into an issue trying to delete this referral.");
+			});
+		}
+	}
+
+	function ReferralVM(data) {
+		var self = {};
+		self.id = ko.observable();
+		self.dateCreated = ko.observable();
+		self.status = ko.observable(null);
+		self.statusNotes = ko.observable();
+		self.dismissalReasonTypeId = ko.observable();
+		self.dismissalReason = ko.observable();
+		self.dismissalReasonNotes = ko.observable();
+		self.followUp = ko.observable();
+		self.followUpDate = ko.observable();
+		// source info
+		self.sourceTypeId = ko.observable();
+		self.sourceName = ko.observable();
+		self.referrerNotes = ko.observable();
+		self.assignedStaffId = ko.observable();
+		//Patient Information
+		self.lastName = ko.observable("");
+		self.firstName = ko.observable("");
+		self.dateOfBirth = ko.observable();
+		self.primaryLanguage = ko.observable();
+		self.areaOfConcern = ko.observable();
+		self.servicesRequested = ko.observable();
+		//Guardian Contact Information
+		self.guardianLastName = ko.observable();
+		self.guardianFirstName = ko.observable();
+		self.relationship = ko.observable();
+		self.email = ko.observable();
+		self.phone = ko.observable();
+		self.address1 = ko.observable();
+		self.address2 = ko.observable();
+		self.city = ko.observable();
+		self.state = ko.observable();
+		self.zipCode = ko.observable();
+		// Insurance Information
+		self.companyName = ko.observable();
+		self.insuranceCompanyId = ko.observable();
+		self.memberId = ko.observable();
+		self.primaryCardholderDateOfBirth = ko.observable();
+		self.primaryCardholderName = ko.observable();
+		self.companyProviderPhone = ko.observable();
+		self.benefitCheck = ko.observable();
+		self.fundingType = ko.observable();
+		self.benefitType = ko.observable();
+		self.coPayAmount = ko.observable();
+		self.coInsuranceAmount = ko.observable();
+		self.deductibleTotal = ko.observable();
+		self.checklist = ko.observableArray([]);
+
+		self.isDismissed = ko.pureComputed(function () {
+			var status = self.status();
+			return status == 2;
+		});
+		self.status.extend({ required: true });
+		self.dismissalReasonTypeId.extend({
+			required: {
+				onlyIf: function () {
+					return self.isDismissed();
+				}
+			}
+		});
+		self.followUpDate.extend({
+			required: {
+				onlyIf: function () {
+					return self.followUp();
+				}
+			},
+			date: true
+		});
+		self.lastName.extend({ required: true });
+		self.firstName.extend({ required: true });
+		self.dateOfBirth.extend({ date: true });
+		self.email.extend({ email: true });
+		self.primaryCardholderDateOfBirth.extend({ date: true });
+
+		self.update = function (data) {
+			ko.mapping.fromJS(data, {}, self);
+		};
+
+		if (data) {
+			self.update(data);
+		}
+
+		return self;
+	}
+
+
+	function ReferralEditVM() {
+		var self = {};
+		self.dismissalReasonTypes = ko.observableArray([]);
+		self.sourceTypes = ko.observableArray([]);
+		self.statuses = ko.observableArray([]);
+		self.officeStaff = ko.observableArray([]);
+		self.languages = ko.observableArray([]);
+		self.states = ko.observableArray([]);
+		self.insuranceStatuses = ko.observableArray([]);
+		self.intakeStatuses = ko.observableArray([]);
+		self.rxStatuses = ko.observableArray([]);
+		self.insuranceCardStatuses = ko.observableArray([]);
+		self.evaluationStatuses = ko.observableArray([]);
+		self.policyBookStatuses = ko.observableArray([]);
+		self.insuranceCompanies = ko.observableArray([]);
+		self.insuranceFundingTypes = ko.observableArray([]);
+		self.insuranceBenefitTypes = ko.observableArray([]);
+		self.guardianRelationships = ko.observableArray([]);
+		self.data = undefined;
+		self.isNew = ko.pureComputed(function () {
+			return self.data && !self.data.id();
+		});
+		self.followUpDateDatePickerOptions = {
+			format: "mm/dd/yyyy",
+			startDate: moment().format("MM/DD/YYYY")
+		};
+		self.dobMaskOptions = {
+			date: true,
+			datePattern: ["m", "d", "Y"],
+			getDisplay: function (value) {
+				return moment(value).format("MM/DD/YYYY");
+			},
+			getValue: function (value) {
+				return moment(value, "MM/DD/YYYY").toISOString();
+			}
+		};
+		self.load = function (id) {
+			var promise;
+			if (id) {
+				promise = $.getJSON("/Referrals/GetReferralData", {
+					referralId: id
+				}).done(function (data) {
+					self.data = new ReferralVM(data);
+				}).fail(function () {
+					App.Dialogs.Error();
+				});
+			} else {
+				promise = $.Deferred().done(function () {
+					self.data = new ReferralVM();
+				}).resolve();
+			}
+			return promise;
+		};
+		self.loadMetadata = function () {
+			return $.ajax({
+				url: "/Referrals/GetMetadata",
+				type: "GET"
+			}).done(function (data) {
+				self.dismissalReasonTypes(data.dismissalReasonTypes);
+				self.sourceTypes(data.sourceTypes);
+				self.statuses(data.statuses);
+				self.officeStaff(data.officeStaff);
+				self.languages(data.languages);
+				self.states(data.states);
+				self.insuranceStatuses(data.insuranceStatuses);
+				self.intakeStatuses(data.intakeStatuses);
+				self.rxStatuses(data.rxStatuses);
+				self.insuranceCardStatuses(data.insuranceCardStatuses);
+				self.evaluationStatuses(data.evaluationStatuses);
+				self.policyBookStatuses(data.policyBookStatuses);
+				self.insuranceCompanies(data.insuranceCompanies);
+				self.insuranceFundingTypes(data.insuranceFundingTypes);
+				self.insuranceBenefitTypes(data.insuranceBenefitTypes);
+				self.guardianRelationships(data.guardianRelationships);
+			});
+		};
+		self.save = function () {
+			var errors = ko.validation.group(self.data, { deep: true });
+			if (errors().length > 0) {
+				errors.showAllMessages();
+			} else {
+				var data = ko.mapping.toJS(self.data);
+				var url = self.isNew() ? "/Referrals/Insert" : "/Referrals/Save";
+				var run = true;
+				if (data.status == 3 && !data.insuranceCompanyId) {
+					run = confirm("Are you sure you want to accept a referral without an insurance company?");
+				}
+				if (run) {
+					$.ajax({
+						url: url,
+						type: "POST",
+						data: data
+					}).done(function (r) {
+						App.Navigate("/Referrals/Search");
+					})
+					.fail(function () {
+						App.Dialogs.Error();
+					});
+				}
+			}
+		};
+		self.markInactive = function () {
+			App.Dialogs.ConfirmDelete({
+				message: "Are you sure you want to mark this Referrals as inactive?\r\n\r\nThis will remove the Referrals from the system.",
+				confirmed: function () {
+					$.ajax({
+						url: "/Referrals/Deactivate",
+						type: "POST",
+						data: { referralID: self.data.id() }
+					}).done(function () {
+						App.Navigate("/Referrals/Search");
+					}).fail(function () {
+						App.Dialogs.Error();
+					});
+				}
+			});
+		};
+		self.deleteR = function () {
+			$.ajax({
+				type: "GET",
+				url: "/Dialogs/ConfirmDelete",
+				data: {
+					contentElementID: App.Content.ContentElementID,
+					message: "Are you sure you want to delete this Referral? No associated patients or cases will be affected."
+				}
+			}).done(function (r) {
+				$("#DialogConfirmAnchor").html(r);
+				activeModelID = self.data.id();
+				DialogConfirm.Show();
+			}).fail(function () {
+				App.Dialogs.Error("We're sorry, but we seem to have run into an issue trying to confirm this action.");
+			});
+		};
+		self.loadMetadata();
+		return self;
+	}
+
+
+	$(function () {
+		var vm = new ReferralEditVM();
+		vm.load(@Model.ReferralId).then(function () {
+			ko.validation.init();
+			var element = $("#referral-edit-page")[0];
+			ko.cleanNode(element);
+			ko.applyBindings(vm, element);
+		});
+	});
+</script>
+<script type="text/javascript" id="dxss_CaseNotesViewModelScripts">
+	App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+</script>
+

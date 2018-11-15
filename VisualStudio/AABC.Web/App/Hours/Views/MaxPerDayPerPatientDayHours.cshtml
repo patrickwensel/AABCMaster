@@ -1,0 +1,20 @@
+﻿@model List<AABC.DomainServices.Hours.HourEx>
+<table style="width:400px;margin-left:20px;">
+    <thead>
+        <tr>
+            <th>Provider</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Hours</th>
+        </tr>
+    </thead>
+    @foreach (var h in Model)
+    {
+        <tr>
+            <td style="width:50%"><a href="/Case/@h.CaseID/Manage/Notes" target="_blank">@h.ProviderName</a></td>
+            <td style="width:15%;text-align:right">@DateTime.Today.Add(h.StartTime).ToString("h:mm tt")</td>
+            <td style="width:15%;text-align:right">@DateTime.Today.Add(h.EndTime).ToString("h:mm tt")</td>
+            <td style="width:10%;text-align:right">@h.BillableHours</td>
+        </tr>
+    }
+</table>

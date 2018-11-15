@@ -1,0 +1,197 @@
+﻿<div id="hours-entry-container-pp" data-bind="template:{name: 'hours-entry-dialog', data: $data}"></div>
+<template id="hours-entry-dialog">
+    <div  class="he-container">
+
+        <div class="he-heading">
+            <table>
+                <tr>
+                    <td>
+                        <h1>Hours Entry/Edit</h1>
+                        <div class="control">
+                            <h3 data-bind="text: patientName"></h3>
+                            <h3 data-bind="text: 'Entry ID: ' + entryID(), visible: entryID() > 0"></h3>
+                            <p data-bind="visible: catalystPreloadID() !== null">This is a template from your Catalyst timesheet entry.  Please complete and submit.</p>
+                        </div>
+                    </td>
+                    <td style="text-align: right">
+                        <div class="control">
+                            <h2 data-bind="text: providerTypeCode"></h2>
+                        </div>
+                        <div class="control">
+                            <h3 data-bind="text: insuranceName"></h3>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="he-body">
+            <table>
+                <tr>
+                    <!-- main area, left column (controls) -->
+                    <td style="width: 50%; border-right: 1px solid #a3c0e8;">
+                        <div style="padding: 5px;">
+                            <div class="control" data-bind="visible: isAdminMode">
+                                <label>Training Entry?</label>
+                                <input type="checkbox" data-bind="checked: isTrainingEntry" />
+                            </div>
+                            <div class="control" data-bind="visible: isAdminMode">
+                                <label>Status</label>
+                                <select data-bind="options: statusEnum, optionsText: 'description', value: selectedStatus, value: selectedStatus, enable: isEditable"></select>
+                            </div>
+                            <div class="control" data-bind="visible: isAdminMode">
+                                <label>Has Data</label>
+                                <input type="checkbox" data-bind="checked: hasData, enable: isEditable" />
+                            </div>
+                            <div class="control">
+                                <label>Date</label>
+                                <input type="date" data-bind="value: date, enable: isEditable() && enableDateEdit()" />
+                            </div>
+                            <div class="control">
+                                <label>Time In</label>
+                                <input type="time" data-bind="value: timeIn, enable: isEditable" />
+                            </div>
+                            <div class="control">
+                                <label>Time Out</label>
+                                <input type="time" data-bind="value: timeOut, enable: isEditable" />
+                            </div>
+                            <div class="control">
+                                <label>Location</label>
+                                <select data-bind="enable: isEditable, options: serviceLocations, optionsText: 'Name' , value: selectedServiceLocation, optionsCaption: 'Select a location...' "></select>
+                            </div>
+                            <div class="control">
+                                <label>Service</label>
+                                <select data-bind="enable: isEditable, options: services, optionsText: 'display' , value: selectedService, optionsCaption: 'Select a service...' "></select>
+                            </div>
+                            <div><span class="he-ssg-info" data-bind="visible: showSSGInfo, text: ssgInfo"></span></div>
+                            <div class="control" data-bind="visible: isSSG">
+                                <label>SSG Attendees</label>
+                                <select id="he-ssg-attendees" data-bind="enable: isEditable, options: activePatients, optionsText: 'name', selectedOptions: selectedSSGPatients" multiple="multiple" size="5"></select>
+                            </div>
+                            <!-- ko if: isOnAideLegacyMode -->
+                            <div class="note-container" data-bind="visible: showNoteContainer">
+                                <label>Notes</label>
+                                <div style="display: inline-block; width: 275px;">
+                                    <span>Please describe the session and include notes on all of these items:</span>
+                                    <ul>
+                                        <li>Behavior during session</li>
+                                        <li>Interventions that occurred during the session</li>
+                                        <li>Reinforcers used during the session</li>
+                                        <li>Goals addressed (include progress made or lack thereof)</li>
+                                        <li>Barriers to progress</li>
+                                        <li>Response to interventions</li>
+                                        <li>Summary of session</li>
+                                    </ul>
+                                </div>
+                                <textarea style="margin-left: 102px;" data-bind="value: note, enable: isEditable" rows="10"></textarea>
+                            </div>
+                            <div class="notes-container" data-bind="visible: showNotesContainer">
+                                <label>Notes</label>
+                                <ul class="question-list" data-bind="template: { name: 'hours-noteGroups-template', foreach: noteGroups, as: 'noteGroup' }"></ul>
+                                <script type="text/html" id="hours-noteGroups-template">
+                                    <li class="he-question-group-item">
+                                        <span class="he-question-group" data-bind="text: noteGroup.name"></span>
+                                        <ul id="he-notes-list" class="he-question-list" data-bind="foreach: noteGroup.notes">
+                                            <li class="he-question-list-item"><span data-bind="text: question"></span></li>
+                                            <li><input type="text" data-bind="value: answer, enable: $root.isEditable" /></li>
+                                        </ul>
+                                    </li>
+                                </script>
+                            </div>
+                            <!-- /ko -->
+                            <!-- ko ifnot: isOnAideLegacyMode -->
+                            <!-- ko with:sessionReportConfig -->
+                            <div class="notes-container">
+                                <ul data-bind="foreach:fields">
+                                    <li>
+                                        <label class="header" data-bind="text:name"></label>
+                                        <div data-bind="component:componentConfig"></div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- /ko -->
+                            <!-- /ko -->
+                        </div>
+                    </td>
+
+                    <!-- main area, right column (information) -->
+                    <td style="width: 50%" valign="top">
+                        <div style="padding: 5px;">
+                            <small>Please exit each field when done for validation to be accurate!</small>
+                            <h3 data-bind="visible: hasInfoMessages">Messages</h3>
+                            <ul class="he-info-messages" data-bind="template: { name: 'info-list-template', foreach: infoMessages }"></ul>
+                            <h3 class="he-errors-heading" data-bind="visible: hasErrorMessages">Errors</h3>
+                            <ul class="he-error-messages" data-bind="template: { name: 'info-list-template', foreach: errorMessages }"></ul>
+                            <h3 class="he-warnings-heading" data-bind="visible: hasWarningMessages">Warnings</h3>
+                            <ul class="he-warning-messages" data-bind="template: { name: 'info-list-template', foreach: warningMessages }"></ul>
+                            <script type="text/html" id="info-list-template">
+                                <li class="info-list-item"><span data-bind="html: message"></span></li>
+                            </script>
+                        </div>
+                    </td>
+
+                </tr>
+            </table>
+        </div>
+
+        <div class="he-footer">
+            <span class="he-non-editable-reason" data-bind="text: nonEditableReason, visible: !isEditable()"></span>
+            <button data-bind="visible: debugMode, click: test">Test</button>
+            <button class="he-delete-button" data-bind="visible: allowDeletion, click: deleteEntry">Delete Entry</button>
+            <button data-bind="click: cancel">Cancel</button>
+            <button data-bind="enable: isValid() && isEditable(), click: submit">OK</button>
+        </div>
+
+    </div>
+</template>
+
+
+
+<template id="component-text">
+    <textarea data-bind="value:summary"></textarea>
+</template>
+
+<template id="component-multiSelect">
+    <ul data-bind="foreach:items">
+        <li>
+            <label><input type="checkbox" data-bind="checked:checked" /><span data-bind="text:data.name"></span></label>
+            <!-- ko if: checked-->
+            <label data-bind="attr:{'for':$parent.entity + 'description' + $index()}">Description</label>
+            <input type="text" data-bind="value:data.description,attr:{'id': $parent.entity + 'description' + $index() }" />
+            <!-- /ko -->
+        </li>
+    </ul>
+</template>
+
+<template id="component-interventions">
+    <ul data-bind="foreach:items">
+        <li>
+            <label><input type="checkbox" data-bind="checked:checked" /><span data-bind="text:data.name"></span></label>
+            <!-- ko if: checked-->
+            <label data-bind="attr:{'for':'interventionResponse' + $index()}">Response</label>
+            <select data-bind="value:data.response,
+                    options:responses,
+                    optionsValue:'name',
+                    optionsText:'name',
+                    optionsCaption:'',
+                    attr:{'id':'interventionResponse' + $index()}"></select>
+            <label>Description</label>
+            <input type="text" data-bind="value:data.description" />
+            <!-- /ko -->
+        </li>
+    </ul>
+</template>
+
+<template id="component-goals">
+    <ul data-bind="foreach:goals">
+        <li>
+            <label data-bind="attr:{'for':'goalName' + $index()}">Goal</label><input type="text" data-bind="value:name, attr:{'id':'goalName' + $index()}" />
+            <label data-bind="attr:{'for':'goalProgress' + $index()}">Progress</label><input type="text" data-bind="value:progress,attr:{'id':'goalProgress' + $index()}" /><button data-bind="click:$parent.removeGoal">-</button>
+        </li>
+    </ul>
+    <label for="newGoalName">Goal</label>
+    <input type="text" id="newGoalName" data-bind="value:newGoal.name" />
+    <label for="newGoalProgress">Progress</label>
+    <input type="text" id="newGoalProgress" data-bind="value:newGoal.progress" />
+    <button data-bind="click:addGoal,enable:canAddGoal">+</button>
+</template>

@@ -1,0 +1,59 @@
+<script type="text/javascript">
+
+    function OnUserOptionsMenuItemClick(s, e) {
+        switch (e.item.name) {
+            case "changePassword":
+                App.Popup.Show({
+                    url: "/Account/UserChangePassword",
+
+                    options: {
+                        title: 'Change User Password',
+                        width: 425,
+                        height: 200
+                    },
+
+                    finished: function (response) {
+                        if (response == "cancelled") {
+                            return;
+                        }   
+                    },
+
+                    error: function (response) {
+                        App.Dialogs.Error(response);
+                    }
+                });
+                break;
+
+            default: break;
+        }
+    }
+
+</script>
+
+
+@if(!Request.IsAuthenticated) {
+    @Html.ActionLink("Login", "Login", "Account")
+}
+else {
+    @: Welcome <b id="userName" class="pointer-cursor">@AABC.ProviderPortal.Global.Default.User().FirstName</b><i class="arrow-down"></i>
+
+    @*@: |
+    @Html.ActionLink("Admin", "Manage", "Admin")*@
+
+    @: |
+    @Html.ActionLink("Logout", "LogOff", "Account")
+}
+
+@Html.DevExpress().PopupMenu(settings => {
+    settings.Name = "UserOptions";
+    settings.PopupElementID = "userName";
+    settings.Items.Add(item => {
+        item.Text = "Change Password";
+        item.Name = "changePassword";
+    });
+    settings.ClientSideEvents.ItemClick = "OnUserOptionsMenuItemClick";
+    settings.PopupAction = PopupAction.LeftMouseClick;
+    settings.PopupHorizontalAlign = PopupHorizontalAlign.LeftSides;
+    settings.PopupVerticalAlign = PopupVerticalAlign.Below;
+
+}).GetHtml()

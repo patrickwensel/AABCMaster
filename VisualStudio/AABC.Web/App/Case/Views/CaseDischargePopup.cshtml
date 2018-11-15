@@ -1,0 +1,91 @@
+﻿@model AABC.Web.Models.Cases.DischargePopupVM
+
+
+<script type="text/javascript" id="dxss_CaseDischargePopupScripts">
+
+    function btnDischargeClick() {
+
+        var caseID = $("input[name='CaseID']").val();
+        var dischargeNotes = DischargeNotes.GetValue();
+
+        $.ajax({
+            url: '/Case/CaseDischarge',
+            type: 'POST',
+            data: {
+                caseID: caseID,
+                dischargeNotes: dischargeNotes
+            },
+            success: function (r) {
+                if (r == "ok") {
+                    App.Popup.Hide("ok")
+                } else {
+                    App.Popup.Hide(r);
+                }
+            },
+            error: function () {
+                App.Dialogs.Error();
+            }
+        });
+
+    }
+
+    function btnCancelClick() {
+        App.Popup.Hide("cancelled");
+    }
+
+</script>
+
+<div>
+
+    @using (Html.BeginForm("CaseDischarge", "Case", new { id = "form-default" })) {
+        
+        @Html.HiddenFor(m => m.CaseID)
+
+        <h3 id="DischargePopupHeader">Discharge for @Model.PatientName</h3>
+                
+        <div class="spacer-10"></div>
+
+        @Html.DevExpress().Memo(
+            s => {
+                s.Name = "DischargeNotes";
+                s.Properties.Caption = "Discharge Notes";
+                s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                s.Properties.Rows = 6;
+                s.Width = Unit.Percentage(100);
+            }
+        ).Bind(Model.DischargeNotes).GetHtml()
+
+        <div class="spacer-10"></div>
+
+        <div style="margin-left: auto; margin-right: 0;">
+            <table>
+                <tr>
+                    <td>
+                        @Html.DevExpress().Button(
+                        s => {
+                            s.Name = "btnOk";
+                            s.Text = "Discharge";
+                            s.UseSubmitBehavior = false;
+                            s.Width = 100;
+                            s.ClientSideEvents.Click = "btnDischargeClick";
+                        }
+                    ).GetHtml()
+                    </td>
+                    <td>
+                        @Html.DevExpress().Button(
+                        s => {
+                            s.Name = "btnDischargeCancel";
+                            s.Text = "Cancel";
+                            s.UseSubmitBehavior = false;
+                            s.Width = 100;
+                            s.ClientSideEvents.Click = "btnCancelClick";
+                        }
+                    ).GetHtml()
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    }
+
+</div>

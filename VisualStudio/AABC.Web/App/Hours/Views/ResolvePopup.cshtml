@@ -1,0 +1,98 @@
+﻿@model AABC.Web.App.Hours.Models.ResolvePopupVM
+<table style="width:100%">
+    <tr>
+    <td width="50%">
+
+        <table class="info-table">
+            <tr><td>Patient:</td><td>@Model.PatientName</td></tr>
+            <tr><td>Provider:</td><td>@Model.ProviderName (@Model.ServiceName)</td></tr>
+            <tr><td>Hours:</td><td>@Html.Raw(Model.HoursText)</td></tr>
+        </table>
+
+    </td>
+    <td valign="top">
+
+        <table class="info-table" style="float:right">
+            <tr><td>Reported By:</td><td>@Model.ReportedBy</td></tr>
+            <tr><td>Reported On:</td><td>@Model.ReportedOn.ToShortDateString()</td></tr>
+        </table>
+
+    </td></tr>
+</table>
+
+
+<hr />
+
+<form id="ResolvePopupForm">
+
+    @Html.HiddenFor(m => m.ID)
+
+    <table>
+        <tr>
+            <td style="padding:5px">
+                @Html.DevExpress().Memo(
+    s =>
+    {
+        s.Name = "ReportedMessage";
+        s.ReadOnly = true;
+        s.Properties.Caption = "Message";
+        s.Properties.CaptionCellStyle.Width = Unit.Pixel(200);
+        s.Width = 375;
+        s.Height = 75;
+    }
+    ).Bind(Model.ReportedMessage).GetHtml()
+            </td>
+            <td></td>
+</tr>
+        <tr>
+            <td style="padding:5px">
+                @Html.DevExpress().Memo(
+    s =>
+    {
+        s.Name = "ResolvedMessage";
+        s.Properties.Caption = "Response";
+        s.Properties.CaptionCellStyle.Width = Unit.Pixel(200);
+        s.Width = 375;
+        s.Height = 75;
+    }
+    ).Bind(Model.ResolvedMessage).GetHtml()
+            </td>
+            <td>
+                @Html.DevExpress().CheckBox(
+    s =>
+    {
+        s.Name = "IsResolved";
+        s.Text = "Resolved";
+    }
+    ).Bind(Model.IsResolved).GetHtml()
+            </td>
+        </tr>
+    </table>
+    
+</form>
+
+
+<table style="margin-top:10px; width:100%">
+    <tr>
+        <td align="right">
+            @Html.DevExpress().Button(
+    s =>
+    {
+        s.Name = "ResolveHoursPopupSave";
+        s.Text = "Save";
+        s.ClientSideEvents.Click = "HoursReported.Editor.Submit";
+    }
+    ).GetHtml()
+
+            @Html.DevExpress().Button(
+    s =>
+    {
+        s.Name = "ResolveHoursPopupCancel";
+        s.Text = "Cancel";
+        s.ClientSideEvents.Click = "App.Popup.Hide";
+    }
+    ).GetHtml()
+
+        </td>
+    </tr>
+</table>

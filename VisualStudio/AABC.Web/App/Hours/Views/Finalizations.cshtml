@@ -1,0 +1,12 @@
+﻿@model AABC.Web.App.Hours.Models.FinalizationsVM
+
+<script type="text/javascript" src="~/client/scripts/app/hoursfinalizations.v1.0.js" id="dxis_43987v693874b69476"></script>
+
+@Html.Partial("FinalizationsGrid", Model)
+
+<script type="text/javascript">
+    HoursFinalizations.Initialize();
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+    });
+</script>

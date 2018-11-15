@@ -1,0 +1,33 @@
+﻿@model List<AABC.Web.Models.Cases.GeneralHoursBilledListItem>
+
+
+<table class="dxgvTable_Aqua" style="border-top: 1px solid #bed6f6; border-left: 1px solid #bed6f6">
+
+    <tr class="dxgvDataRow_Aqua">
+        <td rowspan="4" class="dxgv dx-ac">
+            <div style="transform: rotate(-90deg);">Billed</div>
+        </td>
+        <td class="dxgv dx-ac">BCBA</td>
+        @foreach (var item in Model) {
+            <td class="dxgv dx-ac">@item.BCBAHours</td>
+        }
+    </tr>
+    <tr class="dxgvDataRow_Aqua">
+        <td class="dxgv dx-ac">AIDE</td>
+        @foreach (var item in Model) {
+            <td class="dxgv dx-ac">@item.AideHours</td>
+        }
+    </tr>
+    <tr class="dxgvDataRow_Aqua">
+        <td class="dxgv dx-ac">Total</td>
+        @foreach (var item in Model) {
+            <td class="dxgv dx-ac">@item.TotalHours</td>
+        }
+    </tr>
+    <tr class="dxgvDataRow_Aqua">
+        <td class="dxgv dx-ac"></td>
+        @foreach (var item in Model) {
+            <td class="dxgv dx-ac">@item.Month</td>
+        }
+    </tr>
+</table>

@@ -1,0 +1,61 @@
+﻿@model AABC.Web.Models.Cases.TimeBillDefinalizeProvider
+
+<div>
+    
+    @Html.DevExpress().ComboBox(
+         s => {
+             s.Name = "dcpProvider";
+             s.Properties.TextField = "CommonName";
+             s.Properties.ValueField = "ID";
+             s.Properties.ValueType = typeof(int);
+             s.Properties.Width = 200;
+             s.Properties.Columns.Add("CommonName", "Name", 200);
+             s.Properties.Caption = "Provider";
+             s.Properties.CaptionCellStyle.Width = 100;
+         }
+        ).BindList(ViewBag.CaseProviderList).Bind(Model.dcpProvider).GetHtml()
+
+
+    @Html.DevExpress().ComboBox(
+        cb => {
+            cb.Name = "dcpSelectedDate";
+            cb.Properties.TextField = "Display";
+            cb.Properties.ValueField = "Date";
+            cb.Properties.ValueType = typeof(DateTime);
+            cb.PreRender = (sender, e) => {
+                AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, ViewBag.SelectedDate, "Date");
+            };
+            cb.Properties.Caption = "Current Period";
+            cb.Properties.ClientSideEvents.ValueChanged = "function(s, e) { TimeBill.Scrub.TargetDate.AfterUpdate(); }";
+            cb.Properties.CaptionCellStyle.Width = 100;
+        }
+    ).BindList(ViewBag.AvailableDates).Bind(Model.dcpSelectedDate).GetHtml()
+
+    <div class="spacer-10"></div>
+
+    <table style="float: right;">
+        <tr>
+            <td>
+                @Html.DevExpress().Button(
+                    s => {
+                        s.Name = "btndcpOk";
+                        s.Text = "Ok";
+                        s.ClientSideEvents.Click = "function(s, e) { DefinalizeProvider.Definalize(); }";
+                        s.Width = 75;
+                    }
+                ).GetHtml()
+            </td>
+            <td style="padding-left: 5px;">
+                @Html.DevExpress().Button(
+                    s => {
+                        s.Name = "btndcpCancel";
+                        s.Text = "Cancel";
+                        s.ClientSideEvents.Click = "function(s, e) { dcpPopup.Hide(); }";
+                        s.Width = 75;
+                    }
+                ).GetHtml()
+            </td>
+        </tr>
+    </table>
+
+</div>

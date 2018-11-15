@@ -1,0 +1,205 @@
+﻿@model List<AABC.Web.Models.Providers.PayrollGridItemVM>
+
+
+@{
+    GridViewSettings s = new GridViewSettings();
+    s.Name = "gvPayrollOverviewGrid";
+    s.KeyFieldName = "ID";
+    s.Width = 750;
+
+    //s.Height = Unit.Percentage(100);
+
+    s.SettingsBehavior.AllowSort = false;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = false;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    s.Settings.ShowFilterRow = false;
+    s.CallbackRouteValues = new { Action = "PayrollGridCallback" };
+
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    //s.ClientSideEvents.Init = "function(s, e) { App.Content.GridViews.InitializeForStretchHeight(s); }";
+    s.ClientSideEvents.BeginCallback = "function(s, e) { Payroll.PayrollGrid.BeginCallback(s, e); }";
+    s.ClientSideEvents.EndCallback = "function(s, e) { Payroll.PayrollGrid.EndCallback(s, e); }";
+
+    s.SettingsPager.PageSize = 200;
+
+    s.Settings.ShowTitlePanel = true;
+    s.SetTitlePanelTemplateContent(
+        c => {
+            string content = "<table style='width: 100%;'><tr><td>";
+            ViewContext.Writer.Write(content);
+
+            Html.DevExpress().ComboBox(
+                cb => {
+                    cb.Name = "SelectedDate";
+                    cb.Properties.TextField = "Display";
+                    cb.Properties.ValueField = "Date";
+                    cb.Width = 100;
+                    cb.Properties.ValueType = typeof(DateTime);
+                    cb.PreRender = (sender, e) => {
+                        AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, ViewBag.SelectedDate, "Date");
+                    };
+                    cb.Properties.Caption = "Current Period";
+                    cb.Properties.ClientSideEvents.ValueChanged = "function(s, e) { Payroll.PayrollGrid.TargetDate.AfterUpdate(); }";
+                }
+            ).BindList(ViewBag.AvailableDates).Render();
+
+            ViewContext.Writer.Write("</td><td style='margin-left: 5px;'>");
+
+            Html.DevExpress().ComboBox(
+                    cb => {
+                        cb.Name = "SelectedFilter";
+                        cb.Properties.TextField = "Display";
+                        cb.Properties.ValueField = "Value";
+                        cb.Width = 100;
+                        cb.Properties.ValueType = typeof(String);
+                        cb.PreRender = (sender, e) => {
+                            AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, ViewBag.SelectedFilter, "Value");
+                        };
+                        cb.Properties.Caption = "Filter";
+                        cb.Properties.ClientSideEvents.ValueChanged = "function(s, e) { Payroll.PayrollGrid.FilterSelection.AfterUpdate(); }";
+                    }
+            ).BindList(ViewBag.FilterSelection).Render();
+            
+            ViewContext.Writer.Write("</td><td align='right'>");
+
+            Html.DevExpress().Button(
+                    b => {
+                        b.Name = "btnPayrollOverviewGridRefresh";
+                        b.Text = "Refresh";
+                        b.ClientSideEvents.Click = "function(s, e) { gvPayrollOverviewGrid.Refresh(); }";
+                    }
+                ).Render();
+
+            ViewContext.Writer.Write("</td></tr><tr style='height: 25px;'><td valign='bottom' align='left'><a href='#' onclick='Payroll.ExportWithoutCommit(); return false;'>Export without Committing</a></td>");
+
+
+
+            ViewContext.Writer.Write("<td valign='bottom' align='right'><a href='#' onclick='Payroll.CommitAndExport(); return false;'>Commit and Export</a></td>");
+
+
+
+            ViewContext.Writer.Write("</tr></table>");
+
+        }
+);
+
+
+    var col = s.Columns.Add("colPayrollID");
+    col.FieldName = "PayrollID";
+    col.Caption = "Payroll ID";
+    col.Width = 80;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("colFirstName");
+    col.FieldName = "FirstName";
+    col.Caption = "First Name";
+
+
+    col = s.Columns.Add("colLastName");
+    col.FieldName = "LastName";
+    col.Caption = "Last Name";
+
+    col = s.Columns.Add("colHours");
+    col.FieldName = "Hours";
+    col.Caption = "Hours";
+    col.Width = 80;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("colEntriesMissingCatalystData");
+    col.FieldName = "EntriesMissingCatalystData";
+    col.Caption = "Entries Missing Catalyst Data";
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    //col = s.Columns.Add("colSummary");
+    //col.Caption = " ";
+    //col.Width = 75;
+    //col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    //col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+    //col.SetDataItemTemplateContent(
+    //    c => {
+    //        Html.DevExpress().HyperLink(
+    //            hl => {
+    //                string id = DataBinder.Eval(c.DataItem, "ID").ToString();
+    //                hl.Name = "hlScrubOverviewGridSummary_" + id;
+    //                hl.Properties.Text = "Summary";
+    //                hl.Properties.ClientSideEvents.Click = "function(s, e) { return false; }";
+    //            }
+    //        ).Render();
+    //    }
+    //);
+
+    //col = s.Columns.Add("colScrub");
+    //col.Caption = " ";
+    //col.Width = 75;
+    //col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    //col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+    //col.SetDataItemTemplateContent(
+    //    c => {
+    //        Html.DevExpress().HyperLink(
+    //            hl => {
+    //                string id = DataBinder.Eval(c.DataItem, "ID").ToString();
+    //                hl.Name = "hlScrubOverviewGridGotoScrub_" + id;
+    //                hl.Properties.Text = "Scrub";
+    //                hl.Properties.Target = "_blank";
+    //                hl.NavigateUrl = "/Case/" + id + "/Manage/TimeAndBilling";
+    //            }
+    //        ).Render();
+    //    }
+    //);
+    //col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    //col = s.Columns.Add("colPreviewReport");
+    //col.Caption = " ";
+    //col.Width = 140;
+    //col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    //col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+    //col.SetDataItemTemplateContent(
+    //    c => {
+    //        Html.DevExpress().HyperLink(
+    //            hl => {
+    //                string id = DataBinder.Eval(c.DataItem, "ID").ToString();
+    //                AABC.Web.Models.Hours.AvailableDate date = ViewBag.SelectedDate as AABC.Web.Models.Hours.AvailableDate;
+
+    //                hl.Name = "hlScrubOverviewGridPreviewReport_" + id;
+    //                hl.Properties.Text = "Preview Report";
+    //                hl.Properties.Target = "_blank";
+    //                hl.NavigateUrl = "/Reports/Billing/ViewReport/?mode=preview&caseid=" + id + "&period=" + date.Date.ToString("s");
+    //            }
+    //        ).Render();
+    //    }
+    //);
+    //col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    //col = s.Columns.Add("colFinalizeReport");
+    //col.Caption = " ";
+    //col.Width = 140;
+    //col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    //col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+    //col.SetDataItemTemplateContent(
+    //    c => {
+    //        Html.DevExpress().HyperLink(
+    //            hl => {
+    //                string id = DataBinder.Eval(c.DataItem, "ID").ToString();
+    //                AABC.Web.Models.Hours.AvailableDate date = ViewBag.SelectedDate as AABC.Web.Models.Hours.AvailableDate;
+
+    //                hl.Name = "hlScrubOverviewGridFinalizeReport_" + id;
+    //                hl.Properties.Text = "Finalize Report";
+    //                hl.Properties.Target = "_blank";
+    //                hl.NavigateUrl = "/Reports/Billing/ViewReport/?mode=generate&caseid=" + id + "&period=" + date.Date.ToString("s");
+    //            }
+    //        ).Render();
+    //    }
+    //);
+    //col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+}
+
+@Html.DevExpress().GridView(s).Bind(Model).GetHtml()

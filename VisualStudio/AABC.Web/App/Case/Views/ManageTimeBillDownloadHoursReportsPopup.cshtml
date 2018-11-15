@@ -1,0 +1,69 @@
+﻿
+<div>
+
+
+    <style>
+        table .cmtb-reports-list td {
+            padding: 10px;
+        }
+
+    </style>
+
+    <table class="cmtb-reports-list">
+        <tr>
+            <td valign="middle">
+                @Html.DevExpress().Button(bs => {
+                    bs.Name = "btnDownloadPatientHoursReport";
+                    bs.Text = "Patient Hours Report";
+                    bs.ClientSideEvents.Click = "function(s, e) { TimeBill.Scrub.DownloadPatientHoursReport(); }";
+                }).GetHtml()
+            </td>
+            <td>
+                The original/default Patient Hours Report.  PDF package including all provider reports w/ scripted signatures.
+            </td>
+        </tr>
+        <tr>
+            <td valign="middle">
+                @Html.DevExpress().Button(bs => {
+               bs.Name = "btnDownloadParentHoursReport";
+               bs.Text = "Parent Hours Report";
+               bs.ClientSideEvents.Click = "function(s, e) { TimeBill.Scrub.DownloadParentHoursReport(); }";
+           }).GetHtml()
+            </td>
+
+            <td>
+                <hr />
+                The Parent version of the default Hours Report.  PDF package including all provider reports w/ scripted signatures, signature ID, and with provider notes omitted.
+            </td>
+        </tr>
+        <tr>
+            <td valign="middle">
+                @Html.DevExpress().Button(bs => {
+               bs.Name = "btnDownloadPatientHoursWithSignLineReport";
+               bs.Text = "Patient Hours w/ Sign Line";
+               bs.ClientSideEvents.Click = "function(s, e) { TimeBill.Scrub.DownloadPatientHoursWithSignLine(); }";
+           }).GetHtml()
+            </td>
+
+            <td>
+                <hr />
+                The original/default Patient Hours Report with a Sign Line added.  PDF package including all provider reports w/ scripted signatures and signature line.
+            </td>
+        </tr>
+        <tr>
+            <td valign="middle">
+                @Html.DevExpress().Button(bs => {
+               bs.Name = "btnDownloadSupervisingBCBAReport";
+               bs.Text = "Supervising BCBA";
+               bs.ClientSideEvents.Click = "function(s, e) { TimeBill.Scrub.DownloadSupervisingBCBAReport(); }";
+           }).GetHtml()
+            </td>
+
+            <td>
+                <hr />
+                Version of the report including a second signature line for the supervising BCBA.  PDF package including all provider reports w/ scripted signatures and signature line.
+            </td>
+        </tr>
+    </table>    
+
+</div>

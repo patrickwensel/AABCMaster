@@ -1,0 +1,288 @@
+﻿@using Newtonsoft.Json
+@model AABC.PatientPortal.App.Payments.Models.PaymentVM
+@{
+    ViewBag.Title = "Payments";
+}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Payments</h2>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row" data-bind="if: step() === 1">
+        <div class="col-lg-offset-3 col-lg-5">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>New Payments</h5>
+                </div>
+                <div class="ibox-content">
+                    @if (Model.ActivePlan != null)
+                    {
+                        <p>You have a payment plan for $ @Model.ActivePlan.Amount.ToString("#,##0.00") on a @Model.ActivePlan.Frequency basis.  Please use the form below to submit your payment.  Thank you!</p>
+                    }
+
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="PaymentType" class="col-sm-3 control-label"><span class="pull-left">Payment Type</span></label>
+                            <div class="col-sm-9 ptype">
+                                <!-- ko foreach: paymentTypes-->
+                                <label>
+                                    <input id="PaymentType" type="radio" name="optPaymentType" data-bind="checked: $parent.data.paymentType, checkedValue: value"> <span data-bind="text:text"></span>
+                                </label>
+                                <!-- /ko -->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="PatientId" class="col-sm-3 control-label"><span class="pull-left">Child / Case</span></label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <select id="PatientId" class="form-control" data-bind="value: data.patientId,
+                                            options:$root.patients,
+                                            optionsValue:'value',
+                                            optionsText:'text',
+                                            valueAllowUnset: false"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Amount" class="col-sm-3 control-label"><span class="pull-left">Amount</span></label>
+                            <div class="col-sm-9">
+                                <input id="Amount" type="number" placeholder="Amount" class="form-control" data-bind="value: data.amount, valueUpdate:'keyup'" />
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <!-- ko if: data.paymentType() == 0 -->
+                        <div class="form-group">
+                            <label for="OneTimePaymentDate" class="col-sm-3 control-label"><span class="pull-left">Payment Date</span></label>
+                            <div class="col-sm-9">
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    <input id="OneTimePaymentDate" type="text" class="form-control" data-bind="datepicker: data.oneTimePaymentDate, datepickerOptions: oneTimePaymentDatepickerOptions">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ko if: shouldOneTimeTransactionTimeWindowWarningBeShown -->
+                        <div class="alert alert-warning">
+                            You are about to schedule a payment for after <span data-bind="text:configuration.oneTimeTransactionTimeWindowWarning"></span> days.
+                        </div>
+                        <!-- /ko -->
+                        <!-- /ko -->
+                        <!-- ko if: data.paymentType() == 1 -->
+                        <div class="form-group">
+                            <label for="RecurringFrequency" class="col-sm-3 control-label"><span class="pull-left">Frequency</span></label>
+                            <div class="col-sm-9">
+                                <select id="RecurringFrequency" class="form-control" data-bind="value:data.recurringFrequency,
+                                        options:$root.frequencies,
+                                        optionsValue:'value',
+                                        optionsText:'text',
+                                        valueAllowUnset: true">
+                                </select>
+                            </div>
+                        </div>
+                        <div data-bind="datepickerRange:{},datepickerOptions:recurringDatesDatepickerOptions">
+                            <div class="form-group">
+                                <label for="RecurringDateStart" class="col-sm-3 control-label"><span class="pull-left">Start Date</span></label>
+                                <div class="col-sm-9">
+                                    <div class="input-group date">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </span>
+                                        <input id="RecurringDateStart" type="text" class="form-control date-range" data-bind="datepicker: data.recurringDateStart">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="RecurringDateEnd" class="col-sm-3 control-label"><span class="pull-left">End Date</span></label>
+                                <div class="col-sm-9">
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input id="RecurringDateEnd" type="text" class="form-control date-range" data-bind="datepicker: data.recurringDateEnd">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /ko -->
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group mar-top-30">
+                            <div class="col-sm-12 text-right">
+                                <button class="btn btn-primary" type="button" data-bind="click: gotoStepTwo, disable: hasErrorsOnStep1">Secure Checkout</button>
+                                <p><a href="#"><small>more information</small></a></p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div data-bind="if: step() == 2">
+        <div class="row mar-bot-30">
+            <div class="col-lg-offset-3 col-lg-5 summary">
+                <div class="ibox-title">
+                    <h3>Summary</h3>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span>Payment Type:</span></label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static" data-bind="text: paymentTypeStr"></p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span>Child / Case:</span></label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static" data-bind="text: patientName"></p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span>Amount:</span></label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static" data-bind="text: numeral(data.amount()).format('0,0.00')"></p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <!-- ko if: data.paymentType() == 0-->
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span>Payment Date:</span></label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static" data-bind="text: moment(data.oneTimePaymentDate()).format('MM/DD/YYYY')"></p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <!-- /ko -->
+                <!-- ko if: data.paymentType() == 1-->
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span>Frequency:</span></label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static" data-bind="text:frequencyStr"></p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span>Start Date:</span></label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static" data-bind="text: moment(data.recurringDateStart()).format('MM/DD/YYYY')"></p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span>End Date:</span></label>
+                    <div class="col-sm-8">
+                        <p class="form-control-static" data-bind="text: moment(data.recurringDateEnd()).format('MM/DD/YYYY')"></p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <!-- /ko -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-offset-3 col-lg-5 ccards">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h3>Secure Payment Info</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="panel-group payments-method">
+                            <form role="form" id="payment-form">
+                                <div class="row mar-bot-10">
+                                    <div class="col-xs-12 col-sm-6 col-md-8 mar-bot-15 text-right">
+                                        <span class="pull-right"><img src="/client/images/ccard.png" class="img-responsive" /></span>
+                                        <input type="radio" name="optPaymentMode" data-bind="checked: true, checkedValue: true">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="CardHolder">Name</label> <span><small>(as it appears on your card)</small></span>
+                                            <input id="CardHolder" type="text" class="form-control" data-bind="value: data.cardHolder, valueUpdate:'keyup'" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="CardNumber">Card Number</label> <span><small>(no dashes or spaces)</small></span>
+                                            <input id="CardNumber" type="number" class="form-control" data-bind="value: data.cardNumber, valueUpdate:'keyup'" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-sm-7">
+                                        <label for="ExpiryDate">Expiration Date</label>
+                                        <select id="ExpiryDate" class="form-control col-lg-8" data-bind="value: data.cardExpiryMonth,
+                                                options:$root.months,
+                                                optionsValue:'value',
+                                                optionsText:'text',
+                                                valueAllowUnset: true"></select>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <label>&ensp;</label>
+                                        <select id="ExpiryYear" class="form-control col-lg-4" data-bind="value: data.cardExpiryYear,
+                                                options: $root.years,
+                                                optionsValue:'value',
+                                                optionsText:'text',
+                                                valueAllowUnset: true"></select>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <label for="CardSecurityCode">Security Code</label> <span><small>(3 on back, Amex: 4 on front)</small></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-8 mar-bot-15">
+                                                <input id="CardSecurityCode" type="text" maxlength="4" class="form-control" data-bind="value: data.cardSecurityCode, valueUpdate:'keyup'" />
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <img src="/client/images/seccode.png" class="img-responsive" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12 text-left">
+                                        <button class="btn btn-primary btn-block" type="button" data-bind="click: pay, disable: hasErrorsOnStep2">Pay</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Styles {
+    @Styles.Render("~/plugins/jasnyBootstrapStyles")
+}
+
+@section Scripts {
+    @Scripts.Render("~/app/payments")
+    @Scripts.Render("~/lib/signaturePad");
+    <script type="text/javascript">
+        (function () {
+            var model = @Html.Raw(JsonConvert.SerializeObject(Model, new JsonSerializerSettings
+                   {
+                       ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+                   }));
+            var vm = new aabc.payment.PaymentViewModel(model);
+            ko.applyBindings(vm);
+        })();
+    </script>
+}

@@ -1,0 +1,5 @@
+﻿@model Boolean?
+@Html.DevExpress().CheckBoxFor(m => m, s => {
+    s.Name = Guid.NewGuid().ToString();
+    s.ReadOnly = true;
+}).GetHtml()

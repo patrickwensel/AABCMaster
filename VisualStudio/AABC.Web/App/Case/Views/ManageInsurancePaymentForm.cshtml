@@ -1,0 +1,94 @@
+﻿@model AABC.Web.Models.Cases.CaseInsurancePaymentVM
+
+@using (Html.BeginForm("CaseInsurancePaymentForm", "Case", FormMethod.Post, new { id = "CaseInsurancePaymentForm" }))
+{
+
+    @Html.AntiForgeryToken();
+
+    @Html.HiddenFor(m => m.Id);
+
+    <h1 style="color: #4b4b57; font-size: large; font-weight: 200;">
+        Id : @if(Model.Id == 0) {<strong>( New )</strong>}else{<strong>@Model.Id</strong>}
+    </h1>
+        @Html.DevExpress().ComboBox(
+            s =>
+            {
+                s.Name = "PaymentCaseInsuranceId";
+                s.Properties.Caption = "Insurance";
+                s.Properties.CaptionCellStyle.Width = 150;
+                s.Properties.ValueType = Type.GetType("System.Int32");
+                s.Properties.TextField = "InsuranceName";
+                s.Properties.ValueField = "ID";
+                s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                s.Properties.ValidationSettings.ValidationGroup = "InsurancePaymentForm";
+            }
+        ).BindList(Model.CaseInsuranceList).Bind(Model.PaymentCaseInsuranceId).GetHtml()
+    <div class="spacer-10"></div>
+        @Html.DevExpress().SpinEdit(
+        s =>
+        {
+            s.Name = "InsurancePaymentAmount";
+            s.Properties.Caption = "Amount";
+            s.Properties.CaptionCellStyle.Width = 150;
+            s.Properties.DisplayFormatString = "N";
+            s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+            s.Properties.ValidationSettings.ValidationGroup = "InsurancePaymentForm";
+            s.Width = 100;
+        }
+    ).Bind(Model.InsurancePaymentAmount).GetHtml()
+        <div class="spacer-10"></div>
+        @Html.DevExpress().DateEdit(
+            s =>
+            {
+                s.Name = "PaymentDate";
+                s.Properties.Caption = "Payment Date";
+                s.Properties.CaptionCellStyle.Width = 150;
+                s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                s.Properties.ValidationSettings.ValidationGroup = "InsurancePaymentForm";
+                s.Width = 100;
+            }
+        ).Bind(Model.PaymentDate).GetHtml()
+        <div class="spacer-10"></div>
+        @Html.DevExpress().TextBox(
+            s =>
+            {
+                s.Name = "Description";
+                s.Properties.Caption = "Description";
+                s.Properties.CaptionCellStyle.Width = 150;
+                s.Width = 100;
+            }
+        ).Bind(Model.Description).GetHtml()
+        
+    <div class="spacer-10"></div>
+
+
+    <div style="float: right;">
+        <table>
+            <tr>
+                <td>
+                    @Html.DevExpress().Button(
+                        s =>
+                        {
+                            s.Name = "bnSaveCaseInsurancePayment";
+                            s.Text = "Save";
+                            s.UseSubmitBehavior = false;
+                            s.ValidationGroup = "InsurancePaymentForm";
+                            s.ClientSideEvents.Click = "function(s, e){ if (ASPxClientEdit.AreEditorsValid()){Case.Payment.Insurance.save();}}";
+                        }
+                    ).GetHtml()
+                </td>
+                <td style="padding-left: 5px;">
+                    @Html.DevExpress().Button(
+                            s =>
+                            {
+                                s.Name = "bnCancel";
+                                s.Width = 75;
+                                s.Text = "Cancel";
+                                s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide('cancel'); }";
+                            }
+                        ).GetHtml()
+                </td>
+            </tr>
+        </table>
+    </div>
+}

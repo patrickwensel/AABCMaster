@@ -1,0 +1,161 @@
+﻿@model AABC.Web.Models.Cases.CaseProviderVM
+
+<script type="text/javascript" id="dxss_CaseProviderViewModelScripts">
+    window.CASEID = @Model.ID;
+
+    function addSelected(s, e) {
+        //event.preventDefault();
+        var value = App.DevEx.GetControl("ViewHelper.Providers").GetValue();
+        $.ajax ({
+            type: 'POST',
+            url: '@Url.Action("CaseProviderAdd", "Case")',
+            data: { caseID: window.CASEID, providerID: value },
+            success: function (response) {
+                $("#" + App.Content.ContentElementID).empty().append(response);
+            },
+            error: function() {
+                App.Dialogs.Error();
+            }
+        });
+    }
+
+
+    function gvProvidersShowContentMenu(s, e) {
+        gvProviders.SetFocusedRowIndex(e.index);
+        //if (e.objectType == "header") {
+            // nothing
+        //}
+        if (e.objectType == "row") {
+            cmProvidersGrid.ShowAtPos(ASPxClientUtils.GetEventX(e.htmlEvent), ASPxClientUtils.GetEventY(e.htmlEvent));
+        }
+    }
+
+
+    function btnShowAllProvidersClicked() {
+        var showAll = getShowAll();
+        $.ajax({
+            url: "/Case/ProviderGridCallback",
+            type: "GET",
+            data: {
+                caseID: CASEID,
+                showAll: showAll
+            }
+        }).done(function (r) {
+            $("#providers-grid").empty().append(r);
+            initComponent();
+            setShowAll(!showAll);
+        });
+    }
+
+    function getShowAll() {
+        return $('input#showAll').val() == "false" ? true : false;
+    }
+
+
+    function setShowAll(val) {
+        btnShowAllProviders.SetText(!val ? "Show Active" : "Show All");
+        $('input#showAll').val(!val ? "true" : "false");
+    }
+
+</script>
+
+<div class="case-patient-headerlink">
+    @Html.DevExpress().HyperLink(s =>
+{
+            s.NavigateUrl = "/Patients/Edit/" + Model.ID;
+            s.Properties.Text = Model.PatientName + (!string.IsNullOrEmpty(Model.PatientGender) ? " (" + Model.PatientGender + ")" : string.Empty);
+        }).GetHtml()
+
+    @{Html.RenderAction("CaseHighRiskLabel", "Patients", new { CaseId = Model.ID });}
+</div>
+
+@using (Html.BeginForm("ProviderEdit", "Case", FormMethod.Post, new { id = "form-default" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.HiddenFor(m => m.ID);
+    <div class="section-expander" id="expander-case-info">
+        <div class="section-expander-header">
+            <span>Case Providers</span>
+        </div>
+        <div class="section-expander-content">
+            @Html.DevExpress().ComboBox(s =>
+       {
+                           s.Name = "ViewHelper.Providers";
+                           s.Properties.TextField = "Name";
+                           s.Properties.ValueField = "ID";
+                           s.Properties.TextFormatString = "({0}) {1}";
+                           s.Width = 200;
+                           s.Properties.Columns.Add("Type", "Type", 75);
+                           s.Properties.Columns.Add("Name", "Name", 200);
+                           s.Properties.Caption = "Provider List";
+                           s.Properties.CaptionCellStyle.Width = 100;
+                       }).BindList(Model.ViewHelper.Providers).GetHtml()
+            <div style="margin-left: 106px; margin-top: 5px;">
+                @Html.DevExpress().Button(bs =>
+           {
+                   bs.UseSubmitBehavior = false;
+                   bs.Name = "btnAddProvider";
+                   bs.Text = "Add Selected Provider";
+                   bs.ClientSideEvents.Click = "addSelected";
+               }).GetHtml()
+            </div>
+        </div>
+        <div class="section-expander-content">
+            <!-- Expander Content Here -->
+            <div class="form-section">
+                <div class="form-section-header"><span></span></div>
+                <div class="form-section-content">
+                    <p><em>Double click the checkbox or date fields to toggle/edit</em></p>
+                    <input type="hidden" id="showAll" value="false" />
+                    <div id="providers-grid">
+                        @Html.Partial("ManageProvidersGrid", Model.Items)
+                    </div>
+                    <div style="margin-top:5px">
+                        @Html.DevExpress().Button(s =>
+    {
+    s.Name = "btnShowAllProviders";
+    s.Text = "Show All";
+    s.ImagePosition = ImagePosition.Left;
+    s.Width = 100;
+    s.ClientSideEvents.Click = "btnShowAllProvidersClicked";
+    }).GetHtml()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+}
+<div class="section-expander-content">
+    <!-- Expander Content Here -->
+    <div class="form-section">
+        <div class="form-section-header"><span>Provider Schedule</span></div>
+        <div class="form-section-content">
+            @if (Model.Items.Count() > 0)
+            {
+                @Html.Action("Index", "Scheduler", new { caseId = Model.ID, providerID = Model.Items.FirstOrDefault().ID })
+            }
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+@Html.DevExpress().PopupMenu(s =>
+{
+    s.Name = "cmProvidersGrid";
+    s.Items.Add(
+        i => {
+            i.Text = "Go to Provider";
+            i.Name = "cmProvidersGridItemGotoProvider";
+        }
+    );
+    s.PopupAction = PopupAction.RightMouseClick;
+    s.ClientSideEvents.ItemClick = "function(s, e) { console.log('dummy'); }";  // need this in here to force client side scripts
+}).GetHtml()
+
+<script id="dxss_CaseManagerSummaryJs" type="text/javascript">
+    $.getScript("/Scripts/Pages/CaseManageProviders.js", function () {
+        initComponent();
+        App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+    });
+</script>

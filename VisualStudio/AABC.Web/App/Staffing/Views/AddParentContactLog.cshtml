@@ -1,0 +1,100 @@
+﻿@using AABC.Domain2.Cases
+@model AABC.Web.App.Staffing.Models.AddParentContactLogVM
+
+@using (Html.BeginForm("AddParentContactLog", "Staffing", FormMethod.Post, new { id = "AddParentContactLogForm" }))
+{
+    @Html.HiddenFor(model => model.CaseId);
+    
+    @Html.DevExpress().ComboBox(s =>
+    {
+        s.Name = "GuardianRelationshipId";
+        s.Properties.TextField = "Name";
+        s.Properties.ValueField = "ID";
+        s.Properties.ValueType = typeof(int);
+        s.Properties.Caption = "Contacted Person";
+        s.Properties.CaptionCellStyle.Width = 150;
+    }).BindList(Model.Relationships).Bind(Model.GuardianRelationshipId).GetHtml()
+
+    <div class="spacer-10"></div>
+    
+    @Html.DevExpress().TextBox(s =>
+        {
+            s.Name = "ContactedPersonName";
+            s.Properties.Caption = "Contacted Person Name";
+            s.Properties.CaptionCellStyle.Width = 150;
+        }).Bind(Model.ContactedPersonName).GetHtml()
+
+    <div class="spacer-10"></div>
+    
+    @Html.DevExpress().DateEdit(s =>
+    {
+        s.Name = "ContactDate";
+        s.Properties.Caption = "Contact Date";
+        s.Properties.CaptionCellStyle.Width = 150;
+    }).Bind(Model.ContactDate).GetHtml()
+    
+    <div class="spacer-10"></div>
+
+    @Html.DevExpress().RadioButtonList(s =>
+    {
+        s.Name = "ContactMethodType";
+        s.Properties.ValueField = "Value";
+        s.Properties.TextField = "Text";
+        s.Properties.Caption = "Contacted via";
+        s.Properties.CaptionCellStyle.Width = 115;
+        s.Properties.RepeatColumns = 2;
+        s.SelectedIndex = 0;
+        s.Properties.RepeatDirection = RepeatDirection.Horizontal;
+        s.ControlStyle.Border.BorderStyle = BorderStyle.None;
+        s.Properties.ClientSideEvents.SelectedIndexChanged = "StaffingLogDetails.ParentContactLog.ContactMethodChanged";
+    }).BindList(EnumHelper.GetSelectList(typeof(ContactMethodTypes))).Bind(Model.ContactMethodType).GetHtml()
+   
+    <div class="spacer-10"></div>
+    
+    @Html.DevExpress().TextBox(s =>
+    {
+        s.Name = "ContactMethodValue";
+        s.Properties.Caption = "Phone Number";
+        s.Properties.CaptionCellStyle.Width = 150;
+    }).Bind(Model.ContactedPersonName).GetHtml()
+
+    <div class="spacer-10"></div>
+
+    @Html.DevExpress().Memo(s =>
+    {
+        s.Name = "Notes";
+        s.Properties.Caption = "Notes";
+        s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+        s.Properties.Rows = 4;
+        s.Width = Unit.Percentage(100);
+    }).Bind(Model.Notes).GetHtml()
+
+    <div class="spacer-10"></div>
+
+    <div style="float: right;">
+        <table>
+            <tr>
+                <td>
+                    @Html.DevExpress().Button(s =>
+                    {
+                        s.Name = "btnAddContactOK";
+                        s.Width = 75;
+                        s.Text = "Ok";
+                        s.ClientSideEvents.Click = "function(s, e) { StaffingLogDetails.ParentContactLog.Submit(); }";
+                    }).GetHtml()
+                </td>
+                <td style="padding-left: 5px;">
+                    @Html.DevExpress().Button(s =>
+                    {
+                        s.Name = "btnAddContactCancel";
+                        s.Width = 75;
+                        s.Text = "Cancel";
+                        s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide('cancel'); }";
+                    }).GetHtml()
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+}

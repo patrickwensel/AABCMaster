@@ -1,0 +1,85 @@
+﻿@model AABC.Web.App.Account.Models.UserVM
+@{ 
+    Layout = null;
+}
+@using (Html.BeginForm("UserForm", "Admin", FormMethod.Post, new { id = "form-default" }))
+{
+    @Html.AntiForgeryToken();
+    <input type="hidden" name="ID" value="@Model.ID" />
+    <div class="form-row">
+        @Html.DevExpress().TextBox(
+        s => {
+            s.Name = "FirstName";
+            s.Properties.Caption = "First Name";
+            s.Properties.CaptionCellStyle.Width = 100;
+        }
+    ).Bind(Model.FirstName).GetHtml()
+    </div>
+
+    <div class="form-row">
+        @Html.DevExpress().TextBox(
+        s => {
+            s.Name = "LastName";
+            s.Properties.Caption = "Last Name";
+            s.Properties.CaptionCellStyle.Width = 100;
+        }
+    ).Bind(Model.LastName).GetHtml()
+    </div>
+
+    <div class="form-row">
+        @Html.DevExpress().TextBox(
+        s => {
+            s.Name = "UserName";
+            s.Properties.Caption = "Username";
+            s.Properties.CaptionCellStyle.Width = 100;
+            //s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+            s.ClientEnabled = Model.ID.GetValueOrDefault(0) == 0;
+        }
+    ).Bind(Model.UserName).GetHtml()
+    </div>
+    <div class="form-row">
+        @Html.DevExpress().TextBox(
+        s => {
+            s.Name = "Email";
+            s.Properties.Caption = "Email";
+            s.Properties.CaptionCellStyle.Width = 100;
+            //s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+            s.Properties.ValidationSettings.RegularExpression.ValidationExpression = "\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
+            s.Properties.ValidationSettings.RegularExpression.ErrorText = "Email is invalid";
+            s.Properties.ValidationSettings.Display = Display.Dynamic;
+        }
+    ).Bind(Model.Email).GetHtml()
+    </div>
+
+    <div class="form-row">
+        @Html.DevExpress().ComboBox(settings => {
+        settings.Name = "StaffMemberID";
+        settings.Properties.TextField = "StaffMember";
+        settings.Properties.ValueField = "ID";
+        settings.Properties.ValueType = typeof(int);
+        settings.Properties.Columns.Add("LastName", "Last Name");
+        settings.Properties.Columns.Add("FirstName", "First Name");
+        settings.Properties.Caption = "Staff Member";
+        settings.Properties.CaptionCellStyle.Width = 100;
+    }).BindList(Model.ViewHelper.OfficeStaffList).Bind(Model.StaffMemberID).GetHtml()
+    </div>
+
+    <div style="margin-left: 106px; margin-top: 5px;">
+        @Html.DevExpress().Button(bs => {
+       bs.UseSubmitBehavior = false;
+       bs.Name = "btnAddUser";
+       bs.Text = "Save";
+       bs.ClientSideEvents.Click = "function(s, e){ if (ASPxClientEdit.AreEditorsValid()){bnSaveUser();}}";
+   }).GetHtml()
+
+        @Html.DevExpress().Button(bs =>
+           {
+               bs.UseSubmitBehavior = false;
+               bs.Name = "btnNewUser";
+               bs.Text = "New";
+               bs.ClientSideEvents.Click = "function(s, e){ bnNewUser();}";
+           }).GetHtml()
+
+    </div>
+}
+ 

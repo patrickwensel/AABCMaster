@@ -1,0 +1,224 @@
+﻿@model AABC.Web.Models.Patients.PatientsListVM<AABC.Web.App.Patients.Models.PatientsListItem2VM>
+
+@Html.DevExpress().GridView(
+    s => {
+        s.Name = "gridList";
+        s.KeyFieldName = "ID";
+
+        s.Settings.ShowTitlePanel = true;
+        s.SetTitlePanelTemplateContent(
+            c => {
+                Html.RenderPartial("GridTitlePane", Model.ListBase.GridTitlePanelSettings);
+            });
+
+        s.SettingsSearchPanel.Visible = true;
+
+        s.Width = Unit.Percentage(100);
+        s.Height = Unit.Percentage(100);
+        s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+        s.ClientSideEvents.Init = "function(s, e) { App.Content.GridViews.InitializeForStretchHeight(s); }";
+        s.ClientSideEvents.EndCallback = "function(s, e) { App.Content.GridViews.StretchHeight(s); }";
+
+        s.SettingsPager.PageSize = 500;
+        s.SettingsPager.AlwaysShowPager = true;
+        s.SettingsPager.Visible = true;
+
+        s.SettingsBehavior.AllowSort = true;
+        s.SettingsBehavior.AllowGroup = false;
+        s.SettingsBehavior.AllowFocusedRow = true;
+        s.SettingsBehavior.AllowSelectByRowClick = true;
+        s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        s.SettingsBehavior.AllowDragDrop = false;
+        s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+        s.SettingsCookies.StoreFiltering = true;
+        s.SettingsCookies.StoreGroupingAndSorting = true;
+        s.SettingsCookies.StorePaging = true;
+        s.SettingsCookies.Enabled = true;
+        s.SettingsCookies.CookiesID = "AABC.Web.SearchGrid.Patients.v2";
+
+        s.Settings.ShowFilterRow = true;
+        s.CallbackRouteValues = new { Controller = "Patients", Action = "SearchGridFilter" };
+        s.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['isFilterCallback'] = 'true'; e.customArgs['filter'] = '" + Model.ListBase.CallbackFilterValue + "'; }";
+
+        s.HtmlDataCellPrepared = (sender, e) => {
+            e.Cell.Attributes.Add(
+                "onclick",
+                string.Format("OnCellClick('{0}', '{1}');", e.VisibleIndex, e.DataColumn.FieldName)
+             );
+            e.Cell.Attributes.Add(
+                "ondblclick",
+                string.Format("OnCellDblClick('{0}', '{1}');", e.VisibleIndex, e.DataColumn.FieldName)
+            );
+
+            //if (e.DataColumn.FieldName == "NeedsStaffing") {
+            //    if ((bool)e.CellValue) {
+            //        e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml("#f7fff2");
+            //    }
+            //}
+
+            //if (e.DataColumn.FieldName == "NeedsRestaffing") {
+            //    if ((bool)e.CellValue) {
+            //        e.Cell.BackColor = System.Drawing.ColorTranslator.FromHtml("#ffbfdb");
+            //    }
+            //}
+
+        };
+
+        s.Columns.Add(column => {
+            column.EditFormSettings.Visible = DefaultBoolean.False;
+            column.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+            column.Caption = "Actions";
+            column.UnboundType = DevExpress.Data.UnboundColumnType.String;
+            column.Width = 52;
+            column.SetDataItemTemplateContent(c => {
+
+                string itemID = DataBinder.Eval(c.DataItem, "ID").ToString();
+
+                string button = Html.DevExpress().Button(
+                    b => {
+                        b.Images.Image.Url = "~/Content/Images/actionlist-med-light-16.png";
+                        b.Name = "pmButton" + itemID;
+                        b.Text = "";
+                        b.ControlStyle.CssClass = "action-button";
+                    }).GetHtml().ToHtmlString();
+
+                string popup = @Html.DevExpress().PopupMenu(
+                    menu => {
+                        menu.Name = "pmActions" + itemID;
+                        menu.PopupElementID = "pmButton" + itemID;
+
+                        menu.ClientSideEvents.ItemClick = "actionMenuItemClick";
+                        menu.PopupAction = PopupAction.LeftMouseClick;
+
+                        menu.Items.Add(i => {
+                            i.Text = "Case Manager";
+                            i.Name = "CaseManager";
+                            i.Image.IconID = "mail_editcontact_16x16office2013";
+                        });
+
+                        menu.Items.Add(i => {
+                            i.Text = "View/Edit";
+                            i.Name = "Edit";
+                            i.Image.IconID = "actions_edit_16x16devav";
+                            i.BeginGroup = true;
+                        });
+
+                        menu.Items.Add(i => {
+                            i.Text = "Discharge Patient";
+                            i.Name = "Discharge";
+                            i.Image.IconID = "edit_delete_16x16office2013";
+                            i.BeginGroup = true;
+                        });
+
+                        menu.Items.Add(i => {
+                            i.Text = "Delete";
+                            i.Name = "Delete";
+                            i.Image.IconID = "edit_delete_16x16office2013";
+                            i.BeginGroup = true;
+                        });
+                    }
+                ).GetHtml().ToHtmlString();
+
+                ViewContext.Writer.Write(button + popup);
+
+            });
+        });
+
+        var col = s.Columns.Add("colStartDate");
+        col.Width = 80;
+        col.FieldName = "StartDate";
+        col.Caption = "Start Date";
+        col.PropertiesEdit.DisplayFormatString = "d";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+
+        col = s.Columns.Add("colEndingAuthDate");
+        col.Width = 80;
+        col.FieldName = "EndingAuthDate";
+        col.Caption = "Auth Ending";
+        col.PropertiesEdit.DisplayFormatString = "d";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+        col = s.Columns.Add("colPatientFirstName");
+        col.FieldName = "FirstName";
+        col.Caption = "First Name";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+
+        col = s.Columns.Add("colPatientLastName");
+        col.FieldName = "LastName";
+        col.Caption = "Last Name";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+
+        col = s.Columns.Add("colCaseManager");
+        col.FieldName = "CaseManager";
+        col.Caption = "Case Manager";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.ReadOnly = true;
+        col.EditFormSettings.Visible = DefaultBoolean.False;
+
+        col = s.Columns.Add("colBCBA");
+        col.FieldName = "BCBA";
+        col.Caption = "BCBA";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.ReadOnly = true;
+        col.EditFormSettings.Visible = DefaultBoolean.False;
+
+        col = s.Columns.Add("colAIDE");
+        col.FieldName = "Aide";
+        col.Caption = "ABA Aide";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.ReadOnly = true;
+        col.EditFormSettings.Visible = DefaultBoolean.False;
+
+        col = s.Columns.Add("colCity");
+        col.FieldName = "City";
+        col.Caption = "City";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+
+        col = s.Columns.Add("colState");
+        col.FieldName = "State";
+        col.Caption = "State";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 40;
+
+        col = s.Columns.Add("colZip");
+        col.FieldName = "Zip";
+        col.Caption = "Zip";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 65;
+
+        col = s.Columns.Add("colCounty");
+        col.FieldName = "County";
+        col.Caption = "County";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 65;
+
+        col = s.Columns.Add("colInsuranceCompanyName");
+        col.FieldName = "InsuranceDisplay";
+        col.Caption = "Insurance";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.ReadOnly = true;
+        col.EditFormSettings.Visible = DefaultBoolean.False;
+
+        col = s.Columns.Add("NeedsRestaffing");
+        col.Caption = "ReStaff";
+        col.ColumnType = MVCxGridViewColumnType.CheckBox;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 50;
+
+        col = s.Columns.Add("RestaffingReasonDisplay");
+        col.Caption = "Case Status";
+        col.CellStyle.CssClass = "CellsEllipsis";
+        col.Width = 120;
+        col.CellStyle.Font.Size = 8;
+
+    }
+).Bind(Model.DetailList).GetHtml()

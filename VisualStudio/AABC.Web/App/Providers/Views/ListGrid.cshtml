@@ -1,0 +1,202 @@
+﻿@using DevExpress.Data;
+@model AABC.Web.Models.Providers.ProvidersListVM
+ 
+@Html.DevExpress().GridView(
+    s =>
+    {
+        s.Name = "gridList";
+        s.KeyFieldName = "ID";
+
+        s.SetTitlePanelTemplateContent(c => {
+            Html.RenderPartial("GridTitlePane", Model.ListBase.GridTitlePanelSettings);
+        });
+
+        s.Width = Unit.Percentage(100);
+        s.Height = Unit.Percentage(100);
+        s.CallbackRouteValues = new { Controller = "Providers", Action = "ListGridFilter" };
+
+        s.Settings.ShowTitlePanel = true;
+        s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+        s.Settings.ShowFilterRow = true;
+
+        s.ClientSideEvents.Init = "function(s, e) { App.Content.GridViews.InitializeForStretchHeight(s); }";
+        s.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['status'] = '" + Model.ListBase.CallbackFilterValue + "'; e.customArgs['isFilterCallback'] = 'true'; }";
+        s.ClientSideEvents.EndCallback = "function(s, e) { App.Content.GridViews.StretchHeight(s); }";
+
+        s.SettingsSearchPanel.Visible = true;
+
+        s.SettingsPager.PageSize = 500;
+        s.SettingsPager.AlwaysShowPager = true;
+        s.SettingsPager.Visible = true;
+
+        s.SettingsCookies.StoreFiltering = true;
+        s.SettingsCookies.StoreGroupingAndSorting = true;
+        s.SettingsCookies.StorePaging = true;
+        s.SettingsCookies.Enabled = true;
+        s.SettingsCookies.CookiesID = "AABC.Web.SearchGrid.Providers-2";
+
+        s.SettingsBehavior.AllowSort = true;
+        s.SettingsBehavior.AllowGroup = false;
+        s.SettingsBehavior.AllowFocusedRow = true;
+        s.SettingsBehavior.AllowSelectByRowClick = true;
+        s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        s.SettingsBehavior.AllowDragDrop = false;
+
+        s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+        s.Columns.Add(col =>
+        {
+            col.Settings.AllowAutoFilter = DefaultBoolean.False;
+            col.Caption = "Actions";
+            col.UnboundType = UnboundColumnType.String;
+            col.Width = 110;
+            col.SetDataItemTemplateContent(c =>
+            {
+                var itemID = DataBinder.Eval(c.DataItem, "ID").ToString();
+                ViewContext.Writer.Write(Html.ActionLink("Edit", "Edit", "Providers", new { id = itemID }, null));
+                ViewContext.Writer.Write("&nbsp;&nbsp;|&nbsp;&nbsp;");
+                ViewContext.Writer.Write("<a class=\"show-more\" href=\"#\" itemID=\"" + itemID + "\" onclick=\"showMore(this, event)\">QuickView</a>");
+            });
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colType";
+            col.Width = 110;
+            col.FieldName = "TypeCode";
+            col.Caption = "Type";
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            //col.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colFirstName";
+            col.FieldName = "FirstName";
+            col.Caption = "First Name";
+            col.Width = 100;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colLastName";
+            col.FieldName = "LastName";
+            col.Caption = "Last Name";
+            col.Width = 100;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colCity";
+            col.FieldName = "City";
+            col.Caption = "City";
+            col.Width = 100;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colState";
+            col.FieldName = "State";
+            col.Caption = "State";
+            col.Width = 35;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colZip";
+            col.FieldName = "Zip";
+            col.Caption = "Zip";
+            col.Width = 60;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+
+        s.Columns.Add(col => {
+            col.Name = "colPhone";
+            col.FieldName = "Phone";
+            col.Caption = "Phone";
+            col.Width = 95;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+
+        s.Columns.Add(col => {
+            col.Name = "colEmail";
+            col.FieldName = "Email";
+            col.Caption = "Email";
+            col.Width = 150;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.ColumnType = MVCxGridViewColumnType.HyperLink;
+            var prop = col.PropertiesEdit as HyperLinkProperties;
+            prop.NavigateUrlFormatString = "mailto:{0}";
+            prop.TextField = "Email";
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colServiceAreas";
+            col.FieldName = "ZipCodes";
+            col.Caption = "Service Areas";
+            //col.Width = 60;
+            col.CellStyle.Wrap = DefaultBoolean.False;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colServiceAreasCounties";
+            col.FieldName = "Counties";
+            col.Caption = "Service Areas";
+            //col.Width = 60;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        });
+
+        s.Columns.Add(col => {
+            col.Name = "colCredentials";
+            col.FieldName = "Credentials";
+            col.Caption = "Credentials";
+            //col.Width = 60;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colActive";
+            col.FieldName = "Active";
+            col.Caption = "Active";
+            col.Width = 60;
+            col.ColumnType = MVCxGridViewColumnType.CheckBox;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colActiveCaseload";
+            col.FieldName = "ActiveCaseload";
+            col.Caption = "Active<br />Caseload";
+            col.Width = 60;
+            col.ColumnType = MVCxGridViewColumnType.CheckBox;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colCallForCases";
+            col.FieldName = "CallForCases";
+            col.Caption = "Call for<br />Cases";
+            col.Width = 60;
+            col.ColumnType = MVCxGridViewColumnType.CheckBox;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+    }).Bind(Model.DetailList).GetHtml()

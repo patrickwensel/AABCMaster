@@ -1,0 +1,6 @@
+﻿{
+  "AccountService.Scheme": "http",
+  "AccountService.ServerAddress": "10.0.2.2",
+  "AccountService.ServicePath": "/",
+  "AccountService.Port": "48585"
+}

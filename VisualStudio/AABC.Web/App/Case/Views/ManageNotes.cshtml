@@ -1,0 +1,49 @@
+﻿@model AABC.Web.Models.Cases.NotesVM
+
+
+<div class="case-patient-headerlink">
+    @Html.DevExpress().HyperLink(
+        s => {
+            s.NavigateUrl = "/Patients/Edit/" + Model.CaseID;
+            s.Properties.Text = Model.PatientName +  (!string.IsNullOrEmpty(Model.PatientGender) ? " (" + Model.PatientGender + ")" : string.Empty);
+        }
+    ).GetHtml()
+
+    @{Html.RenderAction("CaseHighRiskLabel", "Patients", new { CaseId = Model.CaseID });}
+</div>
+
+
+
+
+<div class="grid" style="border-top: 1px solid grey; margin-top: 20px;">
+    <div class="row">
+        <div class="col-6"  id="noteEditContainer" style="padding-right: 10px;">
+            <div id="case-manage-notes-entry-container">@Html.Action("NoteEdit", "CaseNotes", new { parentID = Model.CaseID, id = 0})</div>
+        </div>
+        <div class="col-6">
+            <h1 style="color: #4b4b57; font-size: large; font-weight: 200;">Notes List</h1>
+            <div id="case-manage-notes-list-container">@Html.Action("NotesSummaryList", "CaseNotes", new { parentID = Model.CaseID })</div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" id="dxss_CaseNotesViewModelScripts">
+    $.getScript('/client/scripts/app/notes.v1.0.js', function () {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+
+        Notes.NotesEdit.Initialize({
+            parentID: @Model.CaseID,
+            noteID: 0
+        });
+
+        Notes.NotesList.Initialize({
+            parentID: @Model.CaseID,
+            anchorElementId: 'case-manage-notes-list-container',
+            stretch: {
+                enabled: true,
+                topOffset: 140
+            },
+        });
+    });
+</script>

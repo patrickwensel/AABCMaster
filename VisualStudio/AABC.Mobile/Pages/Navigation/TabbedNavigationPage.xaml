@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<naxam:BottomTabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+									xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+									xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+									xmlns:naxam="clr-namespace:Naxam.Controls.Forms;assembly=Naxam.BottomTabbedPage.Forms"
+									xmlns:local="clr-namespace:AABC.Mobile.Pages;assembly=AABC.Mobile"
+									prism:ViewModelLocator.AutowireViewModel="True"
+									x:Class="AABC.Mobile.Pages.Navigation.TabbedNavigationPage"
+									SelectedTabIndex="{Binding CurrentTab}">
+
+	<NavigationPage Title="Settings" Icon="settings.png" >
+		<x:Arguments>
+			<local:S1.SettingsPage />
+		</x:Arguments>
+	</NavigationPage>
+
+	<NavigationPage Title="Cases" Icon="cases.png" >
+		<x:Arguments>
+			<local:S2.CasesPage />
+		</x:Arguments>
+	</NavigationPage>
+
+	<NavigationPage Title="About" Icon="about.png" >
+		<x:Arguments>
+			<local:S3.AboutPage />
+		</x:Arguments>
+	</NavigationPage>
+
+
+</naxam:BottomTabbedPage>

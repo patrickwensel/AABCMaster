@@ -1,0 +1,86 @@
+﻿@model AABC.ProviderPortal.Models.Home.FinalizeMonthPopupVM
+
+@if (System.Configuration.ConfigurationManager.AppSettings["DocuSignEnabled"].AsBool()) {
+    <p>Click the <em>Sign &amp; Finalize</em> link below to finalize the entered hours for that month.  Each month must be finalized before we can further process.</p>
+}
+else {
+    <p>Click the <em>Finalize</em> link below to finalize the entered hours for that month.  Each month must be finalized before we can further process.</p>
+
+}
+
+@Html.DevExpress().GridView(
+    s => {
+
+        s.Name = "gvFinalizeMonth";
+        s.KeyFieldName = "ID";
+
+        s.Width = Unit.Percentage(100);
+
+        s.SettingsBehavior.AllowSort = false;
+
+        var col = s.Columns.Add("colYear");
+        col.Caption = "Year";
+        col.FieldName = "Year";
+
+        col = s.Columns.Add("colMonthName");
+        col.Caption = "Month";
+        col.FieldName = "MonthName";
+
+        //col = s.Columns.Add("colFinalized");
+        //col.Caption = "Finalized?";
+        //col.FieldName = "IsFinalized";
+        //col.ColumnType = MVCxGridViewColumnType.CheckBox;
+
+        col = s.Columns.Add("colDateFinalized");
+        col.Caption = "Date Finalized";
+        col.FieldName = "DateFinalized";
+        col.PropertiesEdit.DisplayFormatString = "d";
+
+
+        col = s.Columns.Add("colAction");
+        col.Caption = " ";
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.SetDataItemTemplateContent(
+            c => {
+                if (Convert.ToBoolean(DataBinder.Eval(c.DataItem, "IsFinalized")) == false) {
+                    Html.DevExpress().HyperLink(
+                    hl => {
+                        string year = DataBinder.Eval(c.DataItem, "Year").ToString();
+                        string month = DataBinder.Eval(c.DataItem, "MonthName").ToString();
+
+
+                        hl.Name = "hlFinalize_" + year + month;
+
+                        if (AABC.ProviderPortal.AppService.Current.Settings.DocusignProviderEnabled) {
+                            hl.Properties.Text = "Sign & Finalize";
+                            hl.Properties.ClientSideEvents.Click = "lnkFinalizeClick";
+                        } else {
+                            hl.Properties.Text = "Finalize";
+                            hl.Properties.ClientSideEvents.Click = "lnkFinalizeClickNoSignature";
+                        }
+
+                    }
+                ).Render();
+                }
+            }
+        );
+
+    }
+).Bind(@Model.Items).GetHtml()
+
+<div class="spacer-10"></div>
+
+<table style="width: 100%;">
+    <tr>
+        <td align="right">
+            @Html.DevExpress().Button(
+                b => {
+                    b.Name = "btnCancelFinalization";
+                    b.Text = "Cancel";
+                    b.Width = 80;
+                    b.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide('cancelled'); }";
+                }
+            ).GetHtml()
+        </td>
+    </tr>
+</table>

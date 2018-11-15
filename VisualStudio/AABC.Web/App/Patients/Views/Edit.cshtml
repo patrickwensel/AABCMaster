@@ -1,0 +1,691 @@
+﻿@model AABC.Web.Models.Patients.PatientVM
+
+
+@using (Html.BeginForm("Edit", "Patients", FormMethod.Post, new { id = "form-default" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.HiddenFor(m => m.ID);
+    <div class="section-expander" id="expander-referral-info">
+        <div class="section-expander-header">
+            <span>Patient Information</span>
+        </div>
+        <div class="section-expander-content">
+            <div class="form-section">
+                <div class="form-section-header"><span>Patient Info</span></div>
+                <div class="form-section-content">
+                    @if (Model.ViewHelper.HasValidationErrors)
+                    {
+                        <div id="ErrServerValidation" class="validation-general">@Model.ViewHelper.ReturnErrorMessage</div>
+                    }
+                    <div class="form-section-content-col1">
+                        @Html.DevExpress().TextBox(s => {
+                       s.Name = "ID";
+                       s.Width = 200;
+                       s.Properties.Caption = "ID";
+                       s.Properties.CaptionCellStyle.Width = 100;
+                       s.ClientVisible = false;
+                   }).Bind(Model.ID).GetHtml()
+                        @Html.DevExpress().TextBox(s => {
+             s.Name = "FirstName";
+             s.Width = 200;
+             s.Properties.Caption = "First Name";
+             s.Properties.CaptionCellStyle.Width = 100;
+         }).Bind(Model.FirstName).GetHtml()
+                        <span id="ErrFirstNameRequired" class="validation-label">First Name is required</span>
+
+                        @Html.DevExpress().TextBox(
+         s => {
+             s.Name = "LastName";
+             s.Width = 200;
+             s.Properties.Caption = "Last Name";
+             s.Properties.CaptionCellStyle.Width = 100;
+         }
+     ).Bind(Model.LastName).GetHtml()
+                        <span id="ErrLastNameRequired" class="validation-label">Last Name is required</span>
+                        @Html.DevExpress().RadioButtonList(s =>
+        {
+            s.Name = "Gender";
+            s.Properties.Caption = "Gender";
+            s.Properties.CaptionCellStyle.Width = 85;
+            s.Properties.RepeatColumns = 2;
+            s.SelectedIndex = 0;
+            s.Properties.RepeatDirection = RepeatDirection.Horizontal;
+            s.ControlStyle.Border.BorderStyle = BorderStyle.None;
+            s.Properties.Items.Add("Male", AABC.Domain.Gender.Male);
+            s.Properties.Items.Add("Female", AABC.Domain.Gender.Female);
+            s.Properties.ValueType = typeof(AABC.Domain.Gender?);
+        }).Bind(Model.Gender).GetHtml()
+
+                    </div>
+
+                    <div class="form-section-content-col2">
+
+                        @Html.DevExpress().DateEdit(
+         s => {
+             s.Name = "DateofBirth";
+             s.Width = 150;
+             s.Properties.Caption = "Date of Birth";
+             s.Properties.CaptionCellStyle.Width = 100;
+         }
+     ).Bind(Model.DateOfBirth).GetHtml()
+                        <span id="ErrDOBMustBePastDate" class="validation-label">Date of Birth must not be a future date</span>
+                        <span id="ErrDOBRequired" class="validation-label">Date of Birth is required</span>
+
+
+                        @Html.DevExpress().CheckBox(
+        i =>
+        {
+            i.Name = "HighRisk";
+            i.Text = "High Risk";
+        }
+    ).Bind(Model.HighRisk).GetHtml()
+                        @* GENDER HERE *@
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+
+            <div class="form-section">
+                <div class="form-section-header"><span>Guardian &amp; Physician Info</span></div>
+                <div class="form-section-content">
+                    <div class="form-section-content-col1">
+
+                        <h4>Guardian #1</h4>
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "GuardianFirstName";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "First Name";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                         ).Bind(Model.GuardianFirstName).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+         s => {
+             s.Name = "GuardianLastName";
+             s.Width = 200;
+             s.Properties.Caption = "Last Name";
+             s.Properties.CaptionCellStyle.Width = 100;
+         }
+     ).Bind(Model.GuardianLastName).GetHtml()
+
+                        @*@Html.DevExpress().TextBox(
+                                s => {
+                                    s.Name = "GuardianRelationship";
+                                    s.Width = 200;
+                                    s.Properties.Caption = "Relationship";
+                                    s.Properties.CaptionCellStyle.Width = 100;
+                                    s.Enabled = false;
+                                }
+                            ).Bind(Model.GuardianRelationship).GetHtml()*@
+
+                        @Html.DevExpress().ComboBox(
+         s => {
+             s.Name = "GuardianRelationshipObject.ID";
+             s.Properties.TextField = "Name";
+             s.Properties.ValueField = "ID";
+             s.Properties.ValueType = typeof(int);
+             s.Properties.Width = 200;
+             s.Properties.Columns.Add("Name", "Name");
+             s.Properties.Caption = "Relationship";
+             s.Properties.CaptionCellStyle.Width = 100;
+             s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRender(sender, Model.GuardianRelationshipObject);
+         }
+     ).BindList(Model.ViewHelper.GuardianRelationships).Bind(Model.GuardianRelationshipObject).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "GuardianEmail";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Email";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.GuardianEmail).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "GuardianCellPhone";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "CellPhone";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.GuardianCellPhone).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "GuardianHomePhone";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Home Phone";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.GuardianHomePhone).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "GuardianWorkPhone";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Work Phone";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.GuardianWorkPhone).GetHtml()
+
+                        @Html.DevExpress().Memo(
+                             s => {
+                                 s.Name = "GuardianNotes";
+                                 s.Width = Unit.Percentage(100);
+                                 s.Properties.Caption = "Notes";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                                 s.Properties.Rows = 3;
+                             }
+                        ).Bind(Model.GuardianNotes).GetHtml()
+
+
+
+
+
+                        <h4>Guardian #2</h4>
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "Guardian2FirstName";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "First Name";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                         ).Bind(Model.Guardian2FirstName).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "Guardian2LastName";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Last Name";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                         ).Bind(Model.Guardian2LastName).GetHtml()
+
+                        @Html.DevExpress().ComboBox(
+                             s => {
+                                 s.Name = "Guardian2RelationshipObject.ID";
+                                 s.Properties.TextField = "Name";
+                                 s.Properties.ValueField = "ID";
+                                 s.Properties.ValueType = typeof(int);
+                                 s.Properties.Width = 200;
+                                 s.Properties.Columns.Add("Name", "Name");
+                                 s.Properties.Caption = "Relationship";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                                 s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRender(sender, Model.Guardian2RelationshipObject);
+                             }
+                         ).BindList(Model.ViewHelper.GuardianRelationships).Bind(Model.Guardian2RelationshipObject).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "Guardian2Email";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Email";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.Guardian2Email).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "Guardian2CellPhone";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "CellPhone";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.Guardian2CellPhone).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "Guardian2HomePhone";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Home Phone";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.Guardian2HomePhone).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "Guardian2WorkPhone";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Work Phone";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.Guardian2WorkPhone).GetHtml()
+
+                        @Html.DevExpress().Memo(
+                             s => {
+                                 s.Name = "Guardian2Notes";
+                                 s.Width = Unit.Percentage(100);
+                                 s.Properties.Caption = "Notes";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                                 s.Properties.Rows = 3;
+                             }
+                        ).Bind(Model.Guardian2Notes).GetHtml()
+
+                    </div>
+
+                    <div class="form-section-content-col2">
+
+
+                        <h4>Guardian #3</h4>
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "Guardian3FirstName";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "First Name";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                         ).Bind(Model.Guardian3FirstName).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "Guardian3LastName";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Last Name";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                         ).Bind(Model.Guardian3LastName).GetHtml()
+
+                        @Html.DevExpress().ComboBox(
+                             s => {
+                                 s.Name = "Guardian3RelationshipObject.ID";
+                                 s.Properties.TextField = "Name";
+                                 s.Properties.ValueField = "ID";
+                                 s.Properties.ValueType = typeof(int);
+                                 s.Properties.Width = 200;
+                                 s.Properties.Columns.Add("Name", "Name");
+                                 s.Properties.Caption = "Relationship";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                                 s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRender(sender, Model.Guardian3RelationshipObject);
+                             }
+                         ).BindList(Model.ViewHelper.GuardianRelationships).Bind(Model.Guardian3RelationshipObject).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "Guardian3Email";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Email";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.Guardian3Email).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "Guardian3CellPhone";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "CellPhone";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.Guardian3CellPhone).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "Guardian3HomePhone";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Home Phone";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.Guardian3HomePhone).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "Guardian3WorkPhone";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Work Phone";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.Guardian3WorkPhone).GetHtml()
+
+                        @Html.DevExpress().Memo(
+                             s => {
+                                 s.Name = "Guardian3Notes";
+                                 s.Width = Unit.Percentage(100);
+                                 s.Properties.Caption = "Notes";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                                 s.Properties.Rows = 3;
+                             }
+                        ).Bind(Model.Guardian3Notes).GetHtml()
+
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <div class="form-section-content-col2">
+
+
+                        <h4>Physician</h4>
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "PhysicianName";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Name";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                         ).Bind(Model.PhysicianName).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "PhysicianAddress";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Address";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                         ).Bind(Model.PhysicianAddress).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "PhysicianPhone";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Phone";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.PhysicianPhone).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "PhysicianFax";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Fax";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.PhysicianFax).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "PhysicianEmail";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Email";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.PhysicianEmail).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                             s => {
+                                 s.Name = "PhysiciantContact";
+                                 s.Width = 200;
+                                 s.Properties.Caption = "Contact";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                             }
+                        ).Bind(Model.PhysicianContact).GetHtml()
+
+                        @Html.DevExpress().Memo(
+                             s => {
+                                 s.Name = "PhysicianNotes";
+                                 s.Width = Unit.Percentage(100);
+                                 s.Properties.Caption = "Notes";
+                                 s.Properties.CaptionCellStyle.Width = 100;
+                                 s.Properties.Rows = 5;
+                             }
+                        ).Bind(Model.PhysicianNotes).GetHtml()
+
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+
+            <div class="form-section">
+                <div class="form-section-header"><span>Contact Information</span></div>
+                <div class="form-section-content">
+                    <div class="form-section-content-col1">
+
+
+                        @Html.DevExpress().TextBox(
+                            s => {
+                                s.Name = "Phone";
+                                s.Width = 125;
+                                s.Properties.Caption = "Phone";
+                                s.Properties.CaptionCellStyle.Width = 100;
+                            }
+                        ).Bind(Model.Phone).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                            s => {
+                                s.Name = "Email";
+                                s.Width = 200;
+                                s.Properties.Caption = "Email";
+                                s.Properties.CaptionCellStyle.Width = 100;
+                                s.Properties.ClientSideEvents.ValueChanged = "function(s,e){ App.DevEx.GetControl(\"Email\").SetValue(App.DevEx.GetControl(\"Email\").GetValue().trim()) }";
+                            }
+                        ).Bind(Model.Email).GetHtml()
+                        <span id="ErrEmailBadFormat" class="validation-label">Email Address format isn't valid</span>
+
+
+                    </div>
+
+                    <div class="form-section-content-col2">
+
+
+                        @Html.DevExpress().TextBox(
+                            s => {
+                                s.Name = "Address1";
+                                s.Width = Unit.Percentage(100);
+                                s.Properties.Caption = "Address 1";
+                                s.Properties.CaptionCellStyle.Width = 100;
+                            }
+                        ).Bind(Model.Address1).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                            s => {
+                                s.Name = "Address2";
+                                s.Width = Unit.Percentage(100);
+                                s.Properties.Caption = "Address 2";
+                                s.Properties.CaptionCellStyle.Width = 100;
+                            }
+                        ).Bind(Model.Address2).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                            s => {
+                                s.Name = "City";
+                                s.Width = 200;
+                                s.Properties.Caption = "City";
+                                s.Properties.CaptionCellStyle.Width = 100;
+                            }
+                        ).Bind(Model.City).GetHtml()
+
+                        @Html.DevExpress().ComboBox(
+                           s => {
+                               s.Name = "State";
+                               s.Properties.TextField = "Code";
+                               s.Properties.ValueField = "Code";
+                               s.Properties.TextFormatString = "{0}";
+                               s.Width = 50;
+                               s.Properties.Columns.Add("Code", "Code", 35);
+                               s.Properties.Columns.Add("Name", "Name", 150);
+                               s.Properties.Caption = "State";
+                               s.Properties.CaptionCellStyle.Width = 100;
+                               s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model, "State");
+                           }
+                        ).BindList(Model.ViewHelper.StatesList).Bind(Model.State).GetHtml()
+
+                        @Html.DevExpress().TextBox(
+                            s => {
+                                s.Name = "Zip";
+                                s.Width = 125;
+                                s.Properties.Caption = "Zip Code";
+                                s.Properties.CaptionCellStyle.Width = 100;
+                            }
+                        ).Bind(Model.Zip).GetHtml()
+
+
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-section-header"><span>Prescription</span></div>
+                <div class="form-section-content">
+                    <div class="form-section-content-col1">
+
+                        @if (String.IsNullOrEmpty(Model.PrescriptionFileName))
+                        {
+                            <div style="margin-top: 5px;">
+                                <table>
+                                    <tr>
+                                        <td style="padding-left:5px;">
+                                            @Html.DevExpress().UploadControl(
+                          i =>
+                          {
+                              i.Name = "PrescriptionFile";
+                              i.NullText = "Upload a Prescription File";
+                              i.ValidationSettings.Assign(AABC.Web.Controllers.PatientsController.ValidationSettings);
+                          }).GetHtml()
+                                        </td>
+
+                                    </tr>
+                                </table>
+
+                            </div>
+                        }
+
+                        else
+                        {
+                            <div style="margin-top: 5px;">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            @Html.DevExpress().Button(s =>
+                       {
+                           s.Name = "ViewPrescriptionButton";
+                           s.Text = "View Prescription";
+                           s.ClientSideEvents.Click = "function(s, e) { prescriptionDownload(" + Model.ID + "); }";
+                       }
+                           ).GetHtml()
+                                        </td>
+                                        <td style="padding-left:5px;">
+                                            @Html.DevExpress().UploadControl(
+                      i =>
+                      {
+                          i.Name = "PrescriptionFile";
+                          i.NullText = "Upload a new Prescription File";
+                          i.ValidationSettings.Assign(AABC.Web.Controllers.PatientsController.ValidationSettings);
+                      }).GetHtml()
+                                        </td>
+
+                                    </tr>
+                                </table>
+
+                            </div>
+                        }
+
+                        <input type="hidden" name="PrescriptionFileName" value="@Model.PrescriptionFileName" />
+
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding-top:50px">
+
+                @Html.DevExpress().Memo(
+                s =>
+                {
+                    s.Name = "Notes";
+                    s.Properties.Caption = "Notes";
+                    s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                    s.Properties.Rows = 6;
+                    s.Width = Unit.Percentage(95);
+                }
+            ).Bind(Model.Notes).GetHtml()
+
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="section-expander" id="expander-referral-info">
+        <div class="section-expander-header">
+            <span>Insurance Information</span>
+        </div>
+        <div class="section-expander-content">
+            <div id="InsuranceGridContainer">
+                @Html.Action("InsuranceGrid", "Case", new { CaseId = Model.CaseId ?? 0 })
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+
+
+    <div class="section-expander clearfix" id="expander-actions-info">
+        <div class="section-expander-header">
+            <span>Actions</span>
+        </div>
+        <div class="section-expander-content section-expander-content-last">
+
+            <div class="actions-content">
+
+                <table>
+                    <tr>
+                        <td>
+                            @Html.DevExpress().Button(bs => {
+                                   bs.UseSubmitBehavior = true;
+                                   bs.Name = "btnSubmit";
+                                   bs.Text = "Save Patient";
+                               }).GetHtml()
+                        </td>
+                        <td style="padding-left: 5px;">
+                            @Html.DevExpress().Button(bs => {
+                           bs.UseSubmitBehavior = false;
+                           bs.Name = "btnCaseManager";
+                           bs.Text = "Case Manager";
+                           bs.ImagePosition = ImagePosition.Left;
+                           bs.Images.Image.IconID = "mail_editcontact_16x16office2013";
+                           if (Model.ViewHelper.IsNewPatientEntry) {
+                               bs.Enabled = false;
+                           }
+
+                       }).GetHtml()
+                        </td>
+                    </tr>
+                </table>
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+}
+
+
+<div id="default-popup-anchor"></div>
+
+
+<script type="text/javascript">
+    $.getScript('/Scripts/Pages/PatientEdit.js', function () {
+        initComponent();
+        App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+    });
+</script>

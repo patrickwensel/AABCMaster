@@ -1,0 +1,77 @@
+﻿@model AABC.Web.App.Hours.Models.ScrubOverviewItemSummaryVM
+
+<div class="hours-scrub-summary">
+
+    <h3><a href="@Model.CaseUrl">@Model.PatientName</a></h3>
+
+    <hr />
+
+    <div class="col-1">
+
+        <h4>Active Providers</h4>
+        <ul>
+            @if (Model.ActiveProviders.Count == 0) {
+                <li>(none)</li>
+            } else {
+                foreach (var p in Model.ActiveProviders) {
+                    <li><a href="@p.Url">@p.FirstName @p.LastName</a></li>
+                }
+            }
+
+        </ul>
+
+        <h4>Providers with Hours</h4>
+        <ul>
+            @if (Model.ProvidersWithHours.Count == 0) {
+                <li>(none)</li>
+            } else {
+                foreach (var p in Model.ProvidersWithHours) {
+                    <li><a href="@p.Url">@p.FirstName @p.LastName</a></li>
+                }
+            }
+        </ul>
+
+        <h4>Providers without Hours</h4>
+        <ul>
+            @if (Model.ProvidersWithoutHours.Count == 0) {
+                <li>(none)</li>
+            } else {
+                foreach (var p in Model.ProvidersWithoutHours) {
+                    <li><a href="@p.Url">@p.FirstName @p.LastName</a></li>
+                }
+            }
+        </ul>
+
+    </div>
+
+    <div class="col-2">
+
+        <h4>Finalized Providers</h4>
+        <ul>
+            @if (Model.ProvidersFinalized.Count == 0) {
+                <li>(none)</li>
+            } else {
+                foreach (var p in Model.ProvidersFinalized) {
+                    <li><a href="@p.Url">@p.FirstName @p.LastName</a></li>
+                }
+            }
+        </ul>
+
+
+
+        <h4>Providers Not Finalized</h4>
+        <ul>
+            @if (Model.ProvidersNotFinalized.Count == 0) {
+                <li>(none)</li>
+            } else {
+                foreach (var p in Model.ProvidersNotFinalized) {
+                    <li><a href="@p.Url">@p.FirstName @p.LastName</a></li>
+                }
+            }
+        </ul>
+
+    </div>
+
+    
+
+</div>

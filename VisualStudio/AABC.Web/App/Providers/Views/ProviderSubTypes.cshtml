@@ -1,0 +1,79 @@
+﻿@model AABC.Web.App.Providers.Models.ProviderSubTypesVM
+
+<div id="provider-sub-types-page" class="new-layout" data-bind="visible:true" style="display:none">
+    <div class="section-expander" id="expander-referral-info">
+        <div class="section-expander-header">
+            <span>Provider Sub Types</span>
+        </div>
+        <div class="section-expander-content">
+            <div class="form-section">
+                <div class="form-section-content">
+                    <div class="form-group">
+                        <label for="status">Provider Type</label>
+                        <select id="status" class="dxeButtonEdit_Aqua form-control-fixed-width" data-bind="value:selectedProviderType,
+                                        options: providerTypes,
+                                        optionsValue:'id',
+                                        optionsText:'fullName',
+                                        optionsCaption:'Select a provider type'"></select>
+                    </div>
+                </div>
+                <div class="form-section-content">
+                    <table class="table dxgvControl_Aqua">
+                        <colgroup>
+                            <col>
+                            <col width="140">
+                        </colgroup>
+                        <thead>
+                            <tr class="dxgvDataRow_Aqua">
+                                <th class="dxgvHeader_Aqua">Sub Type</th>
+                                <th class="dxgvHeader_Aqua">Actions</th>
+                            </tr>
+                        </thead>
+                        <!-- ko if: providerSubTypes().length > 0 -->
+                        <tbody data-bind="foreach:providerSubTypes">
+                            <tr class="dxgvDataRow_Aqua">
+                                <td class="dxgv dx-ac"><span data-bind="text:fullName"></span></td>
+                                <td class="dxgv dx-ac" align="right">
+                                    <button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:$root.selectSubType"><div class="dxb"><span class="dx-vam">Edit</span></div></button>
+                                    <button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:$root.delete"><div class="dxb"><span class="dx-vam">Delete</span></div></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <!-- /ko -->
+                        <!-- ko ifnot: providerSubTypes().length > 0 -->
+                        <tbody>
+                            <tr class="dxgvDataRow_Aqua">
+                                <td class="dxgv dx-ac" colspan="2">No sub types</td>
+                            </tr>
+                        </tbody>
+                        <!-- /ko -->
+                    </table>
+                </div>
+                <!-- ko if: selectedProviderType() -->
+                <button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:$root.addNew"><div class="dxb"><span class="dx-vam">Add New</span></div></button>
+                <!-- /ko -->
+                <div class="form-section-content" data-bind="with:selectedProviderSubType">
+                    <div class="form-group">
+                        <label for="code">Code</label>
+                        <input id="code" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:code" />
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input id="name" type="text" class="dxeTextBox_Aqua form-control-fixed-width" data-bind="value:name" />
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:$root.save"><div class="dxb"><span class="dx-vam">Save</span></div></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            window.ProviderSubType.init($('#provider-sub-types-page')[0]);
+        });
+    </script>
+    <script type="text/javascript">
+    App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+    </script>
+

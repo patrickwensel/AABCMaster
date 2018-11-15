@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Config>
+  <!-- 
+		FOR USE WITH SERVER BASED CONFIGURATIONS ONLY
+		CONTAINS SENSITIVE INFORMATION!!
+	-->
+
+  <SolutionName>Solution Name Here</SolutionName>
+  
+  <ConnectionStrings>
+    <ConnectionString name="UserConnection" connectionString="data source=(localdb)\mssqllocaldb;initial catalog=aspnet-Langel_Web-20160149205649;integrated security=SSPI" />
+    <ConnectionString name="CoreConnection" connectionString="data source=JACK-WORK\SQLEXPRESS2014;initial catalog=LangelWS;integrated security=SSPI" />
+  </ConnectionStrings>
+
+  <Analytics traceRequests="true">
+    <!-- request trace parameters can go here -->
+  </Analytics>
+
+
+  <Exceptions>
+
+    <Logging>
+      <!-- LOGS TO FILE, DATABASE, AZURE TABLE -->
+
+      <Paths>
+        <Path requireVerification="true">E:\System\Logs\Log.log</Path>
+      </Paths>
+
+      <Databases requireVerification="false">
+        <!-- <Connection name="logDb" connectionString="data source=..." /> -->
+      </Databases>
+
+      <Azure requireVerification="true">
+        <TableStorage>
+          <!-- account/container info -->
+        </TableStorage>
+      </Azure>
+    </Logging>
+
+  </Exceptions>
+
+
+  <Integrations>
+    <Clio>
+      <Authentication>
+        <!-- <Bearer>PyWaJ1JfyK2aESDBlCshlamOz19ST5DolgvVqXy9</Bearer> -->
+        <Bearer>BD0axo0ilhCTJig9X9TFX76CIt41VlJhGtbToYqw</Bearer>
+      </Authentication>
+      <Documents>
+        <Post>
+          <Endpoint>https://app.goclio.com/api/v2/documents</Endpoint>
+          <UserAgent>LangelService-domain-application</UserAgent>
+        </Post>
+      </Documents>
+    </Clio>
+  </Integrations>
+
+
+
+  <Documents>
+    <RootDirectory>E:\Projects\Langel\Environment\Documents\Root</RootDirectory>
+    <HoldingDirectory>Holding</HoldingDirectory>
+    <!-- unassigned to Matter, relative to Root -->
+    <Revisions>
+      <HoldingDirectory>Holding\Revisions</HoldingDirectory>
+      <!-- relateive to Root -->
+    </Revisions>
+    <Clio>
+      <PostInfo>
+        <Endpoint>https://app.goclio.com/api/v2/documents</Endpoint>
+        <UserAgent>LangelService-domain-application</UserAgent>
+        <Headers>
+          <ContentType>multipart/form-data</ContentType>
+        </Headers>
+      </PostInfo>
+    </Clio>
+  </Documents>
+  
+  
+
+</Config>

@@ -1,0 +1,43 @@
+﻿@model AABC.Web.Models.Patients.RestaffReasonVM
+
+@Html.DevExpress().ComboBox(
+    s => {
+        s.Name = "RestaffReasonCombo";
+        s.Properties.TextField = "Reason";
+        s.Properties.ValueField = "ID";
+        s.Properties.ValueType = typeof(int);
+        s.Width = 200;
+        s.Properties.Caption = "Reason";
+        s.Properties.CaptionCellStyle.Width = 100;
+
+        s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRenderByValue(sender, Model.ReasonID);
+        
+    }
+).BindList(Model.SelectionList).Bind(Model.ReasonID).GetHtml()
+
+
+<table align="right" style="margin-top: 20px;">
+    <tr>
+        <td>
+            @Html.DevExpress().Button(
+                s => {
+                    s.Name = "btnRestaffReasonComboCancel";
+                    s.Text = "Cancel";
+                    s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide('cancelled'); }";
+                }
+            ).GetHtml()            
+        </td>
+        <td style="padding-left: 5px;">
+            @Html.DevExpress().Button(
+                s => {
+                    s.Name = "btnRestaffReasonComboUpdate";
+                    s.Text = "Save";
+                    s.ClientSideEvents.Click = "function(s, e) { UpdateRestaffReason(" + Model.ID + ", RestaffReasonCombo.GetValue()); }";
+                }
+            ).GetHtml()
+        </td>
+    </tr>
+</table>
+
+
+

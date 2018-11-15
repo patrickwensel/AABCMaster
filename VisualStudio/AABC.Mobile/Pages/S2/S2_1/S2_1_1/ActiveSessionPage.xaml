@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<control:LoggedInPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+			 xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="AABC.Mobile.Pages.S2_1_1.ActiveSessionPage"
+			 Title="{Binding SelectedCase.Patient, Converter={StaticResource patientNameConverter}}"
+			 NavigationPage.BackButtonTitle="Back"
+			 Padding="0">
+
+	<ScrollView>
+		<StackLayout Spacing="1" BackgroundColor="#f1f1f1" >
+			<ContentView VerticalOptions="FillAndExpand" BackgroundColor="{StaticResource highlightBackgroundColor}">
+				<Grid VerticalOptions="Center">
+
+					<Grid.Resources>
+						<ResourceDictionary>
+							<Style TargetType="Label">
+								<Setter Property="TextColor" Value="#ffffff" />
+							</Style>
+						</ResourceDictionary>
+					</Grid.Resources>
+
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="2*" />
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="2*" />
+					</Grid.ColumnDefinitions>
+
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30" />
+						<RowDefinition Height="50" />
+						<RowDefinition Height="30" />
+					</Grid.RowDefinitions>
+
+					<Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Active Session" Style="{StaticResource pageTitle}" HorizontalTextAlignment="Center" />
+
+					<ContentView Grid.Row="1" Grid.Column="0" BackgroundColor="#226faf" HeightRequest="50" WidthRequest="50" HorizontalOptions="Center" VerticalOptions="Center" >
+						<Label Text="{Binding Duration, StringFormat='{0:hh}'}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large" />
+					</ContentView>
+
+					<Label Grid.Row="1" Grid.Column="1" Text=":" HeightRequest="50" WidthRequest="50" VerticalTextAlignment="Center" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" FontSize="Large" />
+
+					<ContentView Grid.Row="1" Grid.Column="2" BackgroundColor="#226faf" HeightRequest="50" WidthRequest="50" HorizontalOptions="Center" VerticalOptions="Center" >
+						<Label Text="{Binding Duration, StringFormat='{0:mm}'}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="Large" />
+					</ContentView>
+
+					<Label Grid.Row="2" Grid.Column="0" Text="Hours" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" FontSize="Small" />
+					<Label Grid.Row="2" Grid.Column="2" Text="Minutes" HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center" FontSize="Small" />
+
+				</Grid>
+			</ContentView>
+
+			<ContentView VerticalOptions="FillAndExpand" BackgroundColor="#ffffff">
+				<control:IconButton Command="{Binding AddNotesClicked}" Text="Add Notes" ImageSource="AddNotes.png" VerticalOptions="Center" />
+			</ContentView>
+
+			<ContentView VerticalOptions="FillAndExpand" BackgroundColor="#ffffff">
+				<control:IconButton Command="{Binding CompleteSessionClicked}" Text="Complete Session" ImageSource="CompleteSession.png" VerticalOptions="Center" />
+			</ContentView>
+
+		</StackLayout>
+	</ScrollView>
+</control:LoggedInPage>

@@ -1,0 +1,103 @@
+﻿
+
+@*<script id="dxss_AdminDataListsJs" type="text/javascript">
+    $.getScript("/Scripts/Pages/AdminDataLists.js", function () {
+        initDataListsScripts();
+    });
+</script>*@
+
+<script type="text/javascript" id="dxss_3409tu3bv9084tubn39048">
+
+    function resolveExistingAuthBreakdown() {
+
+        var startDate = ResolveExistingAuthBreakdownDateEdit.GetValue();
+        var endDate = ResolveExistingAuthBreakdownEndDateEdit.GetValue();
+
+        if (startDate == null || endDate == null) {
+            alert('Please provide a start and end date before processing');
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '/Commands/ResolveExistingAuthBreakdowns',
+            data: {
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString()
+            },
+            success: function (res) {
+                alert(res);
+            }
+        });
+
+
+    }
+
+    function clearCache() {
+        $.post('/Commands/ClearCache').done(function (response) {
+            if (response.success) {
+                alert("Cache cleared!");
+            }
+        });
+    }
+
+</script>
+
+<div class="content">
+
+
+    <div id="ResolveAuthEditCommandDisplayContainer">
+
+        <hr />
+
+        <h3>Resolve Existing Hours Authorization Times</h3>
+
+        <p style="max-width: 350px;">
+            Running this will re-calculate all of the applied authorizations for the hours within the specified date range.
+            This can be a time consuming process (approximately 1-2 minutes per month's worth of hours requested).  We recommend processing one month's
+            worth of hours at a time, preferably not during peak hours.
+        </p>
+        <p style="max-width: 350px;">
+            Use this when a change has been made to the auth resolution process or configuration and the Authorization Hours grids need to be re-calculated.
+        </p>
+
+        @Html.DevExpress().DateEdit(s => {
+   s.Name = "ResolveExistingAuthBreakdownDateEdit";
+   s.Properties.Caption = "Start Date";
+   s.Properties.CaptionCellStyle.Width = 100;
+}).GetHtml()
+
+        <div style="height: 5px;"></div>
+
+        @Html.DevExpress().DateEdit(s => {
+   s.Name = "ResolveExistingAuthBreakdownEndDateEdit";
+   s.Properties.Caption = "End Date";
+   s.Properties.CaptionCellStyle.Width = 100;
+}).GetHtml()
+
+        <div style="height: 5px;"></div>
+
+        <div style="margin-left: 106px;">
+
+            @Html.DevExpress().Button(
+            s => {
+                s.Name = "ResolveExistingAuthBreakdownsButton";
+                s.Text = "Resolve Existing Auth Breakdowns";
+                s.ClientSideEvents.Click = "function(s, e) { resolveExistingAuthBreakdown(); }";
+            }
+        ).GetHtml()
+
+        </div>
+
+        <hr />
+        @Html.DevExpress().Button(
+                s => {
+                    s.Name = "ClearCache";
+                    s.Text = "Clear Cache";
+                    s.ClientSideEvents.Click = "function(s, e) { clearCache(); }";
+                }
+            ).GetHtml()
+    </div>
+
+</div>
+

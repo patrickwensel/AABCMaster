@@ -1,0 +1,855 @@
+﻿@using AABC.Domain2.Providers
+@using AABC.Shared.Web.Helpers
+@model AABC.Web.Models.Providers.ProviderVM
+
+
+<style>
+	.provider-case-list h3 {
+		font-family: Tahoma, Geneva, sans-serif;
+		font-size: 1.2em;
+		font-style: normal;
+		font-weight: 400;
+	}
+
+	.provider-case-list ul {
+		list-style: none;
+		list-style-type: none;
+		padding: 0;
+	}
+</style>
+
+<div class="section-expander" id="expander-referral-info">
+	<div class="section-expander-header">
+		<span>Provider Information</span>
+	</div>
+
+	<div style="width:70%;float:left">
+		@using (Html.BeginForm("Edit", "Providers", FormMethod.Post, new { id = "form-default" }))
+		{
+			@Html.AntiForgeryToken();
+			@Html.HiddenFor(m => m.ID);
+			<div class="section-expander-content">
+				<div class="form-section">
+					<div class="form-section-header"><span>Name &amp; Contact Information</span></div>
+					<div class="form-section-content">
+						<div class="form-section-content-col1">
+							@Html.DevExpress().ComboBox(s =>
+					   {
+						   s.Name = "Type.ID";
+						   s.Properties.ValueField = "ID";
+						   s.Properties.ValueType = typeof(int);
+						   s.Properties.Caption = "Type";
+						   s.Properties.TextField = "Name";
+						   s.Properties.TextFormatString = "{0}";
+						   s.Width = 75;
+						   s.Properties.CaptionCellStyle.Width = 100;
+						   s.Properties.DropDownWidth = 350;
+						   s.Properties.Columns.Add("Code", "Code", 30);
+						   s.Properties.Columns.Add("Name", "Name");
+						   s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRender(sender, Model.Type);
+						   s.Properties.ClientSideEvents.SelectedIndexChanged = "function (s, e) { ProviderSubTypeID.PerformCallback(); }";
+					   }).BindList(Model.ViewHelper.ProviderTypesList).Bind(Model.Type).GetHtml()
+
+							@Html.Partial("Edit_SubTypeComboBox", Model)
+
+							@Html.DevExpress().TextBox(s =>
+							{
+								s.Name = "FirstName";
+								s.Width = 200;
+								s.Properties.Caption = "First Name";
+								s.Properties.CaptionCellStyle.Width = 100;
+							}).Bind(Model.FirstName).GetHtml()
+							<span id="ErrFirstNameRequired" class="validation-label">First Name is required</span>
+
+							@Html.DevExpress().TextBox(s =>
+					   {
+								s.Name = "LastName";
+								s.Width = 200;
+								s.Properties.Caption = "Last Name";
+								s.Properties.CaptionCellStyle.Width = 100;
+							}).Bind(Model.LastName).GetHtml()
+							<span id="ErrLastNameRequired" class="validation-label">Last Name is required</span>
+
+							@Html.DevExpress().RadioButtonList(s =>
+					   {
+								s.Name = "Gender";
+								s.Properties.Caption = "Gender";
+								s.Properties.CaptionCellStyle.Width = 85;
+								s.Properties.RepeatColumns = 2;
+								s.SelectedIndex = 0;
+								s.Properties.RepeatDirection = RepeatDirection.Horizontal;
+								s.ControlStyle.Border.BorderStyle = BorderStyle.None;
+								s.Properties.Items.Add("Male", 'M');
+								s.Properties.Items.Add("Female", 'F');
+								s.Properties.ValueType = typeof(char?);
+							}).Bind(Model.Gender).GetHtml()
+
+							@Html.DevExpress().TextBox(s =>
+					   {
+								s.Name = "CompanyName";
+								s.Width = Unit.Percentage(100);
+								s.Properties.Caption = "Company Name";
+								s.Properties.CaptionCellStyle.Width = 100;
+							}).Bind(Model.CompanyName).GetHtml()
+
+							@Html.DevExpress().TextBox(s =>
+					   {
+								s.Name = "Phone";
+								s.Width = 125;
+								s.Properties.Caption = "Phone";
+								s.Properties.CaptionCellStyle.Width = 100;
+							}).Bind(Model.Phone).GetHtml()
+
+							@Html.DevExpress().TextBox(s =>
+					   {
+								s.Name = "Phone2";
+								s.Width = 125;
+								s.Properties.Caption = "Phone2";
+								s.Properties.CaptionCellStyle.Width = 100;
+							}).Bind(Model.Phone2).GetHtml()
+
+							@Html.DevExpress().TextBox(s =>
+					   {
+								s.Name = "Fax";
+								s.Width = 125;
+								s.Properties.Caption = "Fax";
+								s.Properties.CaptionCellStyle.Width = 100;
+							}).Bind(Model.Fax).GetHtml()
+
+							@Html.DevExpress().TextBox(s =>
+					   {
+								s.Name = "Email";
+								s.Width = 200;
+								s.Properties.Caption = "Email";
+								s.Properties.CaptionCellStyle.Width = 100;
+							}).Bind(Model.Email).GetHtml()
+							<span id="ErrEmailBadFormat" class="validation-label">Email Address format incorrect</span>
+						</div>
+
+						<div class="form-section-content-col2">
+							@Html.DevExpress().ComboBox(s =>
+							{
+								s.Name = "Status";
+								s.Properties.ValueType = typeof(int);
+								s.Properties.Caption = "Status";
+								s.Properties.CaptionCellStyle.Width = 100;
+							}).BindList(SelectListHelper.GetSelectList<ProviderStatus>()).Bind(Model.Status).GetHtml()
+
+							@Html.DevExpress().TextBox(s =>
+					   {
+				 s.Name = "Address1";
+				 s.Width = Unit.Percentage(100);
+				 s.Properties.Caption = "Address 1";
+				 s.Properties.CaptionCellStyle.Width = 100;
+			 }
+		 ).Bind(Model.Address1).GetHtml()
+
+							@Html.DevExpress().TextBox(s =>
+					   {
+				 s.Name = "Address2";
+				 s.Width = Unit.Percentage(100);
+				 s.Properties.Caption = "Address 2";
+				 s.Properties.CaptionCellStyle.Width = 100;
+			 }
+		 ).Bind(Model.Address2).GetHtml()
+
+							@Html.DevExpress().TextBox(s =>
+					   {
+				 s.Name = "City";
+				 s.Width = 200;
+				 s.Properties.Caption = "City";
+				 s.Properties.CaptionCellStyle.Width = 100;
+			 }).Bind(Model.City).GetHtml()
+
+							@Html.DevExpress().ComboBox(s =>
+					   {
+								   s.Name = "State";
+								   s.Properties.TextField = "Code";
+								   s.Properties.ValueField = "Code";
+								   s.Properties.TextFormatString = "{0}";
+								   s.Width = 50;
+								   s.Properties.Columns.Add("Code", "Code", 35);
+								   s.Properties.Columns.Add("Name", "Name", 150);
+								   s.Properties.Caption = "State";
+								   s.Properties.CaptionCellStyle.Width = 100;
+								   s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model, "State");
+							   }).BindList(Model.ViewHelper.StatesList).Bind(Model.State).GetHtml()
+
+							@Html.DevExpress().TextBox(s =>
+					   {
+								 s.Name = "Zip";
+								 s.Width = 125;
+								 s.Properties.Caption = "Zip Code";
+								 s.Properties.CaptionCellStyle.Width = 100;
+							 }).Bind(Model.Zip).GetHtml()
+
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+
+				<div class="form-section">
+					<div class="form-section-header"><span>General Information</span></div>
+					<div class="form-section-content">
+						<div class="form-section-content-col1">
+							@Html.DevExpress().CheckBox(             i =>
+					   {
+				 i.Name = "IsHired";
+				 i.Text = "Is Hired?";
+				 i.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+			 }).Bind(Model.IsHired).GetHtml()
+
+							@Html.DevExpress().CheckBox(i =>
+					   {
+				 i.Name = "HasBackgroundCheck";
+				 i.Text = "Background Check?";
+				 i.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+			 }).Bind(Model.HasBackgroundCheck).GetHtml()
+
+							@Html.DevExpress().CheckBox(i =>
+					   {
+				 i.Name = "HasReferences";
+				 i.Text = "References?";
+				 i.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+			 }).Bind(Model.HasReferences).GetHtml()
+
+							@Html.DevExpress().CheckBox(i =>
+					   {
+				 i.Name = "HasResume";
+				 i.Text = "Resume?";
+				 i.EncodeHtml = false;
+				 i.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+			 }).Bind(Model.HasResume).GetHtml()
+
+							@if (string.IsNullOrEmpty(Model.ResumeFileName))
+							{
+								<div style="margin-left: 103px; margin-top: 5px;">
+									<table>
+										<tr>
+											<td style="padding-left:5px;">
+												@Html.DevExpress().UploadControl(i =>
+		{
+			i.Name = "ResumeFile";
+			i.NullText = "Upload a Resume File";
+			i.ValidationSettings.Assign(AABC.Web.Controllers.ProvidersController.ValidationSettings);
+		}).GetHtml()
+											</td>
+										</tr>
+									</table>
+								</div>
+							}
+							else
+							{
+								<div style="margin-left: 103px; margin-top: 5px;">
+									<table>
+										<tr>
+											<td>
+												@Html.DevExpress().Button(s =>
+										   {
+											   s.Name = "ViewResumeButton";
+											   s.Text = "View Resume";
+											   s.ClientSideEvents.Click = "function(s, e) { resumeDownload(" + Model.ID + "); }";
+										   }).GetHtml()
+											</td>
+											<td style="padding-left:5px;">
+												@Html.DevExpress().UploadControl(i =>
+										   {
+			i.Name = "ResumeFile";
+			i.NullText = "Upload a new Resume File";
+			i.ValidationSettings.Assign(AABC.Web.Controllers.ProvidersController.ValidationSettings);
+		}).GetHtml()
+											</td>
+										</tr>
+									</table>
+								</div>
+							}
+							<input type="hidden" name="ResumeFileName" value="@Model.ResumeFileName" />
+						</div>
+
+						<div class="form-section-content-col2">
+							@Html.DevExpress().DateEdit(s =>
+							{
+								s.Name = "HireDate";
+								s.Properties.Caption = "Hire Date";
+								s.Properties.CaptionCellStyle.Width = 100;
+							}).Bind(Model.HireDate).GetHtml()
+
+							@Html.DevExpress().Memo(
+								i =>
+								{
+									i.Name = "Notes";
+									i.Width = Unit.Percentage(100);
+									i.Properties.Rows = 4;
+									i.Properties.Caption = "Notes";
+									i.Properties.CaptionCellStyle.Width = 100;
+									i.Properties.CaptionSettings.Position = EditorCaptionPosition.Left;
+								}
+								).Bind(Model.Notes).GetHtml()
+
+							@Html.DevExpress().Memo(
+								i =>
+								{
+									i.Name = "Availability";
+									i.Width = Unit.Percentage(100);
+									i.Properties.Rows = 2;
+									i.Properties.Caption = "Availability";
+									i.Properties.CaptionCellStyle.Width = 100;
+									i.Properties.CaptionSettings.Position = EditorCaptionPosition.Left;
+								}
+								).Bind(Model.Availability).GetHtml()
+
+
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+
+			</div>
+			<div class="clearfix"></div>
+
+
+			<div class="section-expander" id="expander-referral-info">
+				<div class="section-expander-header">
+					<span>Service &amp; Rates</span>
+				</div>
+				<div class="section-expander-content">
+					<div class="form-section">
+						<div class="form-section-header" style="border-bottom: none;"><span></span></div>
+						<div class="form-section-content">
+							<div class="form-section-content-col1">
+
+								<table style="width: 100%;">
+									<tr>
+										<td>
+											@Html.DevExpress().Memo(s =>
+									   {
+												 s.Name = "ServiceZips";
+												 s.Properties.Caption = "Service Areas";
+												 s.Width = Unit.Percentage(100);
+												 s.Properties.CaptionCellStyle.Width = 100;
+												 s.Properties.Rows = 3;
+											 }).Bind(Model.ServiceZips).GetHtml()
+										</td>
+										<td style="padding-left: 5px;" valign="top">
+											@Html.DevExpress().Button(s =>
+									   {
+					 s.Name = "btnZipLookup";
+					 s.Text = "Add by City/County";
+					 s.ClientSideEvents.Click = "function(s, e) { Zips.Lookup(); }";
+				 }).GetHtml()
+										</td>
+									</tr>
+								</table>
+							</div>
+
+							<div class="form-section-content-col2">
+								<table style="margin-bottom: 5px;">
+									<tr>
+										<td>
+											@Html.DevExpress().TextBox(s =>
+									   {
+													s.Name = "PayrollID";
+													s.Properties.Caption = "Payroll ID";
+													s.Properties.CaptionCellStyle.Width = 100;
+												}).Bind(Model.PayrollID).GetHtml()
+										</td>
+										<td>
+											<a style="margin-left: 5px;" href="#" id="provider-payroll-id-gen">generate new</a>
+										</td>
+									</tr>
+								</table>
+								@if (AABC.Web.Global.Default.User().HasPermission(AABC.Domain.Admin.Permissions.ProviderRateView))
+								{
+
+									@Html.DevExpress().SpinEdit(s =>
+							   {
+												 s.Name = "HourlyRate";
+												 s.Properties.Caption = "Hourly Rate";
+												 s.Width = 75;
+												 s.Properties.DisplayFormatString = "C";
+												 s.Properties.CaptionCellStyle.Width = 100;
+												 s.ClientVisible = Model.ID == 0;
+											 }).Bind(Model.HourlyRate).GetHtml()
+
+									if (Model.ID != 0)
+									{
+										<label style="display: inline-block; width: 100px;">Rate History:</label><span><a id="provider-newrate" href="javascript:pcRateEntry.Show();">(Add New)</a></span>
+										<ul>
+											@foreach (var rate in Model.ViewHelper.RateHistory)
+											{
+												<li><span style="display: inline-block; width: 75px;">$@rate.Key.ToString("#.00")</span> @rate.Value.ToString("M/d/yyyy")</li>
+											}
+										</ul>
+									}
+								}
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+
+			<div class="section-expander" id="expander-referral-info">
+				<div class="section-expander-header">
+					<span>License &amp; Credentials</span>
+				</div>
+				<div class="section-expander-content">
+					<div class="form-section">
+						<div class="form-section-header" style="border-bottom: none;"><span></span></div>
+						<div class="form-section-content">
+							<div class="form-section-content-col1">
+								@Html.DevExpress().TextBox(s =>
+						   {
+					 s.Name = "CertificationID";
+					 s.Width = 125;
+					 s.Properties.Caption = "Cert ID";
+					 s.Properties.CaptionCellStyle.Width = 100;
+				 }).Bind(Model.CertificationID).GetHtml()
+
+								@Html.DevExpress().ComboBox(s =>
+						   {
+					s.Name = "CertificationState";
+					s.Properties.TextField = "Code";
+					s.Properties.ValueField = "Code";
+					s.Properties.TextFormatString = "{0}";
+					s.Width = 50;
+					s.Properties.Columns.Add("Code", "Code", 35);
+					s.Properties.Columns.Add("Name", "Name", 150);
+					s.Properties.Caption = "Cert State";
+					s.Properties.CaptionCellStyle.Width = 100;
+					s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model, "CertificationState");
+				}).BindList(Model.ViewHelper.StatesList).Bind(Model.CertificationState).GetHtml()
+
+								@Html.DevExpress().DateEdit(s =>
+						   {
+					 s.Name = "CertificationRenewalDate";
+					 s.Width = 125;
+					 s.Properties.Caption = "Cert Renewal";
+					 s.Properties.CaptionCellStyle.Width = 100;
+				 }).Bind(Model.CertificationRenewalDate).GetHtml()
+
+								@Html.DevExpress().Memo(i =>
+						   {
+					 i.Name = "DocumentStatus";
+					 i.Width = Unit.Percentage(100);
+					 i.Properties.Rows = 2;
+					 i.Properties.Caption = "Document Status";
+					 i.Properties.CaptionCellStyle.Width = 100;
+					 i.Properties.CaptionSettings.Position = EditorCaptionPosition.Left;
+				 }).Bind(Model.DocumentStatus).GetHtml()
+							</div>
+
+							<div class="form-section-content-col2">
+								@Html.DevExpress().TextBox(s =>
+						   {
+					 s.Name = "LBA";
+					 s.Width = 125;
+					 s.Properties.Caption = "LBA";
+					 s.Properties.CaptionCellStyle.Width = 100;
+				 }).Bind(Model.LBA).GetHtml()
+
+								@Html.DevExpress().TextBox(s =>
+						   {
+					 s.Name = "NPI";
+					 s.Width = 125;
+					 s.Properties.Caption = "NPI";
+					 s.Properties.CaptionCellStyle.Width = 100;
+				 }).Bind(Model.NPI).GetHtml()
+
+								@Html.DevExpress().TextBox(s =>
+						   {
+					 s.Name = "CAQH";
+					 s.Width = 125;
+					 s.Properties.Caption = "CAQH";
+					 s.Properties.CaptionCellStyle.Width = 100;
+				 }).Bind(Model.CAQH).GetHtml()
+
+								@Html.DevExpress().DateEdit(s =>
+						   {
+					 s.Name = "W9Date";
+					 s.Width = 125;
+					 s.Properties.Caption = "W9 Date";
+					 s.Properties.CaptionCellStyle.Width = 100;
+				 }).Bind(Model.W9Date).GetHtml()
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+
+			<div class="section-expander" id="expander-referral-info">
+				<div class="section-expander-header">
+					<span>Insurance Credentials</span>
+				</div>
+				<div class="section-expander-content">
+					<div class="form-section">
+						<div class="form-section-header" style="border-bottom: none;"><span></span></div>
+						<div class="form-section-content">
+							<div class="form-section-content-col1">
+								<table style="width: 100%;">
+									<tr>
+										<td id="tdInsuranceGrid">
+											@{Html.RenderAction("InsuranceCredentialGrid", new { ProviderId = Model.ID });}
+										</td>
+										<td style="padding-left: 5px;" valign="top">
+											@Html.DevExpress().Button(s =>
+									   {
+					 s.Name = "btnInsuranceLookup";
+					 s.Text = "Add Credentials";
+					 if (Model.ID > 0)
+					 {
+						 s.ClientSideEvents.Click = "function(s, e) { Insurances.Edit(" + Model.ID + ", 0); }";
+					 }
+					 else
+					 {
+						 s.ClientVisible = false;
+					 }
+				 }).GetHtml()
+										</td>
+									</tr>
+									<tr>
+										<td>
+											@Html.DevExpress().Button(s =>
+									   {
+										   s.Name = "btnRemove";
+										   s.Text = "Remove";
+										   s.Width = 100;
+										   if (Model.ID > 0)
+										   {
+											   s.ClientSideEvents.Click = "function(s, e) {Insurances.Remove();}";
+										   }
+										   else
+										   {
+											   s.ClientVisible = false;
+										   }
+									   }).GetHtml()
+										</td>
+										<td></td>
+									</tr>
+								</table>
+							</div>
+							<div class="form-section-content-col2">
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			if (Model.ID != 0)
+			{
+				<div class="section-expander clearfix" id="expander-actions-info">
+					<div class="section-expander-header">
+						<span>Cases</span>
+					</div>
+					<div class="section-expander-content">
+						<div class="actions-content provider-case-list">
+							<table>
+								<tr>
+									<td valign="top">
+										<h3>Active Cases</h3>
+										@if (Model.ViewHelper.ActiveCasesDictionary.Count == 0)
+										{
+											<p>(none)</p>
+										}
+										else
+										{
+											<ul>
+												@foreach (var item in Model.ViewHelper.ActiveCasesDictionary)
+												{
+													<li><a href="/Case/@item.Key/Manage/Summary">@item.Value</a></li>
+												}
+											</ul>
+										}
+									</td>
+									<td valign="top" style="padding-left: 20px;">
+										<h3>Inactive Cases</h3>
+										@if (Model.ViewHelper.InactiveCasesDictionary.Count == 0)
+										{
+											<p>(none)</p>
+										}
+										else
+										{
+											<ul>
+												@foreach (var item in Model.ViewHelper.InactiveCasesDictionary)
+												{
+													<li><a href="/Case/@item.Key/Manage/Summary">@item.Value</a></li>
+												}
+											</ul>
+										}
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				if (AABC.Web.Global.Default.User().HasPermission(AABC.Domain.Admin.Permissions.CaseHoursView))
+				{
+					<div class="section-expander clearfix" id="expander-actions-hours">
+						<div class="section-expander-header">
+							<span>Hours</span>
+						</div>
+						<div class="section-expander-content">
+							<div class="actions-content provider-hours-list">
+								@Html.Partial("HoursGrid", (object)ViewBag.ProviderHours)
+							</div>
+							<div class="spacer-10"></div>
+
+							@Html.DevExpress().Button(s =>
+					   {
+						   s.Name = "btnDownloadHours";
+						   s.Text = "Download Hours Reports";
+						   s.ClientSideEvents.Click = "function(s, e) { downloadProviderHours(); }";
+							}).GetHtml()
+						</div>
+					</div>
+				}
+			}
+
+			<div class="section-expander clearfix" id="expander-actions-info">
+				<div class="section-expander-header">
+					<span>Actions</span>
+				</div>
+				<div class="section-expander-content section-expander-content-last">
+					<div class="actions-content">
+						<div style="float: left;">
+							@Html.DevExpress().Button(bs =>
+					   {
+						   bs.UseSubmitBehavior = true;
+						   bs.Name = "btnSubmit";
+						   bs.Text = "Save Provider";
+						   bs.Width = 100;
+					   }).GetHtml()
+						</div>
+						@if (AABC.Web.AppService.Current.User.HasPermission(AABC.Domain.Admin.Permissions.PatientDelete) && Model.ID > 0)
+						{
+							<div style="margin-left: 125px;">
+								@Html.DevExpress().Button(bs =>
+						   {
+							   bs.UseSubmitBehavior = false;
+							   bs.Name = "btnDelete";
+							   bs.Text = "Delete Provider";
+							   bs.ClientSideEvents.Click = "function(s, e) { deleteProvider(); }";
+							   bs.Images.Image.IconID = IconID.ActionsCancel16x16;
+						   }).GetHtml()
+							</div>
+
+						}
+					</div>
+				</div>
+			</div>
+		}
+
+		@Html.DevExpress().PopupControl(s =>
+   {
+				s.Name = "pcDownloadHours";
+				s.Width = 350;
+				s.AllowDragging = false;
+				s.CloseAction = CloseAction.CloseButton;
+				s.CloseOnEscape = true;
+				s.PopupAnimationType = AnimationType.None;
+				s.HeaderText = "Download Hours";
+				s.Modal = true;
+				s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+				s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+
+				s.SetContent(() => {
+
+					ViewContext.Writer.Write("<div class='line'>");
+
+					Html.DevExpress().ComboBox(cb =>
+					{
+							cb.Name = "DownloadHoursPatientSelect";
+							cb.Properties.Caption = "Patient";
+							cb.Properties.CaptionCellStyle.Width = 100;
+							cb.Properties.ValueField = "Key";
+							cb.Properties.TextField = "Value";
+						}).BindList(Model.ViewHelper.AllCases).Render();
+
+					Html.DevExpress().DateEdit(ds =>
+					{
+							ds.Name = "StartPeriod";
+							ds.Properties.Caption = "Start Period";
+							ds.Properties.CaptionCellStyle.Width = 100;
+						}).Render();
+
+					Html.DevExpress().DateEdit(ds =>
+					{
+							ds.Name = "EndPeriod";
+							ds.Properties.Caption = "End Period";
+							ds.Properties.CaptionCellStyle.Width = 100;
+						}).Render();
+
+					Html.DevExpress().TextBox(ts =>
+					{
+							ts.Name = "ProviderIDForHoursDownload";
+							ts.ClientVisible = false;
+						}).Bind(Model.ID).Render();
+
+					Html.DevExpress().Button(bs =>
+					{
+							 bs.Name = "btnRunReport";
+							 bs.ControlStyle.CssClass = "button";
+							 bs.Width = 80;
+							 bs.Text = "Download Report";
+							 bs.UseSubmitBehavior = false;
+							 bs.ClientSideEvents.Click = "function(s, e) { runDownloadHoursReport(); }";
+						 }).Render();
+
+					ViewContext.Writer.Write("</div>");
+
+				});
+			}
+		).GetHtml()
+
+		@Html.DevExpress().PopupControl(s =>
+   {
+			s.Name = "pcRateEntry";
+			s.Width = 100;
+			s.AllowDragging = false;
+			s.CloseAction = CloseAction.CloseButton;
+			s.CloseOnEscape = true;
+			s.PopupAnimationType = AnimationType.None;
+			s.HeaderText = "Add Rate";
+			s.Modal = true;
+			s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+			s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+
+			s.ClientSideEvents.CloseUp = "function(s, e) { ASPxClientEdit.ClearEditorsInContainer(null, '', true); }";
+
+			s.SetContent(() => {
+				using (Html.BeginForm("AddProviderRate", "Providers", FormMethod.Post, new { id = "pcRateEntryForm", @class = "pcRateEntryFormClass", @style = "width: 300px;" })) {
+					ViewContext.Writer.Write("<div class='line'>");
+
+					Html.DevExpress().Label(ls =>
+					{
+							ls.ControlStyle.CssClass = "label";
+							ls.Text = "Effective Date";
+							ls.AssociatedControlName = "EffectiveDate";
+						}).Render();
+
+					Html.DevExpress().DateEdit(ds =>
+					{
+							ds.Name = "EffectiveDate";
+						}).Render();
+
+					Html.DevExpress().Label(ls =>
+					{
+							ls.ControlStyle.CssClass = "label";
+							ls.Text = "Rate";
+							ls.AssociatedControlName = "Rate";
+						}).Render();
+
+					Html.DevExpress().TextBox(ts =>
+					{
+							ts.Name = "Rate";
+						}).Render();
+
+
+					Html.DevExpress().TextBox(ts =>
+					{
+							ts.Name = "ProviderID";
+							ts.ClientVisible = false;
+						}).Bind(Model.ID).Render();
+
+					Html.DevExpress().Button(bs =>
+					{
+							bs.Name = "btnSaveRate";
+							bs.ControlStyle.CssClass = "button";
+							bs.Width = 80;
+							bs.Text = "OK";
+							bs.UseSubmitBehavior = true;
+						}).Render();
+
+					ViewContext.Writer.Write("</div>");
+
+				}
+			});
+		}).GetHtml()
+	</div>
+    <div style="width:30%;float:left">
+        @if (Model.ID > 0)
+        {
+            @Html.Partial("~/App/Notes/Views/NoteList.cshtml", new AABC.Web.App.Notes.Models.NoteListVM { Source = "Provider", ParentID = Model.ID })
+        }
+    </div>
+
+</div>
+
+<div id="default-popup-anchor"></div>
+
+<script type="text/javascript" id="dxss_ProviderEditScripts">
+	function deleteProvider() {
+		if (confirm("Are you sure you want to delete this provider?  Providers can only be deleted if they do not have no hours, no finalizations, and no cases.")) {
+			$.ajax({
+				type: 'POST',
+				url: '/Providers/Delete',
+				data: {
+					id: $("input[name='ID']").val()
+				},
+				success: function (result) {
+					if (result == 'true') {
+						window.location.href = "/Providers/Search";
+					} else {
+						alert('Unable to delete the provider.  Please ensure provider has no hours, no finalizations and is not applied to any cases.');
+					}
+				},
+				error: function () {
+					alert('Unable to delete the provider: reason unknown.  Please contact your administrator');
+				}
+			});
+		}
+	}
+
+	function downloadProviderHours() {
+		App.DevEx.GetControl("pcDownloadHours").Show();
+	}
+
+	function runDownloadHoursReport() {
+		var providerID = App.DevEx.GetControl("ProviderIDForHoursDownload").GetValue();
+		var caseID = App.DevEx.GetControl("DownloadHoursPatientSelect").GetValue();
+		var startDate = App.DevEx.GetControl("StartPeriod").GetValue();
+		var endDate = App.DevEx.GetControl("EndPeriod").GetValue();
+		//console.log(providerID);
+		//console.log(patient);
+		//console.log(startDate);
+		//console.log(endDate);
+
+		if (caseID === null || startDate === null || endDate === null) {
+			alert('All three fields are required');
+			return;
+		}
+
+		if (startDate > endDate) {
+			alert('Please make sure Start Period is less than End Period');
+			return;
+		}
+
+		//window.open("/Case/PatientHoursReport?caseID=" + caseID + "&period=" + period.toISOString(), "_blank");
+		window.open("/Providers/HoursReport?caseID=" + caseID + "&providerID=" + providerID + "&startPeriod=" + startDate.toISOString() + "&endPeriod=" + endDate.toISOString(), "_blank");
+	}
+
+	var hours = {
+		beginCallback: function (s, e) {
+			e.customArgs["providerID"] = $("input[name='ID'").val();
+			e.customArgs["selectedPeriod"] = App.DevEx.GetControl("SelectedDate").GetValue().toISOString();
+		},
+		endCallback: function (s, e) { },
+		periodSelected: function () {
+			window.setTimeout(function () {
+				App.DevEx.GetControl("gvProviderHoursGrid").PerformCallback();
+			}, 250);
+		}
+	};
+</script>
+
+<script type="text/javascript">
+	$.getScript('/Scripts/Pages/ProviderEdit.js', function () {
+		initComponent();
+		App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+	});
+</script>

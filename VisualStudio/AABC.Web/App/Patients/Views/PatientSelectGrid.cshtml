@@ -1,0 +1,54 @@
+﻿@model List<AABC.DomainServices.Patients.PatientEx>
+
+@Html.DevExpress().GridView(
+    s => {
+        s.Name = "SelectPatientGrid";
+        s.KeyFieldName = "ID";
+
+        s.Width = Unit.Percentage(100);
+        s.Height = Unit.Percentage(100);
+        s.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        s.ClientSideEvents.Init = "function(s, e) { SelectPatientGrid.SetHeight(470); }";
+        //s.ClientSideEvents.EndCallback = "function(s, e) { App.Content.GridViews.StretchHeight(s); }";
+
+        s.SettingsPager.PageSize = 15;
+        s.SettingsPager.AlwaysShowPager = true;
+        s.SettingsPager.Visible = true;
+
+        s.SettingsBehavior.AllowSort = true;
+        s.SettingsBehavior.AllowGroup = false;
+        s.SettingsBehavior.AllowFocusedRow = true;
+        s.SettingsBehavior.AllowSelectByRowClick = true;
+        s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        s.SettingsBehavior.AllowDragDrop = false;
+
+        s.SettingsCookies.StoreFiltering = true;
+        s.SettingsCookies.StoreGroupingAndSorting = true;
+        s.SettingsCookies.StorePaging = true;
+        s.SettingsCookies.Enabled = true;
+        s.SettingsCookies.CookiesID = "AABC.Web.SearchGrid.PatientSelect";
+
+        s.Settings.ShowFilterRow = true;
+        s.CallbackRouteValues = new { Controller = "Patients", Action = "PatientSelectGrid" };
+        //s.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['isFilterCallback'] = 'true'; e.customArgs['filter'] = '" + Model.ListBase.CallbackFilterValue + "'; }";
+
+        s.HtmlDataCellPrepared = (sender, e) =>
+        {
+            e.Cell.Attributes.Add("data-dym-cellClick", "SelectPatientGrid");
+            e.Cell.Attributes.Add("data-dym-visibleIndex", e.VisibleIndex.ToString());
+            e.Cell.Attributes.Add("data-dym-fieldName", e.DataColumn.FieldName);
+            e.Cell.Attributes.Add("data-dym-patientName", e.GetValue("FirstName") + " " + e.GetValue("LastName"));
+        };
+
+        var col = s.Columns.Add("colPatientFirstName");
+        col.FieldName = "FirstName";
+        col.Caption = "First Name";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+
+        col = s.Columns.Add("colPatientLastName");
+        col.FieldName = "LastName";
+        col.Caption = "Last Name";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+
+    }
+).Bind(Model).GetHtml()

@@ -1,0 +1,99 @@
+﻿@model AABC.Web.Models.Providers.ProviderTypesListVM
+
+<script type="text/javascript">
+
+    var DialogConfirmResult = null;
+    var activeModelID = null;
+
+    function DialogConfirmClosed() {
+        if (DialogConfirmResult == 'button1') {
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("TypeDelete", "Providers")',
+                data: { id: activeModelID },
+                success: function (response) {
+                    $("#" + App.Content.ContentElementID).empty().append(response);
+                    App.Dialogs.MessageBox("Delete successful", App.Dialogs.Icons.Ok);
+                },
+                error: function (response) {
+                    App.Dialogs.Error("We're sorry, but we seem to have run into an issue trying to delete this referral.");
+                }
+            });
+        }
+    }
+
+    function actionMenuItemClick(s, e) {
+
+        var id = s.name.replace('pmActions', '');
+        var action = e.item.name;
+
+        switch (action) {
+
+            case "Edit":
+
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("TypeEdit", "Providers")',
+                    data: { id: id },
+                    success: function (response) {
+                        $("#" + App.Content.ContentElementID).empty().append(response);
+                    },
+                    error: function (response) {
+                        App.Dialogs.Error("We're sorry, but we couldn't seem to load the Edit form for this referral.");
+                    }
+                });
+
+                break;
+
+            case "Delete":
+                
+
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("TypeAssocCount", "Providers")',
+                    data: { id: id },
+                    success: function (r) {
+
+                        if (r != "0") {
+                            
+                            var msg = "Unable to delete a Provider Type while it has Providers associated with it.\r\n\r\n";
+                            msg += "Please edit the associated providers and change their Types before deleting.";
+
+                            App.Dialogs.MessageBox(msg, App.Dialogs.Icons.Warning, "Unable to Delete");
+
+                        } else {
+
+
+                            var msg = "Are you sure you want to delete this provider type?";
+
+                            $.ajax({
+                                type: 'GET',
+                                url: '/Dialogs/ConfirmDelete',
+                                data: { contentElementID: App.Content.ContentElementID, message: msg },
+                                success: function (r) {
+                                    $("#DialogConfirmAnchor").html(r);
+                                    activeModelID = id;
+                                    DialogConfirm.Show();
+                                }
+
+                            });
+
+                        }
+
+                    }
+                });
+
+
+
+                break;
+            default:
+                App.Dialogs.Error("Action not recognized.  Please contact your administrator.");
+        }
+
+    }
+</script>
+
+<div id="grid-list-types">@Html.Partial("TypeListGrid", Model)</div>
+
+<div id="DialogConfirmAnchor"></div>

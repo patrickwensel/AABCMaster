@@ -1,0 +1,23 @@
+﻿@model DevExpress.XtraReports.UI.XtraReport
+
+
+@Html.DevExpress().WebDocumentViewer(
+    s => {
+        s.Name = "rvBillingReport";
+        s.MenuItems.Add(new DevExpress.XtraReports.Web.WebDocumentViewer.WebDocumentViewerMenuItem
+        {
+            Text = "test",
+            Disabled = false,
+            JSClickAction = "function() { alert('clicked'); }",
+             Visible = true
+              
+
+        });
+        
+        s.ClientSideEvents.BeginCallback = "function(s, e) { alert('callback begin'); }";
+    }
+).Bind(Model).GetHtml()
+
+<script type="text/javascript" id="dxss_ReportViewerScripts">
+    
+</script>

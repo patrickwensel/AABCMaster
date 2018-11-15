@@ -1,0 +1,1436 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DC45AF9D-CE68-4BBF-8B57-0FF852F7E794}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AABC.Web</RootNamespace>
+    <AssemblyName>AABC.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UpgradeBackupLocation />
+    <UseGlobalApplicationHostFile />
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <ApplicationInsightsResourceId>/subscriptions/55768199-4aab-4965-bdbd-1c32a6be767a/resourcegroups/AppliedABC/providers/microsoft.insights/components/manage.appliedabc.com</ApplicationInsightsResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/55768199-4aab-4965-bdbd-1c32a6be767a/resourcegroups/AppliedABC/providers/microsoft.insights/components/manage.appliedabc.com</ApplicationInsightsAnnotationResourceId>
+    <Use64BitIISExpress>
+    </Use64BitIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Charts.v16.1.Core, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.CodeParser.v16.1, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Data.v16.1, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.DataAccess.v16.1, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Office.v16.1.Core, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Pdf.v16.1.Core, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.PivotGrid.v16.1.Core, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Printing.v16.1.Core, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.RichEdit.v16.1.Core, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Sparkline.v16.1.Core, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v16.1, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.ASPxScheduler.v16.1, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxThemes.v16.1, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.Mvc5.v16.1, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.Resources.v16.1, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.v16.1, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpo.v16.1, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraCharts.v16.1, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraGauges.v16.1.Core, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraPrinting.v16.1, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v16.1, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v16.1.Extensions, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v16.1.Service, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v16.1.Web, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v16.1.Web.Azure, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraScheduler.v16.1.Core, Version=16.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DotNetOpenAuth.AspNet, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetOpenAuth.AspNet.4.3.4.13329\lib\net45-full\DotNetOpenAuth.AspNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetOpenAuth.Core.4.3.4.13329\lib\net45-full\DotNetOpenAuth.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Core.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth.Consumer, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Consumer.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OAuth.Consumer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.Core.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OpenId.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.RelyingParty.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.0\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebPages.OAuth, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.OAuth.3.2.3\lib\net45\Microsoft.Web.WebPages.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PdfSharp.Charting, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.Charting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="StackExchange.Redis.Extensions.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=d7d863643bcd13ef, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.Extensions.Core.3.5.0\lib\net46\StackExchange.Redis.Extensions.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis.Extensions.LegacyConfiguration, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.Extensions.LegacyConfiguration.1.4.0\lib\net45\StackExchange.Redis.Extensions.LegacyConfiguration.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis.Extensions.Newtonsoft, Version=3.5.0.0, Culture=neutral, PublicKeyToken=d7d863643bcd13ef, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.Extensions.Newtonsoft.3.5.0\lib\net46\StackExchange.Redis.Extensions.Newtonsoft.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis.StrongName, Version=1.2.6.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.StrongName.1.2.6\lib\net46\StackExchange.Redis.StrongName.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.5.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebMatrix.Data, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.3.2.3\lib\net45\WebMatrix.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebMatrix.WebData, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.WebData.3.2.3\lib\net45\WebMatrix.WebData.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\SharedMVC\Dymeng.js">
+      <Link>Scripts\Dymeng.js</Link>
+    </Content>
+    <Content Include="..\AABC.Shared.Web\client\hoursEntry-v1.css">
+      <Link>client\css\hoursEntry-v1.css</Link>
+    </Content>
+    <Content Include="..\AABC.Shared.Web\client\hoursEntry.js">
+      <Link>client\scripts\app\hoursEntry\hoursEntry.js</Link>
+    </Content>
+    <Content Include="App\Case\Views\ManageInsuranceGrid.cshtml" />
+    <Content Include="App\Case\Views\ManageTimeBillAuthResolutionDetailsPopup.cshtml" />
+    <Content Include="App\Case\Views\AuthsGrid.cshtml" />
+    <Content Include="client\css\app.v1.2.css" />
+    <Content Include="client\css\bootstrap-datepicker.standalone.css" />
+    <Content Include="client\css\bootstrap-datepicker.standalone.min.css" />
+    <Content Include="client\images\ccard.png" />
+    <Content Include="client\images\seccode.png" />
+    <Content Include="client\scripts\app\dashboard-yakov.v1.0.js" />
+    <Content Include="client\scripts\app\hoursfinalizations.v1.0.js" />
+    <Content Include="client\scripts\app\homeHoursEligibility.js" />
+    <Content Include="client\scripts\app\hoursreported.v1.0.js" />
+    <Content Include="Content\highcharts\highcharts.css" />
+    <Content Include="Content\highcharts\themes\dark-unica.css" />
+    <Content Include="Content\highcharts\themes\grid-light.css" />
+    <Content Include="Content\highcharts\themes\sand-signika.css" />
+    <Content Include="Scripts\highcharts\es-modules\error.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\highcharts-3d.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\highcharts-more.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\highcharts.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\accessibility.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\annotations.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\boost-canvas.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\boost.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\broken-axis.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\bullet.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\data.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\drag-panes.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\drilldown.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\export-data.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\exporting.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\funnel.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\gantt.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\grid-axis.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\heatmap.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\histogram-bellcurve.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\item-series.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\no-data-to-display.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\offline-exporting.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\oldie.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\overlapping-datalabels.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\parallel-coordinates.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\pareto.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\pattern-fill.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\sankey.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\series-label.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\solid-gauge.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\static-scale.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\stock.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\streamgraph.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\sunburst.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\tilemap.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\treemap.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\variable-pie.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\variwide.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\vector.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\windbarb.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\wordcloud.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\modules\xrange.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\themes\avocado.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\themes\avocado.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\themes\dark-blue.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\themes\dark-green.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\themes\dark-unica.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\themes\gray.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\themes\grid-light.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\themes\grid.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\themes\sand-signika.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\themes\skies.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\themes\sunset.js" />
+    <Content Include="Scripts\highcharts\es-modules\masters\themes\sunset.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\mixins\ajax.js" />
+    <Content Include="Scripts\highcharts\es-modules\mixins\centered-series.js" />
+    <Content Include="Scripts\highcharts\es-modules\mixins\derived-series.js" />
+    <Content Include="Scripts\highcharts\es-modules\mixins\draw-point.js" />
+    <Content Include="Scripts\highcharts\es-modules\mixins\on-series.js" />
+    <Content Include="Scripts\highcharts\es-modules\mixins\polygon.js" />
+    <Content Include="Scripts\highcharts\es-modules\mixins\tree-series.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\a11y-i18n.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\annotations.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\bellcurve.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\boost-canvas.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\boost.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\broken-axis.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\bullet.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\data.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\drag-panes.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\drilldown.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\export-data.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\exporting.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\funnel.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\histogram.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\item-series.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\keyboard-navigation.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\no-data-to-display.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\offline-exporting.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\oldie.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\overlapping-datalabels.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\parallel-coordinates.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\pareto.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\pattern-fill.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\sankey.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\screen-reader.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\series-label.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\solid-gauge.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\static-scale.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\streamgraph.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\sunburst.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\tilemap.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\treemap.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\variable-pie.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\variwide.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\vector.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\windbarb.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\wordcloud.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\modules\xrange.src.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-3d\Axis.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-3d\Chart.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-3d\Column.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-3d\Globals.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-3d\Intro.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-3d\Math.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-3d\Pie.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-3d\Scatter.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-3d\Series.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-3d\SVGRenderer.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-3d\VMLRenderer.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-gantt\gantt.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-gantt\grid-axis.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\ColorAxis.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\ColorSeriesMixin.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\GeoJSON.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\HeatmapIntro.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\HeatmapSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\Intro.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\IntroMapModule.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\Map.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\MapAxis.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\MapBubbleSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\MapLineSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\MapNavigation.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\MapPointer.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\MapPointSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-map\MapSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-more\AreaRangeSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-more\AreaSplineRangeSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-more\BoxPlotSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-more\BubbleSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-more\ColumnRangeSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-more\ErrorBarSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-more\GaugeSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-more\Intro.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-more\Pane.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-more\Polar.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-more\PolygonSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-more\RadialAxis.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts-more\WaterfallSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\AreaSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\AreaSplineSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Axis.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\BarSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\CandlestickSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Chart.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Color.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\ColumnSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\DataGrouping.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\DataLabels.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\DateTimeAxis.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Dynamics.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\FlagsSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Globals.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Html.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Interaction.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Legend.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\LogarithmicAxis.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\MSPointer.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Navigator.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\OHLCSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Options.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\OrdinalAxis.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\PieSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\PlotBandSeries.experimental.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\PlotLineOrBand.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Point.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Pointer.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\RangeSelector.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Responsive.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\ScatterSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\ScrollablePlotArea.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Scrollbar.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Series.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\SplineSeries.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Stacking.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\StockChart.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\SvgRenderer.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Tick.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Time.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Tooltip.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\TouchPointer.js" />
+    <Content Include="Scripts\highcharts\es-modules\parts\Utilities.js" />
+    <Content Include="Scripts\highcharts\es-modules\themes\avocado.js" />
+    <Content Include="Scripts\highcharts\es-modules\themes\dark-blue.js" />
+    <Content Include="Scripts\highcharts\es-modules\themes\dark-green.js" />
+    <Content Include="Scripts\highcharts\es-modules\themes\dark-unica.js" />
+    <Content Include="Scripts\highcharts\es-modules\themes\gray.js" />
+    <Content Include="Scripts\highcharts\es-modules\themes\grid-light.js" />
+    <Content Include="Scripts\highcharts\es-modules\themes\grid.js" />
+    <Content Include="Scripts\highcharts\es-modules\themes\sand-signika.js" />
+    <Content Include="Scripts\highcharts\es-modules\themes\skies.js" />
+    <Content Include="Scripts\highcharts\es-modules\themes\sunset.js" />
+    <Content Include="Scripts\highcharts\highcharts-3d.js" />
+    <Content Include="Scripts\highcharts\highcharts-3d.src.js" />
+    <Content Include="Scripts\highcharts\highcharts-more.js" />
+    <Content Include="Scripts\highcharts\highcharts-more.src.js" />
+    <Content Include="Scripts\highcharts\highcharts.js" />
+    <Content Include="Scripts\highcharts\highcharts.src.js" />
+    <Content Include="Scripts\highcharts\modules\accessibility.js" />
+    <Content Include="Scripts\highcharts\modules\accessibility.src.js" />
+    <Content Include="Scripts\highcharts\modules\annotations.js" />
+    <Content Include="Scripts\highcharts\modules\annotations.src.js" />
+    <Content Include="Scripts\highcharts\modules\boost-canvas.js" />
+    <Content Include="Scripts\highcharts\modules\boost-canvas.src.js" />
+    <Content Include="Scripts\highcharts\modules\boost.js" />
+    <Content Include="Scripts\highcharts\modules\boost.src.js" />
+    <Content Include="Scripts\highcharts\modules\broken-axis.js" />
+    <Content Include="Scripts\highcharts\modules\broken-axis.src.js" />
+    <Content Include="Scripts\highcharts\modules\bullet.js" />
+    <Content Include="Scripts\highcharts\modules\bullet.src.js" />
+    <Content Include="Scripts\highcharts\modules\data.js" />
+    <Content Include="Scripts\highcharts\modules\data.src.js" />
+    <Content Include="Scripts\highcharts\modules\drag-panes.js" />
+    <Content Include="Scripts\highcharts\modules\drag-panes.src.js" />
+    <Content Include="Scripts\highcharts\modules\drilldown.js" />
+    <Content Include="Scripts\highcharts\modules\drilldown.src.js" />
+    <Content Include="Scripts\highcharts\modules\export-data.js" />
+    <Content Include="Scripts\highcharts\modules\export-data.src.js" />
+    <Content Include="Scripts\highcharts\modules\exporting.js" />
+    <Content Include="Scripts\highcharts\modules\exporting.src.js" />
+    <Content Include="Scripts\highcharts\modules\funnel.js" />
+    <Content Include="Scripts\highcharts\modules\funnel.src.js" />
+    <Content Include="Scripts\highcharts\modules\gantt.js" />
+    <Content Include="Scripts\highcharts\modules\gantt.src.js" />
+    <Content Include="Scripts\highcharts\modules\grid-axis.js" />
+    <Content Include="Scripts\highcharts\modules\grid-axis.src.js" />
+    <Content Include="Scripts\highcharts\modules\heatmap.js" />
+    <Content Include="Scripts\highcharts\modules\heatmap.src.js" />
+    <Content Include="Scripts\highcharts\modules\histogram-bellcurve.js" />
+    <Content Include="Scripts\highcharts\modules\histogram-bellcurve.src.js" />
+    <Content Include="Scripts\highcharts\modules\item-series.js" />
+    <Content Include="Scripts\highcharts\modules\item-series.src.js" />
+    <Content Include="Scripts\highcharts\modules\no-data-to-display.js" />
+    <Content Include="Scripts\highcharts\modules\no-data-to-display.src.js" />
+    <Content Include="Scripts\highcharts\modules\offline-exporting.js" />
+    <Content Include="Scripts\highcharts\modules\offline-exporting.src.js" />
+    <Content Include="Scripts\highcharts\modules\oldie.js" />
+    <Content Include="Scripts\highcharts\modules\oldie.src.js" />
+    <Content Include="Scripts\highcharts\modules\overlapping-datalabels.js" />
+    <Content Include="Scripts\highcharts\modules\overlapping-datalabels.src.js" />
+    <Content Include="Scripts\highcharts\modules\parallel-coordinates.js" />
+    <Content Include="Scripts\highcharts\modules\parallel-coordinates.src.js" />
+    <Content Include="Scripts\highcharts\modules\pareto.js" />
+    <Content Include="Scripts\highcharts\modules\pareto.src.js" />
+    <Content Include="Scripts\highcharts\modules\pattern-fill.js" />
+    <Content Include="Scripts\highcharts\modules\pattern-fill.src.js" />
+    <Content Include="Scripts\highcharts\modules\sankey.js" />
+    <Content Include="Scripts\highcharts\modules\sankey.src.js" />
+    <Content Include="Scripts\highcharts\modules\series-label.js" />
+    <Content Include="Scripts\highcharts\modules\series-label.src.js" />
+    <Content Include="Scripts\highcharts\modules\solid-gauge.js" />
+    <Content Include="Scripts\highcharts\modules\solid-gauge.src.js" />
+    <Content Include="Scripts\highcharts\modules\static-scale.js" />
+    <Content Include="Scripts\highcharts\modules\static-scale.src.js" />
+    <Content Include="Scripts\highcharts\modules\stock.js" />
+    <Content Include="Scripts\highcharts\modules\stock.src.js" />
+    <Content Include="Scripts\highcharts\modules\streamgraph.js" />
+    <Content Include="Scripts\highcharts\modules\streamgraph.src.js" />
+    <Content Include="Scripts\highcharts\modules\sunburst.js" />
+    <Content Include="Scripts\highcharts\modules\sunburst.src.js" />
+    <Content Include="Scripts\highcharts\modules\tilemap.js" />
+    <Content Include="Scripts\highcharts\modules\tilemap.src.js" />
+    <Content Include="Scripts\highcharts\modules\treemap.js" />
+    <Content Include="Scripts\highcharts\modules\treemap.src.js" />
+    <Content Include="Scripts\highcharts\modules\variable-pie.js" />
+    <Content Include="Scripts\highcharts\modules\variable-pie.src.js" />
+    <Content Include="Scripts\highcharts\modules\variwide.js" />
+    <Content Include="Scripts\highcharts\modules\variwide.src.js" />
+    <Content Include="Scripts\highcharts\modules\vector.js" />
+    <Content Include="Scripts\highcharts\modules\vector.src.js" />
+    <Content Include="Scripts\highcharts\modules\windbarb.js" />
+    <Content Include="Scripts\highcharts\modules\windbarb.src.js" />
+    <Content Include="Scripts\highcharts\modules\wordcloud.js" />
+    <Content Include="Scripts\highcharts\modules\wordcloud.src.js" />
+    <Content Include="Scripts\highcharts\modules\xrange.js" />
+    <Content Include="Scripts\highcharts\modules\xrange.src.js" />
+    <Content Include="Scripts\highcharts\themes\avocado.js" />
+    <Content Include="Scripts\highcharts\themes\avocado.src.js" />
+    <Content Include="Scripts\highcharts\themes\dark-blue.js" />
+    <Content Include="Scripts\highcharts\themes\dark-blue.src.js" />
+    <Content Include="Scripts\highcharts\themes\dark-green.js" />
+    <Content Include="Scripts\highcharts\themes\dark-green.src.js" />
+    <Content Include="Scripts\highcharts\themes\dark-unica.js" />
+    <Content Include="Scripts\highcharts\themes\dark-unica.src.js" />
+    <Content Include="Scripts\highcharts\themes\gray.js" />
+    <Content Include="Scripts\highcharts\themes\gray.src.js" />
+    <Content Include="Scripts\highcharts\themes\grid-light.js" />
+    <Content Include="Scripts\highcharts\themes\grid-light.src.js" />
+    <Content Include="Scripts\highcharts\themes\grid.js" />
+    <Content Include="Scripts\highcharts\themes\grid.src.js" />
+    <Content Include="Scripts\highcharts\themes\sand-signika.js" />
+    <Content Include="Scripts\highcharts\themes\sand-signika.src.js" />
+    <Content Include="Scripts\highcharts\themes\skies.js" />
+    <Content Include="Scripts\highcharts\themes\skies.src.js" />
+    <Content Include="Scripts\highcharts\themes\sunset.js" />
+    <Content Include="Scripts\highcharts\themes\sunset.src.js" />
+    <Content Include="Scripts\ko\bindings\ko.bindingHandlers.numeric.js" />
+    <Content Include="Scripts\ko\bindings\ko.bindingHandlers.cleave.js" />
+    <Content Include="Scripts\ko\bindings\ko.bindingHandlers.datepicker.js" />
+    <Content Include="Scripts\ko\knockout.js" />
+    <Content Include="Scripts\ko\knockout.mapping-latest.debug.js" />
+    <Content Include="Scripts\ko\knockout.mapping-latest.js" />
+    <Content Include="Scripts\ko\knockout.validation.js" />
+    <Content Include="Scripts\ko\knockout.validation.min.js" />
+    <Content Include="Content\Images\example-ctsr.png" />
+    <Content Include="Content\timeline.css" />
+    <Content Include="Scripts\cleave\cleave.min.js" />
+    <Content Include="Scripts\datepicker\bootstrap-datepicker.js" />
+    <Content Include="Scripts\datepicker\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker-en-CA.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.ar-tn.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.ar.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.az.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.bg.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.bn.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.br.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.bs.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.ca.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.cs.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.cy.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.da.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.de.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.el.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.en-AU.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.en-GB.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.en-IE.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.en-NZ.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.en-ZA.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.eo.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.es.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.et.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.eu.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.fa.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.fi.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.fo.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.fr-CH.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.fr.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.gl.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.he.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.hi.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.hr.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.hu.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.hy.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.id.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.is.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.it-CH.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.it.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.ja.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.ka.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.kh.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.kk.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.km.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.ko.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.kr.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.lt.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.lv.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.me.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.mk.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.mn.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.ms.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.nb.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.nl-BE.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.nl.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.no.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.oc.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.pl.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.pt-BR.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.pt.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.ro.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.rs-latin.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.rs.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.ru.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.si.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.sk.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.sl.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.sq.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.sr-latin.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.sr.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.sv.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.sw.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.ta.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.tg.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.th.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.tr.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.uk.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.uz-cyrl.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.uz-latn.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.vi.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.zh-CN.min.js" />
+    <Content Include="Scripts\datepicker\locales\bootstrap-datepicker.zh-TW.min.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\mustache.js" />
+    <Content Include="Scripts\numeral\numeral.js" />
+    <Content Include="Scripts\numeral\numeral.min.js" />
+    <Content Include="Scripts\Pages\CaseManagePayment.js" />
+    <Content Include="client\scripts\app\notes.v1.0.js" />
+    <Content Include="client\scripts\app\hoursedit.v1.0.js" />
+    <Content Include="Scripts\Pages\AdminPatientPortal.js" />
+    <Content Include="Scripts\Pages\ProviderAppUtilizationReport.js" />
+    <Content Include="Scripts\Pages\Timeline.js" />
+    <Content Include="Scripts\Pages\ProviderSubTypes.js" />
+    <Content Include="Scripts\Pages\StaffingLogDetails.js" />
+    <Content Include="Scripts\Pages\StaffingLogEdit.js" />
+    <Content Include="Scripts\Pages\PatientSelect.js" />
+    <Content Include="Scripts\Pages\ReportingAuthorizations.js" />
+    <Content Include="Content\Images\actionlist-med-light-16.png" />
+    <Content Include="Content\Images\actionlist-dark-16.png" />
+    <Content Include="Content\Images\actionlist-white-16.png" />
+    <Content Include="Content\Images\AquaHeader.jpg" />
+    <Content Include="Content\Images\BlackGlassHeader.jpg" />
+    <Content Include="Content\Images\example-csar.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Images\expand-down.png" />
+    <Content Include="Content\Images\expand-right.png" />
+    <Content Include="Content\Images\GlassHeader.jpg" />
+    <Content Include="Content\Images\ico-billing.png" />
+    <Content Include="Content\Images\ico-delete-48.png" />
+    <Content Include="Content\Images\ico-info-48.png" />
+    <Content Include="Content\Images\ico-ok-48.png" />
+    <Content Include="Content\Images\ico-patients.png" />
+    <Content Include="Content\Images\ico-providers.png" />
+    <Content Include="Content\Images\ico-question-48.png" />
+    <Content Include="Content\Images\ico-referrals.png" />
+    <Content Include="Content\Images\ico-save-48.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Images\ico-staffing.png" />
+    <Content Include="Content\Images\ico-warning-48.png" />
+    <Content Include="Content\Images\loading.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Images\PlasticBlueHeader.jpg" />
+    <Content Include="Content\Images\RedWineHeader.jpg" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.min.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Scripts\app.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\mousetrap.1.5.3.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Pages\AdminDataLists.js" />
+    <Content Include="Scripts\Pages\AdminProviderPortal.js" />
+    <Content Include="Scripts\Pages\AdminUsers.js" />
+    <Content Include="Scripts\Pages\CaseManageNotesTrack.js" />
+    <Content Include="Scripts\Pages\CaseManageProviders2.js" />
+    <Content Include="Scripts\Pages\CaseManageProviders.js" />
+    <Content Include="Scripts\Pages\CaseManageTimeBill.js" />
+    <Content Include="Scripts\Pages\CaseNotes.js" />
+    <Content Include="Scripts\Pages\ExternalDataCatalyst.js" />
+    <Content Include="Scripts\Pages\HoursMaxPerDayPerPatient.js" />
+    <Content Include="Scripts\Pages\TaskHomeDashboard.js" />
+    <Content Include="Scripts\Pages\Insurance.js" />
+    <Content Include="Scripts\Pages\HoursWatch.js" />
+    <Content Include="Scripts\Pages\Payroll.js" />
+    <Content Include="Scripts\Pages\HoursScrub.js" />
+    <Content Include="Scripts\Pages\PatientEdit.js" />
+    <Content Include="Scripts\Pages\ProviderTypeEdit.js" />
+    <Content Include="Scripts\Pages\ProviderEdit.js" />
+    <Content Include="Scripts\Pages\ReferralEdit.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\globalize.cultures.js" />
+    <Content Include="Scripts\globalize.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-ui-1.10.3.js" />
+    <Content Include="Scripts\jquery-ui-1.10.3.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="packages.config" />
+    <Content Include="App\Reporting\Views\ReportSelector.cshtml" />
+    <Content Include="App\Web.config" />
+    <Content Include="App\_ViewStart.cshtml" />
+    <Content Include="App\Home\Views\Dashboard.cshtml" />
+    <Content Include="App\Hours\Views\Validate.cshtml" />
+    <Content Include="client\scripts\app\hoursvalidate.v1.0.js" />
+    <Content Include="App\Hours\Views\Edit.cshtml" />
+    <Content Include="App\Hours\Views\EditGrid.cshtml" />
+    <Content Include="App\Hours\Views\EditPopup.cshtml" />
+    <Content Include="App\Home\Views\DashboardYakov.cshtml" />
+    <Content Include="App\Home\Views\Index.cshtml" />
+    <Content Include="App\Home\Views\DashboardYakovInsCostList.cshtml" />
+    <Content Include="App\Notes\Views\NoteEdit.cshtml" />
+    <Content Include="App\Notes\Views\NotesSummaryList.cshtml" />
+    <Content Include="App\Hours\Views\Watch.cshtml" />
+    <Content Include="App\Hours\Views\WatchGridMissingBCBA.cshtml" />
+    <Content Include="App\Hours\Views\WatchGridMissingAide.cshtml" />
+    <Content Include="App\Hours\Views\WatchGridNoSupervision.cshtml" />
+    <Content Include="App\Hours\Views\WatchGridNoHours.cshtml" />
+    <Content Include="Content\Fonts\KUNSTLER.TTF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App\PatientPortal\Views\Index.cshtml" />
+    <Content Include="App\PatientPortal\Views\ExistingLoginsGrid.cshtml" />
+    <Content Include="App\PatientPortal\Views\AddRemovePatientsPopup.cshtml" />
+    <Content Include="App\PatientPortal\Views\CurrentPatientsGridPartial.cshtml" />
+    <Content Include="App\PatientPortal\Views\PatientsListGridPartial.cshtml" />
+    <Content Include="App\PatientPortal\Views\AddUpdateLoginPopup.cshtml" />
+    <Content Include="App\Insurance\Views\List.cshtml" />
+    <Content Include="App\Insurance\Views\ListGrid.cshtml" />
+    <Content Include="App\Insurance\Views\Base.cshtml" />
+    <Content Include="App\Insurance\Views\Edit.cshtml" />
+    <Content Include="App\Insurance\Views\AuthRulesGrid.cshtml" />
+    <Content Include="App\Insurance\Views\AuthRuleEdit.cshtml" />
+    <Content Include="App\Notes\Views\NoteFollowupCompletePopup.cshtml" />
+    <Content Include="App\Notes\Views\TaskEditPartial.cshtml" />
+    <Content Include="App\Hours\Views\WatchDetailPopup.cshtml" />
+    <Content Include="App\Hours\Views\Approval.cshtml" />
+    <Content Include="App\Hours\Views\ApprovalGrid.cshtml" />
+    <Content Include="App\Hours\Views\Reported.cshtml" />
+    <Content Include="App\Hours\Views\ReportedGrid.cshtml" />
+    <Content Include="App\Hours\Views\ResolvePopup.cshtml" />
+    <Content Include="App\Reporting\Views\AuthorizationReports.cshtml" />
+    <Content Include="App\Reporting\Views\AuthsUnmatchedGrid.cshtml" />
+    <Content Include="App\Reporting\Views\AuthsBreakdownByCase.cshtml" />
+    <Content Include="App\Reporting\Views\AuthsBreakdownByCaseGrid.cshtml" />
+    <Content Include="App\Reporting\Views\AuthsUnmatchedContainer.cshtml" />
+    <Content Include="App\Reporting\Views\AuthsUnmatchedDetail.cshtml" />
+    <Content Include="App\Home\Views\Tasks.cshtml" />
+    <Content Include="App\Notes\Views\TaskCompleteForm.cshtml" />
+    <Content Include="App\Home\Views\TaskUserDashboardTodoGrid.cshtml" />
+    <Content Include="App\Home\Views\TaskUserDashboardCompletedGrid.cshtml" />
+    <Content Include="App\Insurance\Views\InsuranceForm.cshtml" />
+    <Content Include="App\PatientPortal\Views\SignInGrid.cshtml" />
+    <Content Include="App\Scheduler\Views\Calendar.cshtml" />
+    <Content Include="App\Scheduler\Views\AppointmentEditPopUp.cshtml" />
+    <Content Include="App\Scheduler\Views\AppointmentCreatePopUp.cshtml" />
+    <Content Include="App\Hours\Views\MaxPerDayPerPatient.cshtml" />
+    <Content Include="App\Hours\Views\MaxPerDayPerPatientList.cshtml" />
+    <Content Include="App\Hours\Views\MaxPerDayPerPatientDays.cshtml" />
+    <Content Include="App\Hours\Views\MaxPerDayPerPatientDayHours.cshtml" />
+    <Content Include="App\HoursEntry\Views\ProviderSelectPopup.cshtml" />
+    <Content Include="App\Home\Views\HoursEligibility.cshtml" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App\ExternalData\Views\CatalystTimesheet.cshtml" />
+    <Content Include="App\Case\Views\ManageTimeBillDownloadHoursReportsPopup.cshtml" />
+    <Content Include="App\Services\Views\Index.cshtml" />
+    <Content Include="App\Staffing\Views\List.cshtml" />
+    <Content Include="App\Staffing\Views\ListGrid.cshtml" />
+    <Content Include="App\Staffing\Views\SummaryTab.cshtml" />
+    <Content Include="App\Staffing\Views\StaffingManager.cshtml" />
+    <Content Include="App\Staffing\Views\ProvidersGrid.cshtml" />
+    <Content Include="App\Staffing\Views\ProvidersTab.cshtml" />
+    <Content Include="App\Staffing\Views\ProvidersGridHeader.cshtml" />
+    <Content Include="App\Staffing\Views\SelectedProvidersGrid.cshtml" />
+    <Content Include="App\Staffing\Views\SelectedProvidersGridHeader.cshtml" />
+    <Content Include="App\Insurance\Views\ServicesGrid.cshtml" />
+    <Content Include="App\Insurance\Views\ServicesEdit.cshtml" />
+    <Content Include="App\Staffing\Views\AddProviderContactLog.cshtml" />
+    <Content Include="App\Staffing\Views\AddParentContactLog.cshtml" />
+    <Content Include="App\Hours\Views\Finalizations.cshtml" />
+    <Content Include="App\Hours\Views\FinalizationsGrid.cshtml" />
+    <Content Include="App\Insurance\Views\CarriersGrid.cshtml" />
+    <Content Include="App\Hours\Views\WatchGridNoBilledHours.cshtml" />
+    <Content Include="App\Case\Views\ManagePayments.cshtml" />
+    <Content Include="App\Case\Views\ManagePaymentsForm.cshtml" />
+    <Content Include="Scripts\ko\knockout.validation.min.js.map" />
+    <Content Include="Local.AppSettings.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App\Referrals\Views\ListGrid.cshtml" />
+    <Content Include="App\Referrals\Views\List.cshtml" />
+    <Content Include="App\Referrals\Views\Edit.cshtml" />
+    <Content Include="App\Case\Views\ManageInsurance.cshtml" />
+    <Content Include="App\Case\Views\ManageInsuranceForm.cshtml" />
+    <Content Include="App\Providers\Views\Edit_SubTypeComboBox.cshtml" />
+    <Content Include="client\css\bootstrap-datepicker.standalone.css.map" />
+    <Content Include="App\Providers\Views\ProviderSubTypes.cshtml" />
+    <Content Include="Local.Cache.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App\Staffing\Views\TimelineTab.cshtml" />
+    <Content Include="App\Staffing\Views\EmailProvidersModal.cshtml" />
+    <Content Include="App\Referrals\Views\_BaseReferralInfo.cshtml" />
+    <Content Include="Content\highcharts\highcharts.scss" />
+    <Content Include="App\Reporting\Views\ProviderAppUtilizationReport.cshtml" />
+    <Content Include="App\Notes\Views\NoteList.cshtml" />
+    <Content Include="..\AABC.Shared.Web\Views\HoursEntry.cshtml">
+      <Link>App\HoursEntry\Views\HoursEntry.cshtml</Link>
+    </Content>
+    <None Include="Properties\PublishProfiles\Pub.AABC.Web.Local.pubxml" />
+    <Content Include="Scripts\highcharts\highcharts-3d.js.map" />
+    <Content Include="Scripts\highcharts\highcharts-more.js.map" />
+    <Content Include="Scripts\highcharts\highcharts.js.map" />
+    <Content Include="Scripts\highcharts\modules\accessibility.js.map" />
+    <Content Include="Scripts\highcharts\modules\annotations.js.map" />
+    <Content Include="Scripts\highcharts\modules\boost-canvas.js.map" />
+    <Content Include="Scripts\highcharts\modules\boost.js.map" />
+    <Content Include="Scripts\highcharts\modules\broken-axis.js.map" />
+    <Content Include="Scripts\highcharts\modules\bullet.js.map" />
+    <Content Include="Scripts\highcharts\modules\data.js.map" />
+    <Content Include="Scripts\highcharts\modules\drag-panes.js.map" />
+    <Content Include="Scripts\highcharts\modules\drilldown.js.map" />
+    <Content Include="Scripts\highcharts\modules\export-data.js.map" />
+    <Content Include="Scripts\highcharts\modules\exporting.js.map" />
+    <Content Include="Scripts\highcharts\modules\funnel.js.map" />
+    <Content Include="Scripts\highcharts\modules\gantt.js.map" />
+    <Content Include="Scripts\highcharts\modules\grid-axis.js.map" />
+    <Content Include="Scripts\highcharts\modules\heatmap.js.map" />
+    <Content Include="Scripts\highcharts\modules\histogram-bellcurve.js.map" />
+    <Content Include="Scripts\highcharts\modules\item-series.js.map" />
+    <Content Include="Scripts\highcharts\modules\no-data-to-display.js.map" />
+    <Content Include="Scripts\highcharts\modules\offline-exporting.js.map" />
+    <Content Include="Scripts\highcharts\modules\oldie.js.map" />
+    <Content Include="Scripts\highcharts\modules\overlapping-datalabels.js.map" />
+    <Content Include="Scripts\highcharts\modules\parallel-coordinates.js.map" />
+    <Content Include="Scripts\highcharts\modules\pareto.js.map" />
+    <Content Include="Scripts\highcharts\modules\pattern-fill.js.map" />
+    <Content Include="Scripts\highcharts\modules\sankey.js.map" />
+    <Content Include="Scripts\highcharts\modules\series-label.js.map" />
+    <Content Include="Scripts\highcharts\modules\solid-gauge.js.map" />
+    <Content Include="Scripts\highcharts\modules\static-scale.js.map" />
+    <Content Include="Scripts\highcharts\modules\stock.js.map" />
+    <Content Include="Scripts\highcharts\modules\streamgraph.js.map" />
+    <Content Include="Scripts\highcharts\modules\sunburst.js.map" />
+    <Content Include="Scripts\highcharts\modules\tilemap.js.map" />
+    <Content Include="Scripts\highcharts\modules\treemap.js.map" />
+    <Content Include="Scripts\highcharts\modules\variable-pie.js.map" />
+    <Content Include="Scripts\highcharts\modules\variwide.js.map" />
+    <Content Include="Scripts\highcharts\modules\vector.js.map" />
+    <Content Include="Scripts\highcharts\modules\windbarb.js.map" />
+    <Content Include="Scripts\highcharts\modules\wordcloud.js.map" />
+    <Content Include="Scripts\highcharts\modules\xrange.js.map" />
+    <Content Include="Scripts\highcharts\themes\avocado.js.map" />
+    <Content Include="Scripts\highcharts\themes\dark-blue.js.map" />
+    <Content Include="Scripts\highcharts\themes\dark-green.js.map" />
+    <Content Include="Scripts\highcharts\themes\dark-unica.js.map" />
+    <Content Include="Scripts\highcharts\themes\gray.js.map" />
+    <Content Include="Scripts\highcharts\themes\grid-light.js.map" />
+    <Content Include="Scripts\highcharts\themes\grid.js.map" />
+    <Content Include="Scripts\highcharts\themes\sand-signika.js.map" />
+    <Content Include="Scripts\highcharts\themes\skies.js.map" />
+    <Content Include="Scripts\highcharts\themes\sunset.js.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\underscore.js" />
+    <Content Include="Scripts\underscore.min.js" />
+    <Content Include="Scripts\underscore.min.map" />
+    <None Include="Scripts\_references.js" />
+    <Content Include="App\Shared\Views\DisplayTemplates\Boolean.cshtml" />
+    <Content Include="App\Shared\Views\EditorTemplates\Boolean.cshtml" />
+    <Content Include="App\Shared\Views\EditorTemplates\DateTime.cshtml" />
+    <Content Include="App\Shared\Views\EditorTemplates\Decimal.cshtml" />
+    <Content Include="App\Shared\Views\EditorTemplates\MultilineText.cshtml" />
+    <Content Include="App\Shared\Views\EditorTemplates\Password.cshtml" />
+    <Content Include="App\Shared\Views\EditorTemplates\String.cshtml" />
+    <Content Include="App\Shared\Views\EditorTemplates\EmailAddress.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App\Account\Views\ChangePassword.cshtml" />
+    <Content Include="App\Account\Views\ChangePasswordSuccess.cshtml" />
+    <Content Include="App\Account\Views\Login.cshtml" />
+    <Content Include="App\Account\Views\Register.cshtml" />
+    <Content Include="App\Shared\Views\NavBar.cshtml" />
+    <Content Include="App\Shared\Views\FooterPartialView.cshtml" />
+    <Content Include="App\Shared\Views\HeaderPartialView.cshtml" />
+    <Content Include="App\Shared\Views\LogOnPartialView.cshtml" />
+    <Content Include="App\Shared\Views\_lightLayout.cshtml" />
+    <Content Include="App\Shared\Views\_mainLayout.cshtml" />
+    <Content Include="App\Shared\Views\_rootLayout.cshtml" />
+    <Content Include="App\Shared\Views\ErrorPartial.cshtml" />
+    <Content Include="App\OfficeStaff\Views\List.cshtml" />
+    <Content Include="App\OfficeStaff\Views\Edit.cshtml" />
+    <Content Include="App\Shared\Views\DialogConfirmPartialView.cshtml" />
+    <Content Include="App\OfficeStaff\Views\ListGrid.cshtml" />
+    <Content Include="App\Providers\Views\TypeList.cshtml" />
+    <Content Include="App\Providers\Views\TypeListGrid.cshtml" />
+    <Content Include="App\Providers\Views\TypeEdit.cshtml" />
+    <Content Include="App\Providers\Views\Edit.cshtml" />
+    <Content Include="App\Patients\Views\Edit.cshtml" />
+    <Content Include="App\Case\Views\ManagerContainer.cshtml" />
+    <Content Include="App\Case\Views\ManageSummary.cshtml" />
+    <Content Include="App\Patients\Views\List.cshtml" />
+    <Content Include="App\Patients\Views\ListGrid.cshtml" />
+    <Content Include="App\Shared\Views\GridTitlePane.cshtml" />
+    <Content Include="App\Shared\Views\MessageBox.cshtml" />
+    <Content Include="App\Shared\Views\ErrorPopup.cshtml" />
+    <Content Include="App\Providers\Views\List.cshtml" />
+    <Content Include="App\Providers\Views\ListGrid.cshtml" />
+    <Content Include="App\Case\Views\ManageProviders.cshtml" />
+    <Content Include="App\Case\Views\ManageTimeBill.cshtml" />
+    <Content Include="App\Case\Views\ManageProvidersGrid.cshtml" />
+    <Content Include="App\Selectors\Views\GetDatePopup.cshtml" />
+    <Content Include="Local.Connections.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App\Case\Views\GeneralHoursEdit.cshtml" />
+    <Content Include="App\Shared\Views\PopupGeneral.cshtml" />
+    <Content Include="App\Admin\Views\AdminContainer.cshtml" />
+    <Content Include="App\Admin\Views\Users.cshtml" />
+    <Content Include="App\Admin\Views\UsersListGrid.cshtml" />
+    <Content Include="App\Case\Views\CaseAuthCreate.cshtml" />
+    <Content Include="App\ProviderPortal\Views\Index.cshtml" />
+    <Content Include="App\ProviderPortal\Views\IndexGrid.cshtml" />
+    <Content Include="App\ProviderPortal\Views\RegisterPopup.cshtml" />
+    <Content Include="App\Admin\Views\PermissionsListGrid.cshtml" />
+    <Content Include="App\Admin\Views\OptionsListGrid.cshtml" />
+    <Content Include="App\Case\Views\CaseDischargePopup.cshtml" />
+    <Content Include="App\Shared\Views\Error.cshtml" />
+    <Content Include="App\UniversalSearch\Views\Search.cshtml" />
+    <Content Include="App\UniversalSearch\Views\FirstLastNameResultGrid.cshtml" />
+    <Content Include="App\DataLists\Views\Index.cshtml" />
+    <Content Include="App\DataLists\Views\AuthsGrid.cshtml" />
+    <Content Include="App\DataLists\Views\AuthDetail.cshtml" />
+    <Content Include="App\Admin\Views\UserChangePassword.cshtml" />
+    <Content Include="App\Case\Views\ManageTimeBillGrid.cshtml" />
+    <Content Include="App\Hours\Views\ScrubOverview.cshtml" />
+    <Content Include="App\Hours\Views\ScrubOverviewGrid.cshtml" />
+    <Content Include="App\Reporting\Views\BillingReport.cshtml" />
+    <Content Include="App\Providers\Views\Payroll.cshtml" />
+    <Content Include="App\Providers\Views\PayrollGrid.cshtml" />
+    <Content Include="App\ExternalData\Views\CatalystHasData.cshtml" />
+    <Content Include="App\ExternalData\Views\CatalystImportResultsPopup.cshtml" />
+    <Content Include="App\ExternalData\Views\CatalystImportResultsSuccessesGrid.cshtml" />
+    <Content Include="App\ExternalData\Views\CatalystImportResultsFailuresGrid.cshtml" />
+    <Content Include="App\Case\Views\ManageTimeBillAddHoursPopup.cshtml" />
+    <Content Include="App\Case\Views\ManageTimeBillAutoPopulatePopup.cshtml" />
+    <Content Include="App\Case\Views\ManageTimeBillDefinalizeProviderPopup.cshtml" />
+    <Content Include="App\Selectors\Views\ZipLookupMain.cshtml" />
+    <Content Include="App\Selectors\Views\ZipLookupCity.cshtml" />
+    <Content Include="App\Selectors\Views\ZipLookupState.cshtml" />
+    <Content Include="App\Selectors\Views\ZipLookupCounty.cshtml" />
+    <Content Include="App\Providers\Views\HoursGrid.cshtml" />
+    <Content Include="App\Hours\Views\ScrubOverviewItemSummary.cshtml" />
+    <Content Include="App\Hours\Views\ValidationResultsGrid.cshtml" />
+    <Content Include="App\Case\Views\ManageGeneralHoursBilled.cshtml" />
+    <Content Include="App\Case\Views\ManageNotes.cshtml" />
+    <Content Include="App\Case\Views\ManageGeneralHoursGrid.cshtml" />
+    <Content Include="App\Case\Views\ManageGeneralHours.cshtml" />
+    <Content Include="App\Patients\Views\RestaffReasonPopup.cshtml" />
+    <Content Include="App\Commands\Views\Index.cshtml" />
+    <Content Include="App\Case\Views\ManagePaymentPlans.cshtml" />
+    <Content Include="App\Case\Views\ManagePaymentPlanGrid.cshtml" />
+    <Content Include="App\Case\Views\ManagePaymentPlanForm.cshtml" />
+    <Content Include="App\Providers\Views\InsuranceCredentialGrid.cshtml" />
+    <Content Include="App\Providers\Views\InsuranceCredentialForm.cshtml" />
+    <Content Include="App\Admin\Views\UserForm.cshtml" />
+    <Content Include="App\Case\Views\ManageInsurancePaymentGrid.cshtml" />
+    <Content Include="App\Case\Views\ManageInsurancePaymentForm.cshtml" />
+    <Content Include="App\Case\Views\ManageBillingCorrespondenceList.cshtml" />
+    <Content Include="App\Case\Views\ManageBillingCorrespondenceForm.cshtml" />
+    <Content Include="App\Patients\Views\CaseHighRiskLabel.cshtml" />
+    <Content Include="App\Patients\Views\PatientSelectGrid.cshtml" />
+    <Content Include="App\Patients\Views\PatientSelect.cshtml" />
+    <Content Include="Service References\Application Insights\ConnectedService.json" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Integration.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppService.cs" />
+    <Compile Include="App\Admin\AdminService.cs" />
+    <Compile Include="App\Case\CaseService.cs" />
+    <Compile Include="App\Case\Models\AuthResolutionDetailsDTO.cs" />
+    <Compile Include="App\Case\Models\CasePaymentVM.cs" />
+    <Compile Include="App\Case\Models\CaseInsuranceDTO.cs" />
+    <Compile Include="App\Case\Models\CaseInsuranceHistoryDTO.cs" />
+    <Compile Include="App\Case\Models\CaseInsuranceMaxOutOfPocketDTO.cs" />
+    <Compile Include="App\Case\Models\CaseAuthorizationDTO.cs" />
+    <Compile Include="App\Case\Models\GeneralHoursBilledListItem.cs" />
+    <Compile Include="App\ExternalData\Models\Catalyst\TimesheetValidationSettings.cs" />
+    <Compile Include="App\Home\DashboardService.cs" />
+    <Compile Include="App\Home\Models\DashboardYakovVM.cs" />
+    <Compile Include="App\Home\Models\HoursEligibility\HoursEligiblityVM.cs" />
+    <Compile Include="App\Home\Models\InsuranceCostListItem.cs" />
+    <Compile Include="App\HoursEntry\HoursEntryController.cs" />
+    <Compile Include="App\HoursEntry\HoursEntryService.cs" />
+    <Compile Include="App\Hours\Models\FinalizationListItem.cs" />
+    <Compile Include="App\Hours\Models\FinalizationsVM.cs" />
+    <Compile Include="App\Insurance\Models\CarrierListItem.cs" />
+    <Compile Include="App\Insurance\Models\ServiceEditVM.cs" />
+    <Compile Include="App\Insurance\Models\ServiceListItem.cs" />
+    <Compile Include="App\Notes\CaseNotesController.cs" />
+    <Compile Include="App\Notes\Models\NoteListVM.cs" />
+    <Compile Include="App\Notes\ProviderNotesController.cs" />
+    <Compile Include="App\Notes\ReferralNotesController.cs" />
+    <Compile Include="App\Notes\UserProvider.cs" />
+    <Compile Include="App\Patients\Models\PatientsListItem2VM.cs" />
+    <Compile Include="App\Patients\PatientSearchService.cs" />
+    <Compile Include="App\Payments\Models\ExtendedPaymentCreationParameters.cs" />
+    <Compile Include="App\Payments\Models\PaymentVM.cs" />
+    <Compile Include="App\Payments\PaymentsController.cs" />
+    <Compile Include="App\Payments\PaymentsService.cs" />
+    <Compile Include="App\ProviderPortal\ProviderPortalService.cs" />
+    <Compile Include="App\Providers\Models\ProviderInsuranceCredentialDTO.cs" />
+    <Compile Include="App\Providers\Models\PayrollFilterListItem.cs" />
+    <Compile Include="App\Providers\Models\ProviderDetailsDTO.cs" />
+    <Compile Include="App\Providers\Models\ProviderSubTypesListItemVM.cs" />
+    <Compile Include="App\Providers\ProviderSearchService.cs" />
+    <Compile Include="App\Providers\Models\ProviderSubTypesVM.cs" />
+    <Compile Include="App\ProviderTypes\Models\ProviderTypeDTO.cs" />
+    <Compile Include="App\ProviderTypes\Models\ProviderSubTypeDTO.cs" />
+    <Compile Include="App\ProviderTypes\ProviderTypesController.cs" />
+    <Compile Include="App\ProviderTypes\ProviderTypeService.cs" />
+    <Compile Include="App\Referrals\IReferralService.cs" />
+    <Compile Include="App\Referrals\Models\ReferralsListVM.cs" />
+    <Compile Include="App\Referrals\Models\ReferralListItemModel.cs" />
+    <Compile Include="App\Referrals\Models\ReferralDTO.cs" />
+    <Compile Include="App\Referrals\Models\ReferralDataEditVM.cs" />
+    <Compile Include="App\Referrals\Models\ReferralEditVM.cs" />
+    <Compile Include="App\Referrals\ReferralService.cs" />
+    <Compile Include="App\Reporting\Models\ProviderAppUtilizationReportItem.cs" />
+    <Compile Include="App\Scheduler\Models\AppointmentCreateFromRecurringRequest.cs" />
+    <Compile Include="App\Scheduler\Models\AppointmentForSchedulerViewModel.cs" />
+    <Compile Include="App\Scheduler\Models\AppointmentEditViewModel.cs" />
+    <Compile Include="App\Scheduler\Models\AppointmentEditRequest.cs" />
+    <Compile Include="App\Scheduler\Models\AppointmentCreateRequest.cs" />
+    <Compile Include="App\Scheduler\Models\AppointmentCreateViewModel.cs" />
+    <Compile Include="App\Scheduler\Models\ResourceDTO.cs" />
+    <Compile Include="App\Scheduler\Models\SchedulerStorageProvider.cs" />
+    <Compile Include="App\Scheduler\Models\SchedulerDataObject.cs" />
+    <Compile Include="App\Scheduler\SchedulerController.cs" />
+    <Compile Include="App\Services\ServicesController.cs" />
+    <Compile Include="App\Services\ServicesService.cs" />
+    <Compile Include="App\Staffing\Models\AddParentContactLogVM.cs" />
+    <Compile Include="App\Staffing\Models\AddProviderContactLogVM.cs" />
+    <Compile Include="App\Staffing\Models\ParentContactLogListItemVM.cs" />
+    <Compile Include="App\Staffing\Models\ProviderContactLogListItemVM.cs" />
+    <Compile Include="App\Staffing\Models\ScheduleRequestVM.cs" />
+    <Compile Include="App\Staffing\Models\DetailFormVM.cs" />
+    <Compile Include="App\Staffing\Models\ProvidersTabVM.cs" />
+    <Compile Include="App\Staffing\Models\SelectedProviderListItemVM.cs" />
+    <Compile Include="App\Staffing\Models\ProviderListItemVM.cs" />
+    <Compile Include="App\Staffing\Models\ProvidersListVM.cs" />
+    <Compile Include="App\Staffing\Models\SpecialAttentionNeedVM.cs" />
+    <Compile Include="App\Staffing\Models\StaffingLogProviderSaveRequest.cs" />
+    <Compile Include="App\Staffing\StaffingService.cs" />
+    <Compile Include="App\Staffing\ZipInfoRepository.cs" />
+    <Compile Include="App\Staffing\Models\StaffingLogSaveRequest.cs" />
+    <Compile Include="App\Staffing\Models\StaffingLogVM.cs" />
+    <Compile Include="App\Staffing\Models\StaffingListItemVM.cs" />
+    <Compile Include="App\Staffing\Models\StaffingListVM.cs" />
+    <Compile Include="App\Staffing\StaffingRepository.cs" />
+    <Compile Include="App\Staffing\StaffingController.cs" />
+    <Compile Include="App\Systems\TransactionLogger.cs" />
+    <Compile Include="App\Systems\Mailer.cs" />
+    <Compile Include="App\Systems\SystemController.cs" />
+    <Compile Include="App\Systems\SystemService.cs" />
+    <Compile Include="App\Hours\HoursService.cs" />
+    <Compile Include="App\Hours\Models\EditListItem.cs" />
+    <Compile Include="App\Hours\Models\EditPopupSubmitVM.cs" />
+    <Compile Include="App\Hours\Models\EditPopupVM.cs" />
+    <Compile Include="App\Hours\Models\EditVM.cs" />
+    <Compile Include="App\Hours\Models\ReportedListItem.cs" />
+    <Compile Include="App\Hours\Models\ReportedVM.cs" />
+    <Compile Include="App\Hours\Models\ResolvePopupVM.cs" />
+    <Compile Include="App\Hours\Models\WatchCaseResultItem.cs" />
+    <Compile Include="App\Hours\Models\WatchDetailPopupVM.cs" />
+    <Compile Include="App\Hours\Models\WatchVM.cs" />
+    <Compile Include="App\Insurance\InsuranceController.cs" />
+    <Compile Include="App\Insurance\InsuranceService.cs" />
+    <Compile Include="App\Insurance\Models\AuthRuleEditVM.cs" />
+    <Compile Include="App\Insurance\Models\AuthRuleListItem.cs" />
+    <Compile Include="App\Insurance\Models\InsuranceEditVM.cs" />
+    <Compile Include="App\Insurance\Models\InsuranceListItem.cs" />
+    <Compile Include="App\Notes\Models\NotesSummaryListVM.cs" />
+    <Compile Include="App\Notes\BaseNotesController.cs" />
+    <Compile Include="App\PatientPortal\Models\ActivationToggleStatusVM.cs" />
+    <Compile Include="App\PatientPortal\Models\AddRemovePatientsVM.cs" />
+    <Compile Include="App\PatientPortal\Models\ExistingLoginListItem.cs" />
+    <Compile Include="App\PatientPortal\Models\ExistingLoginPatientListItem.cs" />
+    <Compile Include="App\PatientPortal\Models\ExistingVM.cs" />
+    <Compile Include="App\PatientPortal\PatientPortalController.cs" />
+    <Compile Include="App\PatientPortal\PatientPortalExtendedServices.cs" />
+    <Compile Include="App\PatientPortal\PatientPortalService.cs" />
+    <Compile Include="App\Providers\ProviderService.cs" />
+    <Compile Include="App\Reporting\Models\AuthsUnmatchedDetailVM.cs" />
+    <Compile Include="App\Reporting\Models\ReportSelectorVM.cs" />
+    <Compile Include="App\Reporting\ReportingController.cs" />
+    <Compile Include="App\Reporting\ReportingService.cs" />
+    <Compile Include="App\Shared\DropDownSource.cs" />
+    <Compile Include="App\Shared\PushState.cs" />
+    <Compile Include="App\Test\TestController.cs" />
+    <Compile Include="App_Start\AuthConfig.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="App\Account\AccountController.cs" />
+    <Compile Include="App\Admin\AdminController.cs" />
+    <Compile Include="App\Case\CaseController.cs" />
+    <Compile Include="App\Commands\CommandsController.cs" />
+    <Compile Include="App\DataLists\DataListsController.cs" />
+    <Compile Include="App\ExternalData\ExternalDataController.cs" />
+    <Compile Include="App\Hours\HoursController.cs" />
+    <Compile Include="App\ProviderPortal\ProviderPortalController.cs" />
+    <Compile Include="App\Selectors\SelectorsController.cs" />
+    <Compile Include="App\UniversalSearch\UniversalSearchController.cs" />
+    <Compile Include="Filters\ModelStateToExceptionAttribute.cs" />
+    <Compile Include="Global.cs" />
+    <Compile Include="App\Dialogs\DialogsController.cs" />
+    <Compile Include="App\Home\HomeController.cs" />
+    <Compile Include="App\OfficeStaff\OfficeStaffController.cs" />
+    <Compile Include="App\Patients\PatientsController.cs" />
+    <Compile Include="App\Providers\ProvidersController.cs" />
+    <Compile Include="App\Referrals\ReferralsController.cs" />
+    <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\AuthorizePermissionsAttribute.cs" />
+    <Compile Include="Helpers\CommonListItems.cs" />
+    <Compile Include="Helpers\DevEx.cs" />
+    <Compile Include="Helpers\NavBarExtensions.cs" />
+    <Compile Include="Infrastructure\CustomDateTimeConverter.cs" />
+    <Compile Include="Infrastructure\DateFormattedJsonResult.cs" />
+    <Compile Include="Infrastructure\DymengRazorViewEngine.cs" />
+    <Compile Include="App\Account\Models\AccountModels.cs" />
+    <Compile Include="App\Case\Models\AuthCreateVM.cs" />
+    <Compile Include="App\Case\Models\CaseBillingCorrespondenceTypeVM.cs" />
+    <Compile Include="App\Case\Models\CaseInsurancePaymentVM.cs" />
+    <Compile Include="App\Case\Models\CaseBillingCorrespondenceVM.cs" />
+    <Compile Include="App\Case\Models\CasePaymentPlanVM.cs" />
+    <Compile Include="App\Case\Models\CaseProviderListItem.cs" />
+    <Compile Include="App\Case\Models\CaseProviderVM.cs" />
+    <Compile Include="App\Case\Models\GeneralHoursEditVM.cs" />
+    <Compile Include="App\Case\Models\GeneralHoursListItemVM.cs" />
+    <Compile Include="App\Case\Models\GeneralHoursVM.cs" />
+    <Compile Include="App\Case\Models\DischargePopupVM.cs" />
+    <Compile Include="App\Case\Models\CaseInsuranceVM.cs" />
+    <Compile Include="App\Case\Models\NotesVM.cs" />
+    <Compile Include="App\Case\Models\ProviderDropdownListItem.cs" />
+    <Compile Include="App\Case\Models\ProvidersVM.cs" />
+    <Compile Include="App\Case\Models\SummaryVM.cs" />
+    <Compile Include="App\Case\Models\TimeBillAddHoursVM.cs" />
+    <Compile Include="App\Case\Models\TimeBillAutoPopulateVM.cs" />
+    <Compile Include="App\Case\Models\TimeBillDefinalizeProvider.cs" />
+    <Compile Include="App\Case\Models\TimeBillGridAuthItemVM.cs" />
+    <Compile Include="App\Case\Models\TimeBillGridListItemVM.cs" />
+    <Compile Include="App\Case\Models\TimeBillVM.cs" />
+    <Compile Include="App\DataLists\Models\AuthDetailVM.cs" />
+    <Compile Include="App\DataLists\Models\AuthGridVM.cs" />
+    <Compile Include="App\ExternalData\Models\Catalyst\StudentAttendanceImportResults.cs" />
+    <Compile Include="App\ExternalData\Models\Catalyst\StudentAttendenceReportValidationSettings.cs" />
+    <Compile Include="App\Hours\Models\MHBExportItemVM.cs" />
+    <Compile Include="App\Hours\Models\ScrubOverviewItem.cs" />
+    <Compile Include="App\Hours\Models\ScrubOverviewItemSummaryVM.cs" />
+    <Compile Include="App\Hours\Models\ScrubOverviewVM.cs" />
+    <Compile Include="App\Hours\Models\UnfinalizedProviderItemVM.cs" />
+    <Compile Include="App\Hours\Models\ValidateVM.cs" />
+    <Compile Include="App\Hours\Models\ValidationItemVM.cs" />
+    <Compile Include="App\OfficeStaff\Models\OfficeStaffHelpers.cs" />
+    <Compile Include="App\OfficeStaff\Models\OfficeStaffListModel.cs" />
+    <Compile Include="App\Patients\Models\InsuranceListItem.cs" />
+    <Compile Include="App\Patients\Models\PatientsListItemVM.cs" />
+    <Compile Include="App\Patients\Models\PatientsListVM.cs" />
+    <Compile Include="App\Patients\Models\PatientVM.cs" />
+    <Compile Include="App\Patients\Models\ReastaffReasonSelectionItem.cs" />
+    <Compile Include="App\Patients\Models\RestaffReasonVM.cs" />
+    <Compile Include="App\ProviderPortal\Models\RegisterVM.cs" />
+    <Compile Include="App\Account\Models\PermissionsListVM.cs" />
+    <Compile Include="App\Account\Models\PermissionVM.cs" />
+    <Compile Include="App\ProviderPortal\Models\UserVM.cs" />
+    <Compile Include="App\Providers\Models\CaseHoursListItemVM.cs" />
+    <Compile Include="App\Providers\Models\Cases.cs" />
+    <Compile Include="App\Providers\Models\PayrollGridItemVM.cs" />
+    <Compile Include="App\Providers\Models\PayrollVM.cs" />
+    <Compile Include="App\Providers\Models\ProvidersListItemVM.cs" />
+    <Compile Include="App\Providers\Models\ProvidersListVM.cs" />
+    <Compile Include="App\Providers\Models\ProviderTypesListItemVM.cs" />
+    <Compile Include="App\Providers\Models\ProviderTypesListVM.cs" />
+    <Compile Include="App\Providers\Models\ProviderTypeVM.cs" />
+    <Compile Include="App\Providers\Models\ProviderVM.cs" />
+    <Compile Include="App\OfficeStaff\Models\OfficeStaffModel.cs" />
+    <Compile Include="App\Shared\Models\DialogConfirmVM.cs" />
+    <Compile Include="App\Shared\Models\DateSelectorVM.cs" />
+    <Compile Include="App\Shared\Models\MessageBoxVM.cs" />
+    <Compile Include="App\Shared\Models\GeneralPopupVM.cs" />
+    <Compile Include="App\Providers\Models\ProviderInsuranceCredentialVM.cs" />
+    <Compile Include="App\Shared\Models\ZipLookupVM.cs" />
+    <Compile Include="App\UniversalSearch\Models\FirstLastNameResultGridVM.cs" />
+    <Compile Include="App\Account\Models\UserListVM.cs" />
+    <Compile Include="App\Account\Models\OptionListItemVM.cs" />
+    <Compile Include="App\Account\Models\OptionListVM.cs" />
+    <Compile Include="App\Account\Models\OptionVM.cs" />
+    <Compile Include="App\Account\Models\PermissionListItemVM.cs" />
+    <Compile Include="App\Account\Models\PermissionListVM.cs" />
+    <Compile Include="App\Account\Models\UserVM.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\obs_BillingReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\obs_ParentApprovalReport_alt.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\ParentApprovalReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\ParentApprovalReport.Designer.cs">
+      <DependentUpon>ParentApprovalReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\ParentHoursReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\PatientHoursReportWithBCBASignLine.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\PatientHoursReportWithSignLine.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\PatientHoursReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\ReportService.cs" />
+    <Compile Include="App\ApplicationRepository.cs" />
+    <Compile Include="App\AutoPopulateHoursRepository.cs" />
+    <Compile Include="App\Case\CaseRepository.cs" />
+    <Compile Include="App\OfficeStaff\OfficeStaffRepository.cs" />
+    <Compile Include="App\Patients\PatientRepository.cs" />
+    <Compile Include="App\ProviderPortal\ProviderPortalRepository.cs" />
+    <Compile Include="App\Providers\ProviderRepository.cs" />
+    <Compile Include="App\UniversalSearch\UniversalSearchRepository.cs" />
+    <Compile Include="App\Account\UserRepository.cs" />
+    <Compile Include="App\DataLists\DataListsRepo.cs" />
+    <Compile Include="App\Hours\HoursRepo.cs" />
+    <Compile Include="App\Shared\CommonLists.cs" />
+    <Compile Include="App\Hours\HoursAutoPopulateService.cs" />
+    <Compile Include="UserCache.cs" />
+    <Content Include="Scripts\Pages\CaseManageSummary.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App\Services\Models\" />
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AABC.Cache\AABC.Cache.csproj">
+      <Project>{7a0e23ac-7238-402d-8199-eed6ff250185}</Project>
+      <Name>AABC.Cache</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AABC.Data\AABC.Data.csproj">
+      <Project>{fe28a9ea-0e6f-4332-b86a-e6178a654986}</Project>
+      <Name>AABC.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AABC.Domain2\AABC.Domain2.csproj">
+      <Project>{1176f48d-ed61-451b-8bbf-88cd0d02586f}</Project>
+      <Name>AABC.Domain2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AABC.DomainServices\AABC.DomainServices.csproj">
+      <Project>{5acc425b-ae61-4a66-9530-3b18898ec816}</Project>
+      <Name>AABC.DomainServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AABC.Domain\AABC.Domain.csproj">
+      <Project>{aac89b95-8f5d-43c3-81ff-0ad892f108a9}</Project>
+      <Name>AABC.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AABC.Scheduling\AABC.Scheduling.csproj">
+      <Project>{96367a7b-cc4d-40aa-a7c1-7d79533cbd60}</Project>
+      <Name>AABC.Scheduling</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AABC.Shared.Web\AABC.Shared.Web.csproj">
+      <Project>{9c54c296-fab5-4c96-8c71-2200583aaf62}</Project>
+      <Name>AABC.Shared.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dymeng.Framework\Dymeng.Framework.csproj">
+      <Project>{8a84fce2-729e-4f18-b8c1-e8a5bfe56136}</Project>
+      <Name>Dymeng.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Reports\obs_BillingReport.resx">
+      <DependentUpon>obs_BillingReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\obs_ParentApprovalReport_alt.resx">
+      <DependentUpon>obs_ParentApprovalReport_alt.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ParentApprovalReport.resx">
+      <DependentUpon>ParentApprovalReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\ParentHoursReport.resx">
+      <DependentUpon>ParentHoursReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\PatientHoursReportWithBCBASignLine.resx">
+      <DependentUpon>PatientHoursReportWithBCBASignLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\PatientHoursReportWithSignLine.resx">
+      <DependentUpon>PatientHoursReportWithSignLine.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\PatientHoursReport.resx">
+      <DependentUpon>PatientHoursReport.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Integration|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>58997</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:58687/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+  </Target>
+  <Target Name="CopyLinkedContentFiles" BeforeTargets="Build">
+    <Copy SourceFiles="%(Content.Identity)" DestinationFiles="%(Content.Link)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Condition="'%(Content.Link)' != ''" />
+  </Target>
+</Project>

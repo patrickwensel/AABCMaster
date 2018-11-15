@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="0.9.2.0" package="com.appliedabc.mobile.provider.app" android:installLocation="auto" android:versionCode="3">
+	<uses-sdk android:minSdkVersion="15" />
+	<application android:label="Applied Provider App"></application>
+</manifest>

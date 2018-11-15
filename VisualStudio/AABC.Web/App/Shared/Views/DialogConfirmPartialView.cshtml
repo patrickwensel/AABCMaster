@@ -1,0 +1,68 @@
+﻿@model AABC.Web.Models.Shared.DialogConfirmVM
+
+@Html.DevExpress().PopupControl(s => {
+
+    s.Name = Model.DialogElementID;
+    s.PopupElementID = Model.AnchorElementID;
+
+    s.Width = 350;
+
+    s.AllowDragging = false;
+    s.AllowResize = false;
+    s.CloseAction = CloseAction.None;
+    s.ShowCloseButton = false;
+    s.CloseOnEscape = true;
+    s.PopupAnimationType = AnimationType.None;
+    s.Modal = true;
+    s.HeaderText = Model.Title;
+    s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+
+    if (Model.DialogCloseScript != null) {
+        s.ClientSideEvents.CloseUp = Model.DialogCloseScript;
+    }
+
+    s.SetContent(() => {
+        using (Html.BeginForm()) {
+
+            ViewContext.Writer.Write("<div id='dlg-form-content'>");
+            ViewContext.Writer.Write("  <div class='dlg-form-row'>");
+            ViewContext.Writer.Write("      <div class='dlg-form-col-icon'>");
+
+            Html.DevExpress().Image(i => {
+                i.Width = 48;
+                i.Height = 48;
+                i.ImageUrl = "~/Content/Images/" + Model.ImageFilename;
+            }).Render();
+
+
+
+            ViewContext.Writer.Write("</div><div class='dlg-form-col-message'>" + Model.Message + "</div>");
+
+            ViewContext.Writer.Write("  </div>");
+            ViewContext.Writer.Write("  <div class='dlg-form-row dlg-form-row-buttons'>");
+
+            Html.DevExpress().Button(b => {
+                b.Name = "btn1";
+                b.Text = Model.Button1Caption;
+                b.Width = 80;
+                b.UseSubmitBehavior = false;
+                b.ClientSideEvents.Click = "function(s, e) { " + Model.ResultVariableName + " = 'button1'; " + Model.DialogElementID + ".Hide(); }";
+            }).Render();
+
+            Html.DevExpress().Button(b => {
+                b.Name = "btn2";
+                b.Text = Model.Button2Caption;
+                b.Width = 80;
+                b.UseSubmitBehavior = false;
+                b.ClientSideEvents.Click = "function(s, e) { " + Model.ResultVariableName + " = 'button2'; " + Model.DialogElementID + ".Hide(); }";
+            }).Render();
+
+            ViewContext.Writer.Write("  </div>");
+            ViewContext.Writer.Write("</div>");
+
+        }
+    });
+
+
+}).GetHtml()

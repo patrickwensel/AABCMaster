@@ -1,0 +1,72 @@
+﻿@model AABC.Web.App.Insurance.Models.ServiceEditVM
+<div>
+    
+    @Html.DevExpress().ComboBox(
+    s => {
+        s.Name = "ServiceEditProviderTypeID";
+        s.Properties.TextField = "Code";
+        s.Properties.ValueField = "ID";
+        s.Properties.ValueType = typeof(int);
+        s.Properties.TextFormatString = "{0} - {1}";
+        s.Width = 200;
+        s.Properties.Columns.Add("Code", "Code", 35);
+        s.Properties.Columns.Add("Name");
+        s.Properties.Caption = "Provider Type";
+        s.Properties.CaptionCellStyle.Width = 100;
+
+        s.PreRender = (sender, e) => {
+            AABC.Web.Helpers.DevEx.ComboPreRenderByValue(sender, Model.ProviderTypeID);
+        };
+    }
+).BindList(Model.ProviderTypesList).Bind(Model.ProviderTypeID).GetHtml()
+
+    @Html.DevExpress().ComboBox(
+    s => {
+        s.Name = "ServiceEditServiceID";
+        s.Properties.TextField = "Code";
+        s.Properties.ValueField = "ID";
+        s.Properties.ValueType = typeof(int);
+        s.Properties.TextFormatString = "{0} - {1}";
+        s.Width = 200;
+        s.Properties.Columns.Add("Code");
+        s.Properties.Columns.Add("name");
+        s.Properties.Caption = "Service";
+        s.Properties.CaptionCellStyle.Width = 100;
+
+        s.PreRender = (sender, e) => {
+            AABC.Web.Helpers.DevEx.ComboPreRenderByValue(sender, Model.ServiceID);
+        };
+    }).BindList(Model.ServicesList).Bind(Model.ServiceID).GetHtml()
+
+
+    @Html.DevExpress().DateEdit(
+        s => {
+            s.Name = "ServiceEditEffectiveDate";
+            s.Properties.Caption = "Effective Date";
+            s.Properties.CaptionCellStyle.Width = 100;
+            s.Width = 100;
+        }
+    ).Bind(Model.EffectiveDate).GetHtml()
+
+    @Html.DevExpress().DateEdit(
+        s => {
+            s.Name = "ServiceEditDefectiveDate";
+            s.Properties.Caption = "Defective Date";
+            s.Properties.CaptionCellStyle.Width = 100;
+            s.Width = 100;
+        }
+    ).Bind(Model.DefectiveDate).GetHtml()
+
+
+</div>
+
+
+<div class="spacer-10" style="margin-left: 107px;">
+    @Html.DevExpress().Button(
+        s => {
+            s.Name = "ServiceEditSaveButton";
+            s.UseSubmitBehavior = false;
+            s.Text = "Save Service";
+        }
+    ).GetHtml()
+</div>

@@ -1,0 +1,1 @@
+mstest /usestderr /testcontainer:VisualStudio\AABC.Domain2.Tests.Unit\bin\Integration\AABC.Domain2.Tests.Unit.dll /testcontainer:VisualStudio\AABC.DomainServices.Tests.Unit\bin\Integration\AABC.DomainServices.Tests.Unit.dll /testcontainer:VisualStudio\AABC.PatientPortal.Tests.Unit\bin\Integration\AABC.PatientPortal.Tests.Unit.dll

@@ -1,0 +1,73 @@
+﻿@model AABC.Web.Models.OfficeStaff.OfficeStaffListModel
+
+<script type="text/javascript">
+
+    var DialogConfirmResult = null;
+    var activeModelID = null;   // valid only when set explicitly
+
+    function DialogConfirmClosed() {
+        if (DialogConfirmResult == 'button1') {
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Delete", "OfficeStaff")",
+                data: { id: activeModelID },
+                success: function (response) {
+                    $("#" + App.Content.ContentElementID).html(response);
+                    App.Dialogs.MessageBox("Office Staff member succesfully deleted.", App.Dialogs.Icons.Ok, "Success");
+                }
+            });
+
+        }
+    }
+
+    function actionMenuItemClick(s, e) {
+
+        var id = s.name.replace('pmActions', '');
+        var action = e.item.name;
+
+        if (action == "Delete") {
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("ConfirmDelete")',
+                data: { id: id },
+                success: function (r) {
+                    $("#DialogConfirmAnchor").html(r);
+                    activeModelID = id;
+                    DialogConfirm.Show();
+                }
+            });
+        }
+
+        if (action == "Edit") {
+
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("Edit", "OfficeStaff")",
+                data: { id: id },
+                success: function (response) {
+                    $("#" + App.Content.ContentElementID).html(response);
+                }
+            });
+
+        }
+
+    }
+
+</script>
+
+
+<div id="grid-items-container">
+
+    @Html.Partial("ListGrid", Model)
+
+</div>
+
+<div id="DialogConfirmAnchor"></div>
+
+<script type="text/javascript">
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+    });
+</script>

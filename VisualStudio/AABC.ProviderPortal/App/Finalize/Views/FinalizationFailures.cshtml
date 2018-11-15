@@ -1,0 +1,99 @@
+﻿@inherits System.Web.Mvc.WebViewPage
+
+<div id="finalize-validations-container-pp" class="fv-container">
+
+    <div class="fv-heading">
+        <h1>Finalization Validation</h1>
+        <p>Unable to finalize this period.  Please see the list of reasons below and address these entries prior to finalizing.</p>
+    </div>
+
+    <div class="fv-body">
+
+        <!-- validation failure types: ProviderOverlapSelf, SupervisionMismatch, CaseOverlap -->
+
+
+
+        <div class="fv-messages" style="max-height: 400px; overflow-y: auto">
+
+
+
+        </div>
+
+        <div id="fv-cat-itemtemplate" style="display: none;">
+            <h3>No Catalyst Record</h3>
+            <p>Hours are required to be associated with a Catalyst record.</p>
+            <div><span style="width: 100px; display: inline-block">Patient:</span><span style="display: inline-block" class="patient"></span></div>
+            <div><span style="width: 100px; display: inline-block">Date/Times:</span><span style="display: inline-block" class="datetime"></span></div>
+
+            <hr />
+
+        </div>
+
+
+        <div id="fv-pos-itemtemplate" style="display: none;">
+            <h3>Overlapping Hours</h3>
+            <p>Hours are not allowed to overlap.</p>
+            <table style="width: 100%">
+                <tr>
+                    <td>
+                        <div><span style="width: 100px; display: inline-block">Patient:</span><span style="display: inline-block" class="patientA"></span></div>
+                        <div><span style="width: 100px; display: inline-block">Date/Times:</span><span style="display: inline-block" class="datetimeA"></span></div>
+                        <div><span style="width: 100px; display: inline-block">Service:</span><span style="display: inline-block" class="serviceA"></span></div>
+
+                    </td>
+                    <td>
+                        <div><span style="width: 100px; display: inline-block">Patient:</span><span style="display: inline-block" class="patientB"></span></div>
+                        <div><span style="width: 100px; display: inline-block">Date/Times:</span><span style="display: inline-block" class="datetimeB"></span></div>
+                        <div><span style="width: 100px; display: inline-block">Service:</span><span style="display: inline-block" class="serviceB"></span></div>
+                    </td>
+                </tr>
+            </table>
+            <hr />
+        </div>
+
+        <div id="fv-sm-itemtemplate" style="display: none;">
+            <h3>Supervision Mismatch</h3>
+            <p>Supervision hours must match between the BCBA and Aide. This entry doesn't have a corresponding match, or the corresponding match times are not consistent.</p>
+
+            <div><span style="width: 100px; display: inline-block">Patient:</span><span style="display: inline-block" class="patient"></span></div>
+            <div><span style="width: 100px; display: inline-block">Date/Times:</span><span style="display: inline-block" class="datetime"></span></div>
+
+            <hr />
+
+        </div>
+
+        <div id="fv-co-itemtemplate" style="display: none;">
+            <h3>Overlapping Hours between Cases</h3>
+            <p>Hours are not allowed to overlap.</p>
+            <table style="width: 100%">
+                <tr>
+                    <td>
+                        <div><span style="width: 100px; display: inline-block">Patient:</span><span style="display: inline-block" class="patientA"></span></div>
+                        <div><span style="width: 100px; display: inline-block">Date/Times:</span><span style="display: inline-block" class="datetimeA"></span></div>
+                        <div><span style="width: 100px; display: inline-block">Service:</span><span style="display: inline-block" class="serviceA"></span></div>
+
+                    </td>
+                    <td>
+                        <div><span style="width: 100px; display: inline-block">Patient:</span><span style="display: inline-block" class="patientB"></span></div>
+                        <div><span style="width: 100px; display: inline-block">Date/Times:</span><span style="display: inline-block" class="datetimeB"></span></div>
+                        <div><span style="width: 100px; display: inline-block">Service:</span><span style="display: inline-block" class="serviceB"></span></div>
+                    </td>
+                </tr>
+            </table>
+            <hr />
+        </div>
+
+        <div id="fv-nm-itemtemplate" style="display: none;">
+            <h3>Hours without notes</h3>
+            <p>Notes are missing for some of the hour entries.</p>
+            <div><span style="width: 100px; display: inline-block">Patient:</span><span style="display: inline-block" class="patient"></span></div>
+            <div><span style="width: 100px; display: inline-block">Date/Times:</span><span style="display: inline-block" class="datetime"></span></div>
+            <hr />
+        </div>
+    </div>
+
+    <div class="he-footer">
+        <button id="fv-close">OK</button>
+    </div>
+
+</div>

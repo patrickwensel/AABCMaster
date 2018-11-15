@@ -1,0 +1,60 @@
+﻿@model AABC.Web.App.PatientPortal.Models.ExistingLoginListItem
+
+@Html.HiddenFor(Model => Model.Email, new { Id = "hdPatientLoginEmail" })
+
+@Html.DevExpress().TextBox(s => {
+    s.Name = "AddLoginEmail";
+    s.Properties.Caption = "Email";
+    s.Properties.CaptionCellStyle.Width = 100;
+    s.Properties.CaptionSettings.Position = EditorCaptionPosition.Left;
+    s.Enabled = Model.Email.Length == 0;
+}).Bind(Model.Email).GetHtml()
+
+@Html.DevExpress().TextBox(s => {
+    s.Name = "AddLoginFirstName";
+    s.Properties.Caption = "First Name";
+    s.Properties.CaptionCellStyle.Width = 100;
+    s.Properties.CaptionSettings.Position = EditorCaptionPosition.Left;
+}).Bind(Model.FirstName).GetHtml()
+
+@Html.DevExpress().TextBox(s => {
+    s.Name = "AddLoginLastName";
+    s.Properties.Caption = "Last Name";
+    s.Properties.CaptionCellStyle.Width = 100;
+    s.Properties.CaptionSettings.Position = EditorCaptionPosition.Left;
+}).Bind(Model.LastName).GetHtml()
+
+@Html.DevExpress().CheckBox(s => {
+    s.Name = "AddLoginActive";
+    s.Text = "Active?";
+    s.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+}).Bind(Model.Active).GetHtml()
+
+<div class="spacer-10"></div>
+
+<div style="width: 100%; text-align: right">
+
+    <table align="right">
+        <tr>
+            <td align="right">
+                @Html.DevExpress().Button(s => {
+                   s.Name = "addLoginCancelButton";
+                   s.Text = "Cancel";
+                   s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide(); }";
+               }).GetHtml()
+            </td>
+            <td align="right" style="padding-left: 5px">
+                @Html.DevExpress().Button(s => {
+                    s.Name = "addLoginSaveButton";
+                    s.Text = "Save";
+                }).GetHtml()
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+
+<script type="text/javascript" id="dxss_304987t5m3v98tn7398b">
+    window.Admin.PatientPortal.Users.existing.addLogin.initializePopup();
+</script>

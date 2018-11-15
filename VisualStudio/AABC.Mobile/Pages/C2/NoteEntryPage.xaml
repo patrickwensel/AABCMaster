@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<control:LoggedInPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="AABC.Mobile.Pages.C2.NoteEntryPage"
+			 Title="{Binding SelectedCase.Patient, Converter={StaticResource patientNameConverter}}"
+			 NavigationPage.BackButtonTitle="Back"
+			Padding="0">
+
+	<ScrollView>
+		<StackLayout>
+			<Label Text="Note Entry" Style="{StaticResource pageTitle}" HeightRequest="80" />
+
+			<control:Repeater ItemsSource="{Binding DisplayQuestionAnswers}" Padding="10">
+				<control:Repeater.ItemTemplate>
+					<DataTemplate>
+						<StackLayout>
+							<Label Text="{Binding CaseValidationQuestion.Question}" Style="{StaticResource label}" />
+							<Editor Text="{Binding Answer}" />
+							<Label IsVisible="{Binding DisplayError}" Text="{Binding ErrorMessage}" Style="{StaticResource error}" />
+						</StackLayout>
+					</DataTemplate>
+				</control:Repeater.ItemTemplate>
+			</control:Repeater>
+
+			<StackLayout Orientation="Horizontal" Padding="10">
+				<Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand" Style="{StaticResource cancel}"/>
+				<Button Text="Done" Command="{Binding DoneCommand}" HorizontalOptions="FillAndExpand" Style="{StaticResource primary}" />
+			</StackLayout>
+
+		</StackLayout>
+	</ScrollView>
+
+</control:LoggedInPage>

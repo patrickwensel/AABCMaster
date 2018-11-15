@@ -1,0 +1,89 @@
+﻿
+<script type="text/javascript" src="~/Scripts/Pages/ExternalDataCatalyst.js" id="dxis_ExternalCatalystPageScripts"></script>
+
+<div style="width: 100%; padding: 10px;">
+
+    <div style="float: left; width: 350px; padding-right: 15px;">
+
+        @using (Html.BeginForm())
+        {
+
+<h3>Catalyst Timesheet Import</h3>
+<p>Uploading the Timesheet report will prefill the Provider Portal notes with those entered in the file.  This process will only import data with a ResponseDate later than the previous imports.</p>
+
+@Html.DevExpress().UploadControl(
+         s =>
+         {
+             s.Name = "uploadCatalystTimesheet";
+             s.ShowProgressPanel = false;
+             s.UploadMode = UploadControlUploadMode.Auto;
+             s.AutoStartUpload = true;
+             s.Width = Unit.Percentage(100);
+             s.DialogTriggerID = "TimesheetDropZone";
+             s.AdvancedModeSettings.EnableDragAndDrop = true;
+             s.AdvancedModeSettings.EnableFileList = false;
+             s.AdvancedModeSettings.EnableMultiSelect = false;
+             s.AdvancedModeSettings.ExternalDropZoneID = "TimesheetDropZone";
+             s.AdvancedModeSettings.DropZoneText = "";
+             s.ClientSideEvents.DropZoneEnter = "function(s, e) { Catalyst.Timesheet.DropZoneEnter(); }";
+             s.ClientSideEvents.DropZoneLeave = "function(s, e) { Catalyst.Timesheet.DropZoneLeave(); }";
+             s.ClientSideEvents.FileUploadComplete = "function(s, e) { Catalyst.Timesheet.UploadFileComplete(s, e); }";
+             s.CallbackRouteValues = new { Controller = "ExternalData", Action = "TimesheetUpload" };
+             s.ValidationSettings.Assign(AABC.Web.Models.ExternalData.Catalyst.TimesheetValidationSettings.Settings);
+             s.ClientSideEvents.FilesUploadComplete = "function(s, e) { Catalyst.Timesheet.UploadFilesComplete(s, e); }";
+
+         }
+         ).GetHtml()
+
+
+}
+
+        <div class="spacer-10"></div>
+
+        <div id="TimesheetDropZone" style="width: 100%; height: 350px; border: 1px dashed #BFDBFF;">
+            <div id="dragZone" style="width: 100%; height: 100%;">
+                <div style="padding-top: 100px;"><span style="margin-left: 75px; font-size: large; color: gray;"><em>Drag Timesheet file here</em></span></div>
+            </div>
+        </div>
+    </div>
+
+    <div style="padding-left: 10px; float: right">
+
+        <p>Example excel report to upload:</p>
+
+        <img src="~/Content/Images/example-ctsr.png" />
+
+        <p style="margin-top: 25px;">The file format must adhere to the following:</p>
+        <ul>
+            <li>The first row must contain headings</li>
+            <li>The name of the headings do not matter</li>
+            <li>
+                The columns must contain data as follows:
+                <ul>
+                    <li>A: Form Name</li>
+                    <li>B: Response Date</li>
+                    <li>C: Student Code</li>
+                    <li>D: Student Name</li>
+                    <li>E: Therapist</li>
+                    <li>F: Date</li>
+                    <li>G: Aide Services</li>
+                    <li>H: BCBA Services</li>
+                    <li>I: Notes</li>
+                    <li>J: Provider Agrees</li>
+                    <li>K: Provider Signed</li>
+                    <li>L: Parent Agrees</li>
+                    <li>M: Parent Signed</li>
+                    <li>(any subsequent columns are ignored)</li>
+                </ul>
+            </li>
+        </ul>
+
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+    });
+</script>

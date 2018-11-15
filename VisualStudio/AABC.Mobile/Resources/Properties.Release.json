@@ -1,0 +1,6 @@
+﻿{
+    "AccountService.Scheme": "https",
+    "AccountService.ServerAddress": "api.providers.mobile.appliedabc.com",
+    "AccountService.ServicePath": "/",
+    "AccountService.Port": "443"
+}

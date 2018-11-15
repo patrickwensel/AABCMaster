@@ -1,0 +1,50 @@
+﻿@model AABC.Web.App.Hours.Models.ValidateVM
+
+<script type="text/javascript" src="~/client/scripts/app/hoursvalidate.v1.0.js" id="dxis_35098tum3v9ty3948t5ub3n"></script>
+
+<div id="HoursValidationResultsGridContainer">@Html.Partial("ValidationResultsGrid", Model)</div>
+
+<div id="HoursScrubValidationResultsContainer">
+
+
+    <div style="padding: 5px;">
+        
+
+
+
+
+        @*<table>
+        <tr>
+            <td>
+                @Html.DevExpress().Button(
+                s => {
+                    s.Name = "btnValidateHours";
+                    s.Text = "Validate";
+                    s.ClientSideEvents.Click = "function(s, e) { HoursScrub.Validation.Run(); }";
+                }
+            ).GetHtml()
+            </td>
+            <td style="padding-left: 5px;">
+                <span>CO: Case Overlap, POS: Provider Overlaps Self, SM: Supervision Mismatch</span>
+            </td>
+        </tr>
+    </table>*@
+    </div>
+
+</div>
+
+
+
+
+@*<div id="hoursScrubSummaryPopupAnchor">
+    <div id="hoursScrubSummaryPopupContainer"></div>
+</div>*@
+
+
+
+<script type="text/javascript">
+    HoursValidate.Initialize();
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+    });
+</script>

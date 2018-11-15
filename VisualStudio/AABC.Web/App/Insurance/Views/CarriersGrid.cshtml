@@ -1,0 +1,73 @@
+﻿@model List<AABC.Web.App.Insurance.Models.CarrierListItem>
+
+@Html.DevExpress().GridView(
+    s => {
+        s.Name = "CarriersGrid";
+        s.KeyFieldName = "ID";
+
+        s.Width = Unit.Percentage(100);
+
+        s.CallbackRouteValues = new { Controller = "Insurance", Action = "CarrierItems" };
+
+        s.SettingsBehavior.AllowFocusedRow = true;
+        s.SettingsBehavior.AllowSelectByRowClick = true;
+        s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+        // GROUPING/SORTING ECT
+        s.SettingsBehavior.AllowSort = false;
+        s.SettingsBehavior.AllowGroup = false;
+        s.Settings.ShowFilterRow = false;
+
+        // PAGING
+        s.SettingsPager.PageSize = 10;
+        s.SettingsPager.AlwaysShowPager = false;
+
+        s.HtmlDataCellPrepared = (sender, e) => {
+            e.Cell.Attributes.Add("data-dym-cellClick", "CarriersGrid");
+            e.Cell.Attributes.Add("data-dym-visibleIndex", e.VisibleIndex.ToString());
+            e.Cell.Attributes.Add("data-dym-fieldName", e.DataColumn.FieldName);
+        };
+
+
+        s.Columns.Add("Name");
+        
+        s.Settings.ShowTitlePanel = true;
+
+        s.SetTitlePanelTemplateContent(h => {
+
+            var vw = ViewContext.Writer;
+
+            string c = "<div style='text-align: right;'>";
+
+            c += "<table align='right'><tr><td>";
+            
+            vw.Write(c);
+
+            c = Html.DevExpress().Button(bs => {
+                bs.Name = "btnAddNewCarrier";
+                bs.Text = "Add New";
+                bs.UseSubmitBehavior = false;
+                bs.ClientSideEvents.Click = "function(s, e) { Insurance.Detail.AddCarrier(); }";
+            }).GetHtml().ToHtmlString();
+
+            c = "</td><td style='padding-left: 5px;'>";
+
+            vw.Write(c);
+
+            c = Html.DevExpress().Button(bs => {
+                bs.Name = "btnRemoveSelectedCarrier";
+                bs.Text = "Remove Selected";
+                bs.UseSubmitBehavior = false;
+                bs.ClientSideEvents.Click = "function(s, e) { Insurance.Detail.RemoveCarrier(); }";
+            }).GetHtml().ToHtmlString();
+
+            c = "</td></tr></table></div>";
+
+            vw.Write(c);
+
+        });
+
+
+    }
+).Bind(Model).GetHtml()

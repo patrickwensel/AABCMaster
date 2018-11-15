@@ -1,0 +1,170 @@
+﻿@model AABC.Web.App.Scheduler.Models.AppointmentEditViewModel
+
+@using (Html.BeginForm(null, null, FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.AppointmentId);
+    @Html.Hidden("Mode")
+    @Html.HiddenFor(m=> m.IsRecurring)
+    <div id="appointmentTypeSelector">
+        @Html.DevExpress().Button(
+            s =>
+            {
+                s.Name = "editNonRecurringAppointmentBtn";
+                s.Text = "Just this one";
+                s.ClientSideEvents.Click = "changeModeToNonRecurringAppointment";
+                s.Width = 75;
+            }
+        ).GetHtml()
+        @Html.DevExpress().Button(
+            s =>
+            {
+                s.Name = "editRecurringAppointmentBtn";
+                s.Text = "The entire series";
+                s.ClientSideEvents.Click = "changeModeToRecurringAppointment";
+                s.Width = 75;
+            }
+        ).GetHtml()
+        @Html.DevExpress().Button(
+            s =>
+            {
+                s.Name = "appointmentTypeSelectorCancelBtn";
+                s.Text = "Cancel";
+                s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide('cancelled'); }";
+                s.Width = 75;
+            }
+        ).GetHtml()
+    </div>
+    <div id="appointmentEditor" style="display:none">
+        <table>
+            <tr>
+                <td>
+                    <div class="recurring">
+                        <label style="width:100px;display:inline-block;margin-bottom: 4px;margin-right: 4px;">Date:</label>
+                        <span>Every @Model.Date.DayOfWeek.ToString()</span>
+                        @Html.HiddenFor(m => m.Date)
+                    </div>
+                    <div class="non-recurring">
+                        @Html.HiddenFor(m => m.OccurrenceDate)
+                        @Html.DevExpress().DateEdit(
+                        s =>
+                        {
+                            s.Name = "newDate";
+                            s.Properties.Caption = "Date";
+                            s.Properties.CaptionCellStyle.Width = 100;
+                        }
+                    ).Bind(Model.OccurrenceDate).GetHtml()
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DevExpress().TimeEdit(
+                    s =>
+                    {
+                        s.Name = "startTime";
+                        s.Properties.Caption = "Start Time";
+                        s.Properties.CaptionCellStyle.Width = 100;
+                    }
+                ).Bind(Model.StartTime).GetHtml()
+                </td>
+                <td>
+                    <span class="validation-label-inline" id="errHoursEditByDate_TimeGeneral">Times must be supplied and Start Time must not be later than End Time</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.DevExpress().TimeEdit(
+                    s =>
+                    {
+                        s.Name = "endTime";
+                        s.Properties.Caption = "End Time";
+                        s.Properties.CaptionCellStyle.Width = 100;
+                    }
+                ).Bind(Model.EndTime).GetHtml()
+                </td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="spacer-10"></div>
+
+        <div style="margin-left:106px;">
+            <table>
+                <tr>
+                    <td>
+                        @Html.DevExpress().Button(
+                         s =>
+                         {
+                             s.Width = 75;
+                             s.Name = "btnchedpOK";
+                             s.Text = "Ok";
+                             s.ClientSideEvents.Click = "SaveAppointment";
+                         }
+                     ).GetHtml()
+                    </td>
+                    <td style="padding-left: 5px;">
+                        @Html.DevExpress().Button(
+                         s =>
+                         {
+                             s.Name = "btnchedpCancel";
+                             s.Text = "Cancel";
+                             s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide('cancelled'); }";
+                             s.Width = 75;
+                         }
+                     ).GetHtml()
+                    </td>
+                </tr>
+            </table>
+            <div class="spacer-10"></div>
+            <table>
+                <tr>
+                    <td>
+                        <div class="recurring">
+                            @Html.DevExpress().Button(
+                                 s =>
+                                 {
+                                     s.Name = "btnchedpDelete";
+                                     s.Text = "Delete all appointments in this series";
+                                     s.ClientSideEvents.Click = "DeleteAppointment";
+                                     s.ControlStyle.ForeColor = System.Drawing.Color.Red;
+                                 }
+                            ).GetHtml()
+                        </div>
+                        <div class="non-recurring">
+                            @if (Model.IsRecurring)
+                            {
+                            @Html.DevExpress().Button(
+                                                    s =>
+                                                    {
+                                                        s.Name = "cancelAppointmentButton";
+                                                        s.Text = "Cancel this appointment";
+                                                        s.ClientSideEvents.Click = "CancelAppointment";
+                                                        s.ControlStyle.ForeColor = System.Drawing.Color.Red;
+                                                    }
+                                                ).GetHtml()
+                            }
+                            else
+                            {
+                            @Html.DevExpress().Button(
+                                             s =>
+                                             {
+                                                 s.Name = "deleteAppointmentButton";
+                                                 s.Text = "Delete this appointment";
+                                                 s.ClientSideEvents.Click = "DeleteAppointment";
+                                                 s.ControlStyle.ForeColor = System.Drawing.Color.Red;
+                                             }
+                                     ).GetHtml()
+                            }
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    initPopUp();
+</script>

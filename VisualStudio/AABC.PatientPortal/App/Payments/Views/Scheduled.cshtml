@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Payments";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Payments</h2>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>My Scheduled Payments</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Child/Case</th>
+                                <th>Payment Type</th>
+                                <th>Frequency</th>
+                                <th>Schedule</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: payments">
+                            <tr data-bind="style: { textDecoration: active ? '' : 'line-through'  }">
+                                <td data-bind="text: patientName"></td>
+                                <td data-bind="text: paymentType"></td>
+                                <td data-bind="text: recurringFrequency"></td>
+                                <td>
+                                    <table class="table">
+                                        <tbody data-bind="foreach: schedules">
+                                            <tr data-bind="style: { textDecoration: paymentChargeId() == null ? '' : 'line-through'  }">
+                                                <td data-bind="text: moment(scheduledDate()).format('MM/DD/YYYY')"></td>
+                                                <td data-bind="text: '$ ' + numeral(amount()).format('0,0.00')"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td><button class="btn btn-danger" type="button" data-bind="visible: active, click: $root.stopScheduled"><i class="fa fa-stop"></i> Stop</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Styles {
+    @Styles.Render("~/plugins/jasnyBootstrapStyles")
+}
+@section Scripts {
+    @Scripts.Render("~/app/payments.scheduled")
+    @Scripts.Render("~/lib/signaturePad");
+    <script type="text/javascript">
+        (function () {
+            var vm = new aabc.payment.ScheduledPaymentListVM();
+            ko.applyBindings(vm);
+        })();
+    </script>
+}

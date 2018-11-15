@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "Payments";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Payments</h2>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Payment History</h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Child/Case</th>
+                                <th>Payment Type</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Transaction Generator</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: charges">
+                            <tr>
+                                <td data-bind="text: patientName"></td>
+                                <td data-bind="text: description"></td>
+                                <td data-bind="text: '$ ' + numeral(amount()).format('0,0.00')"></td>
+                                <td data-bind="text: moment(chargeDate()).format('MM/DD/YYYY')"></td>
+                                <td data-bind="text: isPatientGeneratedStr"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+@section Styles {
+    @Styles.Render("~/plugins/jasnyBootstrapStyles")
+}
+
+@section Scripts {
+    @Scripts.Render("~/app/payments.history")
+    @Scripts.Render("~/lib/signaturePad");
+    <script type="text/javascript">
+        (function () {
+            var vm = new aabc.payment.PaymentChargeListVM();
+            ko.applyBindings(vm);
+        })();
+    </script>
+}

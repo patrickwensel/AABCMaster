@@ -1,0 +1,42 @@
+﻿@model List<AABC.Web.App.PatientPortal.Models.PatientListItem>
+
+@Html.DevExpress().GridView(s => {
+
+    s.Name = "PatientListGrid";
+    s.KeyFieldName = "ID";
+
+    s.SettingsBehavior.AllowSort = false;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = false;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    s.Settings.ShowFilterRow = true;
+    s.CallbackRouteValues = new { Controller = "PatientPortal", Action = "PatientsListGridCallback" };
+
+    s.ClientSideEvents.Init = "function(s, e) { }"; // dummy handler to enable client-side events
+
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    s.SettingsPager.PageSize = 200;
+
+
+    s.Columns.Add(column => {
+        column.Caption = " ";
+        column.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        column.Width = 45;
+        column.Settings.AllowAutoFilter = DefaultBoolean.False;
+        column.SetDataItemTemplateContent(c => {
+            string itemID = DataBinder.Eval(c.DataItem, "ID").ToString();
+
+            ViewContext.Writer.Write("<a href='#/AddPatient' data-dym-link='add-patient', id='add-patient-" + itemID + "'>Add</a>");
+
+        });
+
+    });
+
+
+    s.Columns.Add("FirstName");
+    s.Columns.Add("LastName");
+    s.Columns.Add("Email").Width = 250;
+    ;
+
+
+}).Bind(Model).GetHtml()

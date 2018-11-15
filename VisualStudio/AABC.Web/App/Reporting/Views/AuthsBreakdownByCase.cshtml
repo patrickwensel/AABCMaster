@@ -1,0 +1,51 @@
+﻿
+
+
+<p>This reports shows the time alloted to each authorization for a given hours entry.</p>
+<p>Select the date range and enter a Case ID to view.</p>
+
+@Html.DevExpress().DateEdit(
+    s => {
+        s.Name = "AuthBreakdownsByCaseStartDate";
+        s.Properties.Caption = "Start Date";
+        s.Properties.CaptionCellStyle.Width = 60;
+    }
+).GetHtml()
+
+@Html.DevExpress().DateEdit(
+    s => {
+        s.Name = "AuthBreakdownsByCaseEndDate";
+        s.Properties.Caption = "End Date";
+        s.Properties.CaptionCellStyle.Width = 60;
+    }
+).GetHtml()
+
+@Html.DevExpress().TextBox(
+    s =>
+    {
+        s.Name = "AuthBreakdownsByCasePatientName";
+        s.Properties.Caption = "Patient";
+        s.Properties.CaptionCellStyle.Width = 60;
+    }
+).GetHtml()
+@Html.DevExpress().Button(
+        s =>
+        {
+            s.Name = "AuthBreakdownsByCaseFindPatientButton";
+            s.Text = "Find";
+            s.ClientSideEvents.Click = "function(s, e) { window.Reporting.Authorization.selectPatient(); }";
+        }
+    ).GetHtml()
+
+
+<div style="margin-left: 66px; margin-top: 5px;">
+    @Html.DevExpress().Button(
+        s => {
+            s.Name = "AuthBreakdownsByCaseGoButton";
+            s.Text = "Go";
+        }
+    ).GetHtml()
+</div>
+
+<div id="AuthBreakdownsByCaseGridContainer"></div>
+

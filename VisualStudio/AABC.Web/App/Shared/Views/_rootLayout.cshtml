@@ -1,0 +1,156 @@
+﻿@using System.Web.Optimization
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>@ViewBag.Title</title>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="~/client/css/app.v1.2.css" rel="stylesheet" type="text/css" />
+    <link href="~/client/css/hoursEntry-v1.css" rel="stylesheet" type="text/css" />
+    <link href="~/client/css/bootstrap-datepicker.standalone.css" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/timeline.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/highcharts/highcharts.css")" rel="stylesheet" />
+
+    <script type="text/javascript">
+        var appInsights=window.appInsights||function(config){
+            function i(config){t[config]=function(){var i=arguments;t.queue.push(function(){t[config].apply(t,i)})}}var t={config:config},u=document,e=window,o="script",s="AuthenticatedUserContext",h="start",c="stop",l="Track",a=l+"Event",v=l+"Page",y=u.createElement(o),r,f;y.src=config.url||"https://az416426.vo.msecnd.net/scripts/a/ai.0.js";u.getElementsByTagName(o)[0].parentNode.appendChild(y);try{t.cookie=u.cookie}catch(p){}for(t.queue=[],t.version="1.0",r=["Event","Exception","Metric","PageView","Trace","Dependency"];r.length;)i("track"+r.pop());return i("set"+s),i("clear"+s),i(h+a),i(c+a),i(h+v),i(c+v),i("flush"),config.disableExceptionTracking||(r="onerror",i("_"+r),f=e[r],e[r]=function(config,i,u,e,o){var s=f&&f(config,i,u,e,o);return s!==!0&&t["_"+r](config,i,u,e,o),s}),t
+            }({instrumentationKey:"@AABC.Web.AppService.Current.Settings.ApplicationInsightsInstrumentationKey"});
+        window.appInsights=appInsights;
+        appInsights.trackPageView();
+    </script>
+
+    <script type="text/javascript" src="~/Scripts/mousetrap.1.5.3.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/app.js"></script>
+    @*<script type="text/javascript" src="@Url.Content("~/client/scripts/lib/knockout.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/client/scripts/lib/knockout.mapping-latest.js")"></script>*@
+
+    <script type="text/javascript">
+        App.Init(
+            'MainPlaceholder',
+            '@Url.Action("Navigate", "Home")',
+            '@Url.Action("NavigateBack", "Home")'
+            );
+    </script>
+
+
+    
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Report },
+        new StyleSheet {  ExtensionType = ExtensionType.WebDocumentViewer },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Scheduler }
+    )
+
+    @Html.DevExpress().GetScripts(
+        new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+        new Script { ExtensionSuite = ExtensionSuite.GridView },
+        new Script { ExtensionSuite = ExtensionSuite.Editors },
+        new Script {  ExtensionSuite = ExtensionSuite.Report },
+        new Script {  ExtensionType = ExtensionType.WebDocumentViewer },
+        new Script { ExtensionSuite = ExtensionSuite.Scheduler }
+    )
+
+
+</head>
+<body>
+
+    @RenderSection("BodyTopScripts", false)
+
+    @Html.DevExpress().Splitter(settings => {
+        settings.Name = "MainSplitter";
+        settings.AllowResize = false;
+        settings.Orientation = System.Web.UI.WebControls.Orientation.Vertical;
+        settings.FullscreenMode = true;
+        settings.SeparatorVisible = false;
+        settings.Styles.Pane.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+        settings.Styles.Pane.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+
+        settings.Panes.Add(pane => {
+            pane.Name = "Header";
+            pane.AutoHeight = true;
+            pane.PaneStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+            pane.PaneStyle.CssClass = "headerPane";
+            pane.SetContent(() => {
+                Html.RenderPartial("HeaderPartialView");
+            });
+        });
+
+        settings.Panes.Add(pane => {
+            pane.Name = "Content";
+            pane.PaneStyle.CssClass = "mainContentPane";
+            pane.MinSize = System.Web.UI.WebControls.Unit.Pixel(375);
+            pane.PaneStyle.BackColor = System.Drawing.Color.White;
+            pane.PaneStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+            pane.SetContent(RenderBody().ToHtmlString());
+        });
+
+        settings.Panes.Add(pane => {
+            pane.Name = "Footer";
+            pane.Size = System.Web.UI.WebControls.Unit.Pixel(40);
+            pane.PaneStyle.CssClass = "footerPane";
+            pane.SetContent(() => {
+                Html.RenderPartial("FooterPartialView");
+            });
+        });
+    }).GetHtml()
+
+
+    <div id="DialogAnchor"></div>
+    <div id="MessageBoxAnchor"></div>
+    <div id="ErrorAnchor"></div>
+    <div id="PopupAnchor"></div>
+
+
+    @Html.DevExpress().LoadingPanel(
+    s => {
+        s.Name = "LoadingPanel";
+        s.Modal = true;
+        s.EnableTheming = true;
+        s.Text = "Loading";
+        s.Images.LoadingPanel.Url = "~/Content/Images/loading.gif";
+    }).GetHtml()
+
+    <script type="text/javascript">
+
+        try {
+            App.NavBar.Init(LeftNavBar);
+        } catch (e) {
+            // nothing
+        }
+
+
+        $(document).bind("ajaxSend", function () {
+
+            if (autoLoadingPanelIsSupressed) {
+                if (autoLoadingPanelIsSingleSupression) {
+                    autoLoadingPanelIsSupressed = false;
+                }
+                return;
+            }
+
+            LoadingPanel.Show();
+
+        }).bind("ajaxStop", function () {
+            LoadingPanel.Hide();
+
+        });
+
+
+    autoLoadingPanelIsSupressed = true;
+    autoLoadingPanelIsSingleSupression = true;
+
+    </script>
+
+
+    @Scripts.Render("~/bundles/app")
+    @Scripts.Render("~/bundles/hoursEntry")
+    
+    @RenderSection("Scripts", false)    
+    
+    
+
+</body>
+</html>

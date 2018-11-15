@@ -1,0 +1,144 @@
+﻿@model AABC.Web.App.Referrals.Models.ReferralsListVM
+
+@Html.DevExpress().GridView(s =>
+{
+    s.Name = "gridList";
+    s.KeyFieldName = "ID";
+    s.Width = Unit.Percentage(100);
+    s.Height = Unit.Percentage(100);
+    s.Settings.ShowTitlePanel = true;
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    s.Settings.ShowFilterRow = true;
+    s.SettingsCookies.StoreFiltering = true;
+    s.SettingsCookies.StoreGroupingAndSorting = true;
+    s.SettingsCookies.StorePaging = true;
+    s.SettingsCookies.Enabled = true;
+    s.SettingsCookies.CookiesID = "AABC.Web.SearchGrid.Referrals-3-" + Model.Action;
+    s.SettingsPager.PageSize = 500;
+    s.SettingsPager.AlwaysShowPager = true;
+    s.SettingsPager.Visible = true;
+    s.SettingsBehavior.AllowSort = true;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = true;
+    s.SettingsBehavior.AllowSelectByRowClick = true;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    s.SettingsBehavior.AllowDragDrop = false;
+    s.SettingsSearchPanel.Visible = true;
+    s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+    s.CallbackRouteValues = new { Controller = "Referrals", Action = Model.Action };
+    s.ClientSideEvents.Init = "function(s, e) { App.Content.GridViews.InitializeForStretchHeight(s); }";
+    s.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['isFilterCallback'] = 'true'; }";
+    s.ClientSideEvents.EndCallback = "function(s, e) { App.Content.GridViews.StretchHeight(s); }";
+    s.ClientSideEvents.RowDblClick = "function(s, e) { rowDoubleClick(s,e); }";
+
+    s.SetTitlePanelTemplateContent(c =>
+    {
+        Html.RenderPartial("GridTitlePane", Model.ListBase.GridTitlePanelSettings);
+    });
+
+    if (Model.IsShowingFollowUpsOnly) {
+        s.Columns.Add(col =>
+        {
+            col.FieldName = "FollowUpDate";
+            col.Caption = "Follow Up Date";
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.PropertiesEdit.DisplayFormatString = "d";
+        });
+    }
+
+    s.Columns.Add(col =>
+    {
+        col.FieldName = "AssignedStaff";
+        col.Caption = "Assigned Staff";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.FieldName = "FirstName";
+        col.Caption = "First Name";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.FieldName = "LastName";
+        col.Caption = "Last Name";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.FieldName = "InsuranceName";
+        col.Caption = "Insurance Name";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.FieldName = "BenefitCheck";
+        col.Caption = "Benefit Check";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Width = 100;
+        col.MinWidth = 100;
+        col.FixedStyle = GridViewColumnFixedStyle.None;
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.Caption = "Status";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.SetDataItemTemplateContent(x =>
+        {
+            var item = x.Grid.GetRow(x.ItemIndex) as AABC.Web.App.Referrals.Models.ReferralListItemModel;
+            var notes = new List<string>();
+            foreach (var st in item.Status)
+            {
+                var tb = new TagBuilder("span");
+                if (!string.IsNullOrEmpty(st.ColorCode))
+                {
+                    tb.Attributes.Add("style", "color:" + st.ColorCode + ";");
+                }
+                tb.InnerHtml = st.Label;
+                notes.Add(tb.ToString());
+            }
+            ViewContext.Writer.Write(string.Join("<br />", notes.ToArray()));
+        });
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.FieldName = "StatusNote";
+        col.Caption = "Status Notes";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.FieldName = "City";
+        col.Caption = "City";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.FieldName = "State";
+        col.Caption = "State";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    if (!Model.IsShowingFollowUpsOnly)
+    {
+        s.Columns.Add(col =>
+        {
+            col.FieldName = "DateCreated";
+            col.Caption = "Date Entered";
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+    }
+
+}).Bind(Model.DetailList).GetHtml()

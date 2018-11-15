@@ -1,0 +1,95 @@
+﻿@model AABC.Web.App.Hours.Models.WatchDetailPopupVM
+
+<form id="WatchDetailForm">
+
+    @Html.HiddenFor(m => m.CaseID)
+    @Html.HiddenFor(m => m.Month)
+    @Html.HiddenFor(m => m.Year)
+
+<table><tr>
+    <td style="padding:5px">
+        @Html.DevExpress().Memo(
+    s =>
+    {
+        s.Name = "Comments";
+        s.Properties.Caption = "Comments";
+        s.Width = 375;
+        s.Height = 60;
+    }
+    ).Bind(Model.Comments).GetHtml()
+</td>
+    <td>
+        @Html.DevExpress().CheckBox(
+    s =>
+    {
+        s.Name = "Ignore";
+        s.Text = "Ignore";
+    }
+    ).Bind(Model.Ignore).GetHtml()
+    </td>
+</tr></table>
+</form>
+<br/>
+
+
+@Html.DevExpress().GridView(
+    s =>
+    {
+        s.Name = "WatchGridCaseProviders";
+        s.KeyFieldName = "ProviderID";
+        s.SettingsPager.PageSize = 200;
+        s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+        s.Settings.VerticalScrollableHeight = 250;
+        s.SettingsBehavior.AllowSort = false;
+        s.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+        s.Width = 540;
+        s.Height = 360;
+
+        var col = s.Columns.Add("Name");
+        col.Width = 100;
+
+        col = s.Columns.Add("Type");
+        col.Width = 50;
+        
+        col = s.Columns.Add("IsSupervisor");
+        col.ColumnType = MVCxGridViewColumnType.CheckBox;
+        col.Caption = "Supervisor";
+        col.ToolTip = "Supervisor";
+        col.Width = 40;
+
+        col = s.Columns.Add("IsAuthorizedBCBA");
+        col.ColumnType = MVCxGridViewColumnType.CheckBox;
+        col.Caption = "Auth'd <br />BCBA";
+        col.Width = 40;
+
+        col = s.Columns.Add("Email");
+        col.PropertiesEdit.EncodeHtml = false;
+
+        col = s.Columns.Add("Phone");
+        col.Width = 105;
+
+    }
+
+    ).Bind(Model.Providers).GetHtml()
+
+<table style="margin-top:10px; width:100%"><tr><td align="right">
+@Html.DevExpress().Button(
+    s =>
+    {
+        s.Name = "WatchHoursDetailSave";
+        s.Text = "Save";
+        s.ClientSideEvents.Click = "HoursWatch.watchDetailSave";
+    }
+    ).GetHtml()  
+    
+    @Html.DevExpress().Button(
+    s =>
+    {
+        s.Name = "WatchHoursDetailCancel";
+        s.Text = "Cancel";
+        s.ClientSideEvents.Click = "App.Popup.Hide";
+    }
+    ).GetHtml()   
+      
+</td></tr></table>
+

@@ -1,0 +1,111 @@
+﻿@model AABC.ProviderPortal.Models.Shared.GetDateSelectorModel
+
+
+<script id="dsxx_dateselectorpopupscripts" type="text/javascript">
+
+    function dxDateSelectorPopupSetDateSelected(s, e) {
+
+        var dates = s.GetSelectedDates();
+        if (dates.length == 0) {
+            App.Internal.Selectors.SelectedDate = null;
+        } else {
+            App.Internal.Selectors.SelectedDate = dates[0];
+        }
+    }
+
+    function dxDateSelectorPopupOkClicked(s, e) {
+        App.Internal.Selectors.SelectedDateCancelled = false;
+        dxDateSelectorPopup.Hide();
+    }
+
+    function dxDateSelectorPopupCancelClicked(s, e) {
+        App.Internal.Selectors.SelectedDateCancelled = true;
+        dxDateSelectorPopup.Hide();
+    }
+
+</script>
+
+
+@Html.DevExpress().PopupControl(
+    s => {
+
+        s.Name = "dxDateSelectorPopup";
+        //s.Width = 200;
+        s.HeaderText = "Select Date";
+        s.Modal = true;
+        s.CloseOnEscape = true;
+        s.ShowCloseButton = false;
+        s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+
+
+        s.SetContent(() => {
+
+            @Html.DevExpress().Calendar(
+            settings => {
+                settings.Name = "DateSelectorPopupCalendar";
+                //settings.Properties.HighlightToday = options.HighlightToday;
+                //settings.Properties.HighlightWeekends = options.HighlightWeekends;
+                //settings.Properties.ShowClearButton = options.ShowClearButton;
+                //settings.Properties.ShowTodayButton = options.ShowTodayButton;
+                //settings.Properties.ShowDayHeaders = options.ShowDayHeaders;
+                //settings.Properties.ShowHeader = options.ShowHeader;
+                //settings.Properties.ShowWeekNumbers = options.ShowWeekNumbers;
+                //settings.Properties.EnableMultiSelect = options.EnableMultiSelect;
+                settings.Properties.EnableMultiSelect = false;
+                settings.Properties.ClientSideEvents.SelectionChanged = "dxDateSelectorPopupSetDateSelected";
+                settings.Properties.ClientSideEvents.Init = "dxDateSelectorPopupSetDateSelected";
+
+                //if (ViewData["SelectedDates"] != null) {
+                //    settings.SelectedDates.Add((DateTime[])ViewData["SelectedDates"]);
+                //}
+                //System.Diagnostics.Debug.WriteLine("EXISTING DATE: " + Model.ExistingDate.ToString());
+                
+
+                //if (options.DisableDates) {
+                //    settings.Properties.DisabledDates.AddRange((List<DateTime>)ViewData["DisabledDates"]);
+                //    settings.Properties.ClientSideEvents.CustomDisabledDate = "CustomDisabledDates";
+                //}
+
+                settings.PreRender = (sender, e) => {
+                    MVCxCalendar calendar = (MVCxCalendar)sender;
+                    if (!calendar.EnableMultiSelect) {
+                        calendar.SelectedDates.Clear();
+                        if (Model.ExistingDate != null) {
+                            calendar.SelectedDate = Model.ExistingDate.Value;
+                        }
+                    } else if (calendar.SelectedDates.Count < 2) {
+                        int visibleDaysCount = (calendar.GetLastVisibleDate() - calendar.GetFirstVisibleDate()).Days;
+                        Random rnd = new Random();
+                        for (int i = 0; i < 5; i++) {
+                            DateTime selectedDate = calendar.GetFirstVisibleDate().AddDays(rnd.Next(visibleDaysCount));
+                            calendar.SelectedDates.Add(selectedDate);
+                        }
+                    }
+                };
+            }).GetHtml().ToHtmlString();
+
+            ViewContext.Writer.Write("<div style='margin-top: 10px; width: 100%; text-align: center;'>");
+
+            Html.DevExpress().Button(bs => {
+                bs.Name = "dxDateSelectorPopupOk";
+                bs.Text = "OK";
+                bs.Width = 80;
+                bs.ClientSideEvents.Click = "dxDateSelectorPopupOkClicked";
+            }).GetHtml().ToHtmlString();
+
+            ViewContext.Writer.Write("<span style='width: 20px;' />");
+
+            Html.DevExpress().Button(bs => {
+                bs.Name = "dxDateSelectorPopupCancel";
+                bs.Text = "Cancel";
+                bs.Width = 80;
+                bs.ClientSideEvents.Click = "dxDateSelectorPopupCancelClicked";
+            }).GetHtml().ToHtmlString();
+
+            ViewContext.Writer.Write("</div>");
+
+        });
+
+    }
+).GetHtml()

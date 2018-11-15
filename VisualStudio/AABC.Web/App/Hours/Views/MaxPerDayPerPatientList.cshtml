@@ -1,0 +1,43 @@
+﻿@model List<AABC.DomainServices.Patients.PatientEx>
+
+
+@Html.DevExpress().GridView(
+    s => {
+        s.Name = "MaxPerDayPatientList";
+        s.KeyFieldName = "ID";
+
+        s.CallbackRouteValues = new { Controller = "Hours", Action = "MaxPerDayPerPatientList", period = ViewData["period"] };
+
+
+        s.Height = Unit.Percentage(100);
+        s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+        s.ClientSideEvents.Init = "function(s, e) { App.Content.GridViews.InitializeForStretchHeight(s); }";
+        s.ClientSideEvents.EndCallback = "function(s, e) { App.Content.GridViews.InitializeForStretchHeight(s); }";
+        s.SettingsBehavior.AllowFocusedRow = true;
+        s.SettingsBehavior.AllowSelectByRowClick = true;
+        s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+        // GROUPING/SORTING ECT
+        s.SettingsBehavior.AllowSort = true;
+        s.SettingsBehavior.AllowGroup = false;
+        s.Settings.ShowFilterRow = true;
+
+        // PAGING
+        s.SettingsPager.PageSize = 100;
+        s.SettingsPager.AlwaysShowPager = true;
+        s.SettingsPager.Visible = true;
+
+        s.HtmlDataCellPrepared = (sender, e) => {
+            e.Cell.Attributes.Add("data-dym-cellClick", "MaxPerDayPatientList");
+            e.Cell.Attributes.Add("data-dym-visibleIndex", e.VisibleIndex.ToString());
+            e.Cell.Attributes.Add("data-dym-fieldName", e.DataColumn.FieldName);
+        };
+
+        s.Settings.ShowTitlePanel = true;
+
+        s.Columns.Add("LastName");
+        s.Columns.Add("FirstName");
+
+    }
+).Bind(Model).GetHtml()

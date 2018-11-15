@@ -1,0 +1,163 @@
+﻿@model AABC.Web.Models.OfficeStaff.OfficeStaffViewModel
+
+@{
+    Html.EnableClientValidation();
+    Html.EnableUnobtrusiveJavaScript();
+}
+
+
+
+
+<script type="text/javascript">
+
+    initThis();
+
+    function initThis() {
+        App.DataPage.InitSectionExpanders();
+    }
+
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+    });
+
+</script>
+
+
+@using (Html.BeginForm("Edit", "OfficeStaff", FormMethod.Post, new { id = "form-default" })) {
+    @Html.AntiForgeryToken()
+    
+    <div class="section-expander" id="expander-referral-info">
+        <div class="section-expander-header">
+            <span>Office Staff Information</span>
+        </div>
+        <div class="section-expander-content">
+
+            <div class="form-section">
+                <div class="form-section-header"><span>Basic Information</span></div>
+                <div class="form-section-content">
+                    <div class="form-section-content-col1">
+
+                        @Html.HiddenFor(m => m.Detail.ID)
+
+                        @Html.DevExpress().TextBoxFor(
+                            m => m.Detail.FirstName,
+                            i => {
+                                i.Width = 150;
+                                i.Properties.Caption = "First Name";
+                                i.Properties.CaptionCellStyle.Width = 100;
+                            }
+                        ).GetHtml()
+                        @Html.ValidationMessageFor(model => model.Detail.FirstName, "", new { @class = "text-danger" })
+
+                        @Html.DevExpress().TextBoxFor(
+                            m => m.Detail.LastName,
+                            i => {
+                                i.Width = 150;
+                                i.Properties.Caption = "Last Name";
+                                i.Properties.CaptionCellStyle.Width = 100;
+                            }
+                        ).GetHtml()
+                        @Html.ValidationMessageFor(model => model.Detail.LastName, "", new { @class = "text-danger" })
+
+
+                    </div>
+
+                    <div id="referral-dismissal-info" class="form-section-content-col2">
+
+                        @Html.DevExpress().CheckBoxFor(
+                            m => m.Detail.Active,
+                            i => {
+                                i.Text = "Active?";
+                            }
+                        ).GetHtml()
+
+                        @Html.DevExpress().TextBoxFor(
+                            m => m.Detail.Phone,
+                            i => {
+                                i.Width = 150;
+                                i.Properties.Caption = "Phone";
+                                i.Properties.CaptionCellStyle.Width = 100;
+                            }
+                        ).GetHtml()
+
+                        @Html.DevExpress().TextBoxFor(
+                            m => m.Detail.Email,
+                            i => {
+                                i.Width = 150;
+                                i.Properties.Caption = "Email";
+                                i.Properties.CaptionCellStyle.Width = 100;
+                            }
+                        ).GetHtml()
+                        @Html.ValidationMessageFor(model => model.Detail.Email, "", new { @class = "text-danger" })
+
+
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+
+
+            <div class="form-section">
+                <div class="form-section-header"><span>Hire Information</span></div>
+                <div class="form-section-content">
+                    <div class="form-section-content-col1">
+
+                        @Html.DevExpress().DateEditFor(
+                            m => m.Detail.HireDate,
+                            i => {
+                                i.Width = 150;
+                                i.Properties.Caption = "Hire Date";
+                                i.Properties.CaptionSettings.Position = EditorCaptionPosition.Left;
+                                i.Properties.CaptionCellStyle.Width = 100;
+                            }
+                        ).GetHtml()
+
+                        @Html.DevExpress().DateEditFor(
+                            m => m.Detail.TerminationDate,
+                            i => {
+                                i.Width = 150;
+                                i.Properties.Caption = "Hire Date";
+                                i.Properties.CaptionSettings.Position = EditorCaptionPosition.Left;
+                                i.Properties.CaptionCellStyle.Width = 100;
+                            }
+                        ).GetHtml()
+
+                    </div>
+
+                    <div id="referral-dismissal-info" class="form-section-content-col2">
+                        
+
+
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    
+    <div class="section-expander clearfix" id="expander-actions-info">
+        <div class="section-expander-header">
+            <span>Actions</span>
+        </div>
+        <div class="section-expander-content section-expander-content-last">
+
+            <div class="actions-content">
+
+                @Html.DevExpress().Button(bs => {
+                   bs.UseSubmitBehavior = true;
+                   bs.Name = "btnSubmit";
+                   bs.Text = "Save Referral";
+                   bs.ClientSideEvents.GotFocus = "$.validator.unobtrusive.parse('#form-default')";
+               }).GetHtml()
+
+            </div>
+
+        </div>
+    </div>
+    
+}

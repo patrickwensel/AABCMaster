@@ -1,0 +1,429 @@
+﻿@model AABC.Web.App.Staffing.Models.StaffingLogVM
+<style>
+    td.label {
+        width: 100px;
+    }
+
+    .form-group {
+        padding: 5px 0;
+    }
+</style>
+
+@using (Html.BeginForm("Edit", "Staffing", FormMethod.Post, new { id = "form-default" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.HiddenFor(m => m.CaseID);
+    <div>
+        <div class="section-expander" id="expander-referral-info">
+            <div class="section-expander-header">
+                <span>Patient Information</span>
+            </div>
+            <div class="section-expander-content">
+                <div class="form-section">
+                    <div class="form-section-content">
+                        <div style="width:30%;float:left;padding-right:20px;box-sizing: border-box;">
+                            <div>
+                                <div class="form-section-header"><span>Patient Info</span></div>
+                                <table>
+                                    <tr>
+                                        <td>Patient:</td>
+                                        <td>
+                                            <a href="@Url.RouteUrl("CaseManager", new { id = Model.CaseID, view = "Summary" })" target="_blank">@Model.FirstName @Model.LastName</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label">Date of Birth (Age):</td>
+                                        <td>
+                                            @if (Model.DateOfBirth.HasValue)
+                                            {
+                                                <text>@Model.DateOfBirth.Value.ToString("MM/dd/yyyy")</text> <text>(@AABC.DomainServices.Utils.AgeCalculator.Age(Model.DateOfBirth.Value))</text>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Functioning Level:</td>
+                                        <td>
+                                            @Model.FunctioningLevel
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="form-section-header"><span>Contact Information</span></div>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td class="label">Address:</td>
+                                            <td>
+                                                @Model.Address1
+                                                @(!string.IsNullOrEmpty(Model.Address2) ? "<br/>" + Model.Address2 : string.Empty)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">City:</td>
+                                            <td>@Model.City</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">County:</td>
+                                            <td>@Model.County</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">State:</td>
+                                            <td>@Model.State</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">Zip Code:</td>
+                                            <td>@Model.Zip</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">Phone:</td>
+                                            <td>@Model.Phone</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label">Email:</td>
+                                            <td>@Model.Email</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="form-section-header"><span>Guardian Info</span></div>
+                                @foreach (var g in Model.Guardians.Where(m => !string.IsNullOrEmpty(m.LastName)).Select((g, i) => new { g = g, index = i + 1 }))
+                                {
+                                    <h4>Guardian #@g.index</h4>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td class="label">
+                                                    Name:
+                                                </td>
+                                                <td>
+                                                    @g.g.FirstName @g.g.LastName @(!string.IsNullOrEmpty(g.g.Relationship) ? "(" + g.g.Relationship + ")" : string.Empty)
+                                                </td>
+                                            </tr>
+                                            @if (!string.IsNullOrEmpty(g.g.Email))
+                                            {
+                                                <tr>
+                                                    <td class="label">
+                                                        Email:
+                                                    </td>
+                                                    <td>
+                                                        @g.g.Email
+                                                    </td>
+                                                </tr>
+                                            }
+                                            @if (!string.IsNullOrEmpty(g.g.CellPhone))
+                                            {
+                                                <tr>
+                                                    <td class="label">
+                                                        Cell Phone:
+                                                    </td>
+                                                    <td>
+                                                        @g.g.CellPhone
+                                                    </td>
+                                                </tr>
+                                            }
+                                            @if (!string.IsNullOrEmpty(g.g.HomePhone))
+                                            {
+                                                <tr>
+                                                    <td class="label">
+                                                        Home Phone:
+                                                    </td>
+                                                    <td>
+                                                        @g.g.HomePhone
+                                                    </td>
+                                                </tr>
+                                            }
+                                            @if (!string.IsNullOrEmpty(g.g.WorkPhone))
+                                            {
+                                                <tr>
+                                                    <td class="label">
+                                                        Work Phone:
+                                                    </td>
+                                                    <td>
+                                                        @g.g.WorkPhone
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                                <div class="form-section-header"><span>Case Providers</span></div>
+                                <ul>
+                                    @foreach (var p in Model.CaseProviders)
+                                    {
+                                        <li><a href="@Url.Action("Edit", "Providers", new { id = p.ProviderID })">@p.ProviderFirstName @p.ProviderLastName</a> (@p.ProviderType, @(p.IsActive ? "Active" : "Inactive"))</li>
+                                    }
+                                </ul>
+                                <div class="form-group">
+                                    @Html.DevExpress().RadioButtonList(s =>
+                               {
+                                   s.Name = "ProviderGenderPreference";
+                                   s.Width = Unit.Percentage(100);
+                                   s.SelectedIndex = 0;
+                                   s.ControlStyle.Border.BorderStyle = BorderStyle.None;
+                                   s.Properties.Caption = "Provider gender preference";
+                                   s.Properties.RepeatColumns = 3;
+                                   s.Properties.RepeatDirection = RepeatDirection.Horizontal;
+                                   s.Properties.Items.Add("No", '0');
+                                   s.Properties.Items.Add("Male", 'M');
+                                   s.Properties.Items.Add("Female", 'F');
+                                   s.Properties.ValueType = typeof(char?);
+                               }).Bind(Model.ProviderGenderPreference).GetHtml()
+                                </div>
+                                <div class="form-group">
+                                    @Html.DevExpress().SpinEdit(s =>
+                               {
+                                   s.Name = "HoursOfABATherapy";
+                                   s.Width = Unit.Percentage(100);
+                                   s.Properties.Caption = "Number of hours of weekly ABA Therapy";
+                                   s.Properties.CaptionSettings.Position = EditorCaptionPosition.Left;
+                                   s.Properties.SpinButtons.Position = ButtonsPosition.Right;
+                                   s.Properties.DecimalPlaces = 2;
+                               }).Bind(Model.HoursOfABATherapy).GetHtml()
+                                </div>
+                                <div class="form-group">
+                                    @Html.DevExpress().ListBox(s =>
+                               {
+                                   s.Name = "SpecialAttentionNeedIds";
+                                   s.Width = Unit.Percentage(100);
+                                   //s.Height = 112;
+                                   s.Properties.Caption = "Special attention needs";
+                                   s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                                   s.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                                   s.Properties.ValueField = "ID";
+                                   s.Properties.ValueType = typeof(int);
+                                   s.Properties.Columns.Add("Code").Width = Unit.Percentage(20);
+                                   s.Properties.Columns.Add("Name").Width = Unit.Percentage(80);
+                                   s.PreRender = (sender, args) =>
+                                   {
+                                       MVCxListBox listBox = (MVCxListBox)sender;
+                                       foreach (ListEditItem item in listBox.Items)
+                                       {
+                                           if (Model.SpecialAttentionNeedIDs.Contains((int)item.Value))
+                                           {
+                                               item.Selected = true;
+                                           }
+                                       }
+                                   };
+                               }).BindList(Model.SystemSpecialAttentionNeeds).GetHtml()
+                                </div>
+                                <div class="form-group">
+                                    <div class="dxeListBox_Aqua dxlbcc" style="width: 100%;overflow: hidden;height: auto;">
+                                        <table style="width:100%">
+                                            <thead class="dxeHD">
+                                                <tr class="dxeListBoxItemRow_Aqua">
+                                                    <td class="dxeListBoxItem_Aqua dxeCM">&nbsp;</td>
+                                                    @{
+                                                        string[] names = System.Threading.Thread.CurrentThread.CurrentCulture.DateTimeFormat.AbbreviatedDayNames;
+                                                    }
+                                                    @for (var i = 0; i < Model.ScheduleRequest.Days.Length; i++)
+                                                    {
+                                                        var c = string.Empty;
+                                                        if (i == Model.ScheduleRequest.Days.Length - 1)
+                                                        {
+                                                            c = "dxeHC";
+                                                        }
+                                                        else
+                                                        {
+                                                            c = "dxeHLC";
+                                                        }
+                                                        <td class="dxeListBoxItem_Aqua @c" align="center">@names[i]</td>
+                                                    }
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="dxeListBoxItemRow_Aqua">
+                                                    <td class="dxeListBoxItem_Aqua dxeCM">Day</td>
+                                                    @for (var i = 0; i < Model.ScheduleRequest.Days.Length; i++)
+                                                    {
+                                                        var c = string.Empty;
+                                                        if (i == Model.ScheduleRequest.Days.Length - 1)
+                                                        {
+                                                            c = "dxeLTM";
+                                                        }
+                                                        else
+                                                        {
+                                                            c = "dxeTM";
+                                                        }
+                                                        <td class="dxeListBoxItem_Aqua @c" align="center">
+                                                            <input name="ScheduleRequest.Days[@i]" class="day-checkbox" data-index="@i" type="checkbox" value="true" @(Model.ScheduleRequest.Days[i] ? "checked" : "") onclick="dayCheckboxClick(this)" />
+                                                        </td>
+                                                    }
+                                                </tr>
+                                                <tr class="dxeListBoxItemRow_Aqua">
+                                                    <td class="dxeListBoxItem_Aqua dxeCM">AM</td>
+                                                    @for (var i = 0; i < Model.ScheduleRequest.AM.Length; i++)
+                                                    {
+                                                        var c = string.Empty;
+                                                        if (i == Model.ScheduleRequest.Days.Length - 1)
+                                                        {
+                                                            c = "dxeLTM";
+                                                        }
+                                                        else
+                                                        {
+                                                            c = "dxeTM";
+                                                        }
+                                                        <td class="dxeListBoxItem_Aqua @c" align="center">
+                                                            <input name="ScheduleRequest.AM[@i]" type="checkbox" data-index="@i" value="true" @(Model.ScheduleRequest.AM[i] ? "checked" : "") onclick="ampmCheckboxClick(this)" />
+                                                        </td>
+                                                    }
+                                                </tr>
+                                                <tr class="dxeListBoxItemRow_Aqua">
+                                                    <td class="dxeListBoxItem_Aqua dxeCM">PM</td>
+                                                    @for (var i = 0; i < Model.ScheduleRequest.PM.Length; i++)
+                                                    {
+                                                        var c = string.Empty;
+                                                        if (i == Model.ScheduleRequest.Days.Length - 1)
+                                                        {
+                                                            c = "dxeLTM";
+                                                        }
+                                                        else
+                                                        {
+                                                            c = "dxeTM";
+                                                        }
+                                                        <td class="dxeListBoxItem_Aqua @c" align="center">
+                                                            <input name="ScheduleRequest.PM[@i]" type="checkbox" data-index="@i" value="true" @(Model.ScheduleRequest.PM[i] ? "checked" : "") onclick="ampmCheckboxClick(this)" />
+                                                        </td>
+                                                    }
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.DevExpress().Memo(s =>
+                               {
+                                   s.Name = "ParentalRestaffRequest";
+                                   s.Width = Unit.Percentage(100);
+                                   s.Properties.Caption = "Schedule parents want";
+                                   s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                                   s.Properties.Rows = 4;
+                               }).Bind(Model.ParentalRestaffRequest).GetHtml()
+                                </div>
+                                <div class="form-group">
+                                    @Html.DevExpress().Button(bs =>
+                    {
+                    bs.UseSubmitBehavior = true;
+                    bs.Name = "btnSubmit2";
+                    bs.Text = "Save Staffing Logs";
+                    }).GetHtml()
+                                </div>
+                            </div>
+                        </div>
+                        <div style="width:30%;float:left;padding-right:20px;box-sizing: border-box;">
+                            <div class="form-section-header">
+                                <div style="float:left;">Notes</div>
+                                <div style="float:right; padding-bottom:5px;">
+                                    @Html.DevExpress().Button(bs =>
+                            {
+                            bs.UseSubmitBehavior = false;
+                            bs.Name = "btnAddNote";
+                            bs.Text = "Add Note";
+                                bs.Attributes.Add("parentID", Model.CaseID.ToString());
+                            }).GetHtml()
+                                </div>
+                            </div>
+                            @*todo Check what to call *@
+                            <div id="case-manage-notes-list-container">@Html.Action("NotesSummaryList", "CaseNotes", new { parentID = Model.CaseID })</div>
+                        </div>
+                        <div style="width:40%;float:left">
+                            <div class="form-section-header">
+                                <div style="float:left;">AIDE Providers Contact History</div>
+                                <div style="float:right; padding-bottom:5px;">
+                                    @Html.DevExpress().Button(bs =>
+                            {
+                            bs.UseSubmitBehavior = false;
+                            bs.Name = "btnAddContactWithAide";
+                            bs.Text = "Add";
+                            }).GetHtml()
+                                </div>
+                            </div>
+                            <ul id="provider-contact-log-list">
+                                <li>Loading...</li>
+                            </ul>
+                            <div class="form-section-header">
+                                <div style="float:left;">BCBA Providers Contact History</div>
+                                <div style="float:right; padding-bottom:5px;">
+                                    @Html.DevExpress().Button(bs =>
+                            {
+                            bs.UseSubmitBehavior = false;
+                            bs.Name = "btnAddContactWithBCBA";
+                            bs.Text = "Add";
+                            }).GetHtml()
+                                </div>
+                            </div>
+                            <ul id="bcba-provider-contact-log-list">
+                                <li>Loading...</li>
+                            </ul>
+                            <div class="form-section-header">
+                                <div style="float:left;">Parent Contact History</div>
+                                <div style="float:right; padding-bottom:5px;">
+                                    @Html.DevExpress().Button(bs =>
+                            {
+                            bs.UseSubmitBehavior = false;
+                            bs.Name = "btnAddContactWithParent";
+                            bs.Text = "Add";
+                            }).GetHtml()
+                                </div>
+                            </div>
+                            <ul id="parent-contact-log-list">
+                                <li>Loading...</li>
+                            </ul>
+                            <div class="form-group">
+                                @Html.DevExpress().Memo(s =>
+                           {
+                               s.Name = "AidesRespondingNo";
+                               s.Width = Unit.Percentage(100);
+                               s.Properties.Caption = "Aides who have said no";
+                               s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                               s.Properties.Rows = 4;
+                           }).Bind(Model.AidesRespondingNo).GetHtml()
+                            </div>
+                            <div class="form-group">
+                                @Html.DevExpress().Memo(s =>
+                           {
+                               s.Name = "AidesRespondingMaybe";
+                               s.Width = Unit.Percentage(100);
+                               s.Properties.Caption = "Aides who are possibilities";
+                               s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                               s.Properties.Rows = 4;
+                           }).Bind(Model.AidesRespondingMaybe).GetHtml()
+                            </div>
+                            <div class="form-group">
+                                @Html.DevExpress().Button(bs =>
+                    {
+                    bs.UseSubmitBehavior = true;
+                    bs.Name = "btnSubmit";
+                    bs.Text = "Save Staffing Logs";
+                    }).GetHtml()
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+}
+<script type="text/javascript" id="dxss_CaseNotesViewModelScripts2">
+    $.getScript('/Scripts/Pages/StaffingLogEdit.js', function () {
+        initComponent();
+    });
+</script>
+
+<script type="text/javascript" id="dxss_CaseNotesViewModelScripts">
+    $.getScript('/client/scripts/app/notes.v1.0.js', function () {
+        Notes.NotesEdit.Initialize({
+            parentID: @Model.CaseID,
+            noteID: 0
+        });
+        Notes.NotesList.Initialize({
+            parentID: @Model.CaseID,
+            anchorElementId: 'case-manage-notes-list-container',
+            stretch: {
+                enabled: true,
+                topOffset: 140
+            },
+        });
+    });
+</script>

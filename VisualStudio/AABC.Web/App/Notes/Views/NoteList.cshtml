@@ -1,0 +1,133 @@
+﻿@model AABC.Web.App.Notes.Models.NoteListVM
+
+<div id="notes-container" style="display:none" data-bind="visible:true">
+	<button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:addNote"><div class="dxb"><span class="dx-vam">Add Note</span></div></button>
+	<div data-bind="foreach: items">
+
+		<div class="notesum">
+			<div class="notesum-heading" data-bind="text:heading"></div>
+			<div class="notesum-row">
+				<div class="notesum-correspondence" data-bind="text:correspondenceSummary"></div>
+			</div>
+			<ul class="notesum-tasks" data-bind="foreach:taskItems">
+				<li>
+					<input type="checkbox" data-bind="checked:completed,click:onClick" />
+					<span data-bind="text:summary"></span>
+				</li>
+			</ul>
+			<div class="notesum-comments">
+				<p data-bind="text:comments"></p>
+			</div>
+			<div class="notesum-comments" data-bind="if:followupComments.length > 0">
+				<p>Followup Comments:<br /><span data-bind="text:followupComments"></span></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="/client/scripts/app/notes.v1.0.js"></script>
+<script type="text/javascript">
+	function NoteTaskVM(data) {
+		var self = {};
+		self.id = ko.observable();
+		self.completed = ko.observable();
+		self.summary = ko.observable();
+
+		self.update = function (data) {
+			ko.mapping.fromJS(data, {}, self);
+		};
+
+		self.onClick = function (vm) {
+			if (vm.completed()) {
+				var taskId = vm.id();
+				var sourceType = vm.sourceType() === 0 ? "Case" : "Referral";
+				Notes.NotesList.ToggleTaskCheck2(taskId, sourceType);
+			}
+		};
+
+		if (data) {
+			self.update(data);
+		}
+
+		return self;
+	}
+
+	function NoteVM(data) {
+		var self = {};
+		self.id = ko.observable();
+		self.heading = ko.observable();
+		self.correspondenceSummary = ko.observable();
+		self.taskItems = ko.observableArray([]);
+		self.comments = ko.observable();
+		self.followupComments = ko.observable();
+
+		self.update = function (data) {
+			ko.mapping.fromJS(data, {
+				"taskItems": {
+					create: function (options) {
+						return new NoteTaskVM(options.data);
+					}
+				}
+			}, self);
+		};
+
+		if (data) {
+			self.update(data);
+		}
+
+		return self;
+	}
+
+	function NotesVM(source, parentID) {
+		var self = {};
+		self.items = ko.observableArray([]);
+
+		self.load = function () {
+			return $.getJSON("/" + source + "Notes/GetNotes", {
+				parentID: parentID
+			}).done(function (notes) {
+				var items = notes.map(function (e) {
+					return new NoteVM(e);
+				});
+				self.items(items);
+			});
+		};
+
+		self.addNote = function () {
+			App.Popup.Show({
+				url: "/" + source + "Notes/NoteEdit?parentID=" + parentID + "&id=0&isModal=true",
+				options: {
+					width: 500,
+					height: 400,
+					title: "Note Edit"
+				},
+				finished: function () {
+					self.load();
+					App.Popup.Hide();
+				},
+				error: function () {
+					App.Dialogs.Error();
+				}
+			});
+		};
+
+		return self;
+	}
+</script>
+@if (Model.ParentID > 0)
+{
+	<script>
+		$(function () {
+			Notes.NotesEdit.Initialize({
+				parentID: @Model.ParentID,
+				noteID: 0
+			});
+			var vm = new NotesVM('@Model.Source', @Model.ParentID);
+			vm.load().then(function () {
+				var element = $("#notes-container")[0];
+				ko.cleanNode(element);
+				ko.applyBindings(vm, element);
+			});
+		});
+	</script>
+}

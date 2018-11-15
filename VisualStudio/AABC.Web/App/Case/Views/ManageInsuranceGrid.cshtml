@@ -1,0 +1,71 @@
+﻿@model IEnumerable<AABC.Web.App.Case.Models.CaseInsuranceHistoryDTO>
+
+@Html.DevExpress().GridView(s =>
+{
+    s.Name = "CaseInsuranceEditGrid";
+    s.KeyFieldName = "Id";
+    s.Width = Unit.Percentage(100);
+    s.Height = Unit.Percentage(100);
+    s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+    s.SettingsBehavior.AllowSort = true;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = true;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = false;
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    s.SettingsPager.PageSize = 200;
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "InsuranceName";
+        col.Width = 350;
+        col.Caption = "Insurance";
+        col.FieldName = "InsuranceName";
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "MemberID";
+        col.Caption = "Member ID";
+        col.FieldName = "MemberId";
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 150;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "DatePlanEffective";
+        col.Caption = "Start";
+        col.FieldName = "DatePlanEffective";
+        col.PropertiesEdit.DisplayFormatString = "MM/dd/yyyy";
+        col.Width = 75;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "DatePlanTerminated";
+        col.Caption = "End";
+        col.FieldName = "DatePlanTerminated";
+        col.PropertiesEdit.DisplayFormatString = "MM/dd/yyyy";
+        col.Width = 75;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "OtherNotes";
+        col.Caption = "Notes";
+        col.FieldName = "OtherNotes";
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Settings.AllowEllipsisInText = DefaultBoolean.True;
+    });
+
+}).Bind(Model).GetHtml()

@@ -1,0 +1,108 @@
+@{ Layout = "~/Views/Shared/_rootLayout.cshtml"; }
+
+<style id="landing-styles" type="text/css">
+    .tile-container {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 130px;
+        text-align: center;
+    }
+
+    .tile {
+        height: 180px;
+        width: 180px;
+        margin: 10px;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #2e3f4c;
+        display: inline-block;
+        color: #4b4b57;
+        background-color: #bfdbff;
+        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2e3f4c+0,606c88+100 */
+        background: #bfdbff !important; /* Old browsers */
+        background: -moz-linear-gradient(top, #ffffff 0%, #bfdbff 100%) !important; /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, #ffffff 0%,#bfdbff 100%) !important; /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, #ffffff 0%,#bfdbff 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#bfdbff',GradientType=0 ) !important; /* IE6-9 */
+    }
+
+        .tile:hover {
+            /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2e3f4c+0,606c88+100 */
+            background: #dfedff !important; /* Old browsers */
+            background: -moz-linear-gradient(top, #ffffff 0%, #dfedff 100%) !important; /* FF3.6-15 */
+            background: -webkit-linear-gradient(top, #ffffff 0%,#dfedff 100%) !important; /* Chrome10-25,Safari5.1-6 */
+            background: linear-gradient(to bottom, #ffffff 0%,#dfedff 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#dfedff',GradientType=0 ) !important; /* IE6-9 */
+        }
+
+        .tile span {
+            margin-top: 15px;
+            line-height: normal;
+            vertical-align: middle;
+            display: inline-block;
+            font-size: 1.3em;
+        }
+</style>
+
+<script type="text/javascript" id="landing-scripts">
+
+    function loadMainMenuItem(mmItem, event) {
+
+        App.LoadingPanel.Show();
+
+        var url;
+
+        switch (mmItem) {
+            case 'referrals':
+                url = "@Url.Action("Index", "Referrals")";
+                break;
+            case 'patients':
+                url = "@Url.Action("Index", "Patients")";
+                break;
+            case 'providers':
+                url = "@Url.Action("Index", "Providers")";
+                break;
+            case 'officestaff':
+                url = "@Url.Action("Index", "OfficeStaff")";
+                break;
+            @*case 'staffing':
+                url = "@Url.Action("Index", "Staffing")";
+                break;
+            case 'billing':
+                url = "@Url.Action("Index", "Billing")";
+                break;*@
+            default:
+                return; // TODO: add error handling for unrecognized item
+        }
+
+    }
+
+    App.Hotkeys.Init();
+
+
+
+</script>
+
+<div id="landing-content" style="width: 100%;">
+    <div class="tile-container">
+
+        <a href="@Url.Action("Index", "Referrals")" onclick="loadMainMenuItem('referrals', event);"><div class="tile"><img src="~/Content/Images/ico-referrals.png" /><br /><span>Referrals</span></div></a>
+        <a href="@Url.Action("Index", "Patients")" onclick="loadMainMenuItem('patients', event);"><div class="tile"><img src="~/Content/Images/ico-patients.png" /><br /><span>Patients</span></div></a>
+        <a href="@Url.Action("Index", "Providers")" onclick="loadMainMenuItem('providers', event);"><div class="tile"><img src="~/Content/Images/ico-providers.png" /><br /><span>Providers</span></div></a>
+        <a href="@Url.Action("Index", "OfficeStaff")" onclick="loadMainMenuItem('officestaff', event);"><div class="tile"><img src="~/Content/Images/ico-staffing.png" /><br /><span>Office Staff</span></div></a>
+        @*<a href="@Url.Action("Index", "Staffing")" onclick="loadMainMenuItem('staffing', event);">
+                <div class="tile">
+                    <img src="~/Content/Images/ico-staffing.png" /><br />
+                    <span>Staffing</span>
+                </div></a>
+
+            <a href="@Url.Action("Index", "Billing")" onclick="loadMainMenuItem('billing', event);">
+                <div class="tile">
+                    <img src="~/Content/Images/ico-billing.png" /><br />
+                    <span>Billing</span>
+                </div></a>*@
+
+
+    </div>
+</div>

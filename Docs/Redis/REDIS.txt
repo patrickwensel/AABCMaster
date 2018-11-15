@@ -1,0 +1,74 @@
+============
+=   REDIS  =
+============
+
+
+INSTALLATION
+============
+
+Redis Windows Port available at https://github.com/MicrosoftArchive/redis/releases
+This is not the latest version of Redis. To install latest version, you can follow the instructions available at https://medium.com/@furkanpur/installation-redis-on-windows-10-13fbb055be7c
+
+
+HOW TO SETUP A REDIS SERVICE MANUALLY
+=====================================
+
+http://www.alternatestack.com/development/running-redis-server-on-windows/
+
+
+CREATE ADDITIONAL REDIS INSTANCES
+=================================
+
+- Make a copy of the existing config file "C:\Program Files\Redis\redis.windows-service.conf" named "C:\Program Files\Redis\redis.windows-service-new.conf"
+- Change the port and other settings like logfile and syslog-ident
+- Run the following command (as Administrator) to create a new service:
+
+sc create Redis2 obj= "NT AUTHORITY\NetworkService" start= auto DisplayName= "Redis2" binPath= "\"C:\Program Files\Redis\redis-server.exe\" --service-run \"C:\Program Files\Redis\redis.windows-service-new.conf\"
+
+To delete an existing instance, run the following command with administrative privileges and you can later delete the associated .conf file:
+
+sc delete Redis2
+
+
+CHECK REDIS IS RUNNING
+======================
+
+You can run the redis client by executing redis-cli in a command prompt.
+You might want to add the path to the redis client to your environment variables.
+If you installed redis using the msi file, you should find Redis listed as a service as well.
+
+
+REDIS DATA TYPES
+================
+
+https://redis.io/topics/data-types-intro
+https://scalegrid.io/blog/introduction-to-redis-data-structures-hashes/
+
+
+REDIS DATABASES
+===============
+
+Use different Redis databases for different kinds of data. In Redis, databases are identified by an integer index, not by a database name. 
+By default, a client is connected to database 0. With the SELECT command you can switch to a different database.
+Each Redis database has its own keyspace. By using different databases for your 'staging' and 'production' data, for example, you don't have to worry about key clashes between the two.
+There is also a command to drop all the data in a single database:
+
+redis> flushdb
+OK
+
+This comes in very handy if you want to reset your 'staging' database.
+
+If you want to get rid of all the data in a Redis instance, you can use FLUSHALL instead. But be careful, there is no security check, and this command is guaranteed to never fail.
+
+The number of databases which is available can be configured in redis.conf — by default, it is set to 16. Simply set it to a higher number if you need more.
+Unfortunately, Redis does not provide a way to associate names with the different databases, so you will have to keep track of what data goes where yourself.
+
+There is some debate about whether is a good practice to use multiple databases on a single Redis instance. Although perfectly legal, it is encouraged to use a different redis instance per database.
+See https://stackoverflow.com/questions/16221563/whats-the-point-of-multiple-redis-databases
+
+
+ONLINE TUTORIALS
+================
+
+https://www.youtube.com/watch?v=9S-mphgE5fA
+

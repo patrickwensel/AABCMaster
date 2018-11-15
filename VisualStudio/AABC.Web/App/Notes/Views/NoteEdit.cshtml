@@ -1,0 +1,100 @@
+﻿@model AABC.DomainServices.Notes.NoteDTO
+
+<h1 style="color: #4b4b57; font-size: large; font-weight: 200;">Note Edit/Entry</h1>
+@using (Html.BeginForm("Save", ((string)ViewBag.SourceType) + "Notes", FormMethod.Post, new { id = "NoteEditForm" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.HiddenFor(m => m.ID);
+    @Html.HiddenFor(m => m.ParentID);
+    @Html.DevExpress().ComboBox(s => {
+        s.Name = "CorrespondenceType";
+        s.Properties.Caption = "Correspondence Type";
+        s.Properties.CaptionCellStyle.Width = 150;
+    }).BindList(Enum.GetNames(typeof(AABC.Domain.Notes.CorrespondenceType))).Bind(Model.CorrespondenceType.ToString()).GetHtml()
+    @Html.DevExpress().TextBox(s => {
+        s.Name = "CorrespondenceName";
+        s.Properties.Caption = "Correspondence Name";
+        s.Properties.CaptionCellStyle.Width = 150;
+    }).Bind(Model.CorrespondenceName).GetHtml()
+    <div class="spacer-10"></div>
+    @Html.DevExpress().CheckBox(s =>{
+        s.Name = "RequiresFollowup";
+        s.Properties.Caption = "Requires Followup";
+        s.Properties.CaptionCellStyle.Width = 150;
+    }).Bind(Model.RequiresFollowup).GetHtml()
+    @Html.DevExpress().DateEdit(s =>{
+        s.Name = "FollowupDate";
+        s.Properties.Caption = "Followup Date";
+        s.Properties.CaptionCellStyle.Width = 150;
+    }).Bind(Model.FollowupDate).GetHtml()
+    <div class="spacer-10"></div>
+    <span>Tasks:</span><br />
+    <table class="dxgvControl_Aqua" style="width:100%">
+        <tbody>
+            <tr>
+                <td>
+                    <table style="width:100%">
+                        <tbody>
+                            <tr>
+                                <td class="dxgvTitlePanel_Aqua">
+                                    <div style="float:right">
+                                        @Html.DevExpress().Button(s =>{
+                                       s.Name = "NoteEditTaskListAddNew";
+                                       s.Text = "Add";
+                                       s.UseSubmitBehavior = false;
+                                       s.Attributes.Add("sourceType", ViewBag.SourceType);
+                                       s.ClientSideEvents.Click = "function(s, e) { Notes.NotesEdit.AddTask(s); }";
+                                   }).GetHtml()
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table style="width:100%" id="task-list-table">
+                        <tbody>
+                            <tr>
+                                <td class="dxgvHeader_Aqua">Description</td>
+                                <td class="dxgvHeader_Aqua">Due Date</td>
+                                <td class="dxgvHeader_Aqua">Assigned To</td>
+                                <td class="dxgvHeader_Aqua"></td>
+                            </tr>
+                            @foreach (var t in Model.Tasks)
+                            {
+                                Html.RenderAction("TaskEditRow", ((string)ViewBag.SourceType) + "Notes", new { taskId = t.ID });
+                            }
+                        </tbody>
+                    </table>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="spacer-10"></div>
+    @Html.DevExpress().Memo(s =>{
+        s.Name = "Comments";
+        s.Properties.Caption = "Comments";
+        s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+        s.Properties.Rows = 12;
+        s.Width = Unit.Percentage(100);
+    }).Bind(Model.Comments).GetHtml()
+    <div class="spacer-10"></div>
+    <div style="width: 100%; text-align: right">
+    @Html.DevExpress().Button(s =>
+{
+    s.Name = "NoteEditSubmit";
+    s.Text = "Submit";
+    s.UseSubmitBehavior = false;
+    s.Attributes.Add("isModal", ViewBag.IsModal.ToString().ToLower());
+    s.Attributes.Add("sourceType", ViewBag.SourceType);
+    s.ClientSideEvents.Click = "function(s, e){ Notes.NotesEdit.EditSubmit(s); }";
+}).GetHtml()
+    @Html.DevExpress().Button(s =>{
+        s.Name = "NoteEditCancel";
+        s.Text = "Cancel";
+        s.UseSubmitBehavior = false;
+        s.ClientVisible = ViewBag.IsModal;
+        s.ClientSideEvents.Click = "function(s, e){ App.Popup.Hide(); }";
+    }).GetHtml()
+    </div>
+}

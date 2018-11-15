@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<StackLayout xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AABC.Mobile.Controls.IconButton"
+			 Spacing="0"
+			 >
+
+	<StackLayout.GestureRecognizers>
+		<TapGestureRecognizer x:Name="TapGestureCommand" Tapped="TapGestureCommand_Tapped" />
+	</StackLayout.GestureRecognizers>
+
+	<Image x:Name="ButtonImage" HorizontalOptions="FillAndExpand" Margin="10" HeightRequest="50"/>
+	<StackLayout HorizontalOptions="FillAndExpand" Margin="10">
+		<Label x:Name="ButtonLabel" HorizontalTextAlignment="Center" TextColor="#464646" />
+		<Label x:Name="DisabledLabel" Text="{Binding Text}" HorizontalTextAlignment="Center" TextColor="#e0534d" IsVisible="{Binding Disabled}" />
+	</StackLayout>
+</StackLayout>

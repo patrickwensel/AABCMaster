@@ -1,0 +1,17 @@
+﻿@model AABC.Web.App.Staffing.Models.ProvidersTabVM
+
+<div id="grid-list-new">
+    <div style="width:47%;float:left">
+        @Html.Action("SelectableProviders", "Staffing", new { caseId = Model.CaseID })
+    </div>
+    <div style="width:47%;float:right">
+        @Html.Action("SelectedProviders", "Staffing", new { caseId = Model.CaseID })
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+    });
+</script>

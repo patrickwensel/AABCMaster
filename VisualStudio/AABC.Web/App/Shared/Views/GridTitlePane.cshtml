@@ -1,0 +1,51 @@
+﻿@model Dymeng.Framework.Web.Mvc.Views.GridTitlePanelSettings
+
+<script id="dxss_GridTitlePanelScripts" type="text/javascript">
+    function filterItemClicked(url) {
+        console.log('grid filter item clicked');
+        event.preventDefault();
+        App.Navigation.NavToUrl(url);
+    }
+</script>
+
+<div class="grid-title-panel-container">
+    <div style="display: table; width: 100%;">
+        <div style="display: table-row;">
+            <div class="grid-title" style="display: table-cell; width: 1px; white-space: nowrap;">@Model.Title</div>
+
+            <div class="grid-filter-bar" style="display: table-cell; width: 100%; padding-left: 3px; padding-right: 3px;">
+                
+                @if (Model.FilterItems.Count > 0) {
+                    <span style="margin-right: 5px;">Views: </span>
+                    foreach (var filter in Model.FilterItems) {
+                        if (filter.IsActive) {
+                            <span class="active-filter-item">@filter.Text</span>
+                        } else {
+                            <a href="@filter.RouteUrl" onclick="filterItemClicked('@filter.RouteUrl');">@filter.Text</a>
+                        }
+
+                    }
+
+                }
+
+            </div>
+            
+            @if (Model.ShowAddButton)
+            {
+            <div style="display: table-cell;">
+                @Html.DevExpress().Button(
+                          s =>
+                          {
+                              s.Name = "btnAddNew";
+                              s.Text = "Add New";
+                              s.ImagePosition = ImagePosition.Left;
+                              s.Images.Image.IconID = "actions_newproducts_16x16devav";
+                              s.Width = 100;
+                              s.ClientSideEvents.Click = "function() { App.Navigation.NavTo('" + Model.AddNewAction + "', '" + Model.AddNewController + "'); }";
+                          }).GetHtml()
+
+            </div>
+            }
+        </div>
+    </div>
+</div>

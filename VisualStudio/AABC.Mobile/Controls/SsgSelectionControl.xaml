@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:extensions="clr-namespace:AABC.Mobile.MarkupExtensions;assembly=AABC.Mobile"
+             x:Class="AABC.Mobile.Controls.SsgSelectionControl" 
+			 x:Name="Control">
+
+	<ListView ItemsSource="{Binding DisplayCases, Source={x:Reference Control} }" RowHeight="90" x:Name="CasesList" >
+		<ListView.ItemTemplate>
+			<DataTemplate>
+				<ViewCell>
+					<Grid BackgroundColor="White" Margin="0" Padding="10" >
+						<Grid.GestureRecognizers>
+							<TapGestureRecognizer Command="{Binding CaseTappedCommand, Source={x:Reference Control} }" CommandParameter="{Binding .}" />
+						</Grid.GestureRecognizers>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="30" />
+							<RowDefinition Height="20" />
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="100" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Source="{Binding ImageSource}" Margin="10" />
+						<Label Grid.Row="0" Grid.Column="1" Text="{Binding Case.Patient.PatientLastName}" TextColor="{StaticResource normalText}" FontSize="Large" FontAttributes="Bold" />
+						<Label Grid.Row="1" Grid.Column="1" Text="{Binding Case.Patient.PatientFirstName}" TextColor="{StaticResource normalText}" />
+					</Grid>
+				</ViewCell>
+			</DataTemplate>
+		</ListView.ItemTemplate>
+	</ListView>
+
+</ContentView>

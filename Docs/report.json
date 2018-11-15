@@ -1,0 +1,62 @@
+//JSON structure of Session Notes for Aides
+{
+  "summary": "This is a summary text. Lorem ipsum. More to come.",
+  "behaviorsSection": {
+    "behaviors": [
+      {
+        "name": "Elopement",
+        "description": "Some random description"
+      },
+      {
+        "name": "Tantrum Behavior",
+        "description": null
+      }
+    ]
+  },
+  "interventionsSection": {
+    "interventions": [
+      {
+        "name": "Differential Reinforcement",
+        "response": "Patient responded very well to intervention",
+        "description": null
+      },
+      {
+        "name": "Negative reinforcement",
+        "response": "Patient responded very well to intervention",
+        "description": null
+      }
+    ]
+  },
+  "reinforcersSection": {
+    "reinforcers": [
+      {
+        "name": "Tangibles",
+        "description": "Some random description for reinforcer"
+      },
+      {
+        "name": "Token board",
+        "description": null
+      }
+    ]
+  },
+  "goalsSection": {
+    "goals": [
+      {
+        "name": "Say Thank you",
+        "progress": "Reluctant at first, he finally said it"
+      }
+    ]
+  },
+  "barriersSection": {
+    "barriers": [
+      {
+        "name": "Behavioral",
+        "description": "Some random description for barrier"
+      },
+      {
+        "name": "NA",
+        "description": null
+      }
+    ]
+  }
+}

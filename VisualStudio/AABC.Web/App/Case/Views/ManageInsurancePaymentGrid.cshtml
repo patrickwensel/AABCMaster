@@ -1,0 +1,70 @@
+﻿@model List<AABC.Web.Models.Cases.CaseInsurancePaymentVM>
+
+@{
+    GridViewSettings s = new GridViewSettings();
+    s.Name = "CaseInsurancePaymentEditGrid";
+    s.KeyFieldName = "Id";
+    s.Width = Unit.Percentage(100);
+    s.Height = Unit.Percentage(100);
+
+    s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+    s.SettingsBehavior.AllowSort = true;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = true;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = false;
+
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    s.SettingsPager.PageSize = 200;
+
+    s.Settings.ShowTitlePanel = true;
+
+    // celll/row double click (http://kb.dymeng.com/kb/DevExMVCGridView)
+
+    s.HtmlDataCellPrepared = (sender, e) =>
+    {
+        e.Cell.Attributes.Add("data-dym-cellClick", "CaseInsurancePaymentEditGrid");
+        e.Cell.Attributes.Add("data-dym-visibleIndex", e.VisibleIndex.ToString());
+        e.Cell.Attributes.Add("data-dym-fieldName", e.DataColumn.FieldName);
+    };
+
+    var col = s.Columns.Add("Insurance");
+    col.Caption = "Insurance";
+    col.FieldName = "PaymentCaseInsuranceName";
+    col.Width = Unit.Percentage(15);
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+
+    col = s.Columns.Add("Amount");
+    col.Caption = "Amount";
+    col.FieldName = "InsurancePaymentAmount";
+    col.PropertiesEdit.DisplayFormatString = "c";
+    col.Width = Unit.Percentage(10);
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Right;
+
+    col = s.Columns.Add("PaymentDate");
+    col.Caption = "Date";
+    col.FieldName = "PaymentDate";
+    col.PropertiesEdit.DisplayFormatString = "d";
+    col.Width = Unit.Percentage(15);
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+    col = s.Columns.Add("Description");
+    col.Caption = "Description";
+    col.FieldName = "Description";
+    col.Width = Unit.Percentage(65);
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+
+}
+
+@Html.DevExpress().GridView(s).Bind(Model).GetHtml()
+
+
+
+

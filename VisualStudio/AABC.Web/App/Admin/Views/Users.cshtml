@@ -1,0 +1,68 @@
+﻿@model AABC.Web.App.Account.Models.ManageUsersVM
+
+<script type="text/html" src="~/Scripts/Pages/AdminUsers.js" id="dxis_AdminUserScripts">
+</script>
+
+
+<div class="section-expander" id="expander-user-info">
+    <div class="section-expander-header">
+        <span>Users</span>
+    </div>
+
+    <div class="section-expander-content">
+
+        <div class="form-section">
+
+
+            <div class="form-section-content">
+                <div id="UserFormContainer" class="form-section-content-onethird">
+                    @{Html.RenderAction("UserForm", "Admin", new { Id = 0 });}
+                </div>
+                <div class="form-section-content-twothirds">
+                    <div id="UserGridContainer">
+                        @{Html.RenderAction("UserGrid", "Admin");}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="section-expander-header">
+        <span>Settings for </span>
+    </div>
+
+    <div class="section-expander-content">
+
+        <div class="form-section">
+
+            <div class="form-section-content">
+                <div class="form-section-content-col1">
+                    <span style="float: right; font-size: 0.8em; margin-bottom: 5px;"><a href="#" id="lnkRegenPermissions">Add Permissions</a></span>
+                    <div id="permissions-grid-container">@Html.Partial("PermissionsListGrid", Model.UserPermissionList)</div>
+                </div>
+            </div>
+
+            <div class="form-section-content">
+                <div class="form-section-content-col2">
+                    <span style="float: right; font-size: 0.8em; margin-bottom: 5px;"><a href="#" id="lnkRegenOptions">Add Options</a></span>
+                    <div id="options-grid-container">@Html.Partial("OptionsListGrid", Model.UserOptionList)</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div id="DialogAnchor"></div>
+
+<script id="dxss_ManageUsersJs" type="text/javascript">
+    $.getScript("/Scripts/Pages/AdminUsers.js", function () {
+        initComponent();
+        App.NavBar.InitView(@Html.Raw(Json.Encode(Model.User.Base)));
+    });
+</script>

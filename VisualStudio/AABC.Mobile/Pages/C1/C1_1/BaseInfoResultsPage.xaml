@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<control:LoggedInPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+			 xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+			 xmlns:extensions="clr-namespace:AABC.Mobile.MarkupExtensions;assembly=AABC.Mobile"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="AABC.Mobile.Pages.C1_1.BaseInfoResultsPage"
+ 			 Title="Begin Entry"
+		>
+	<ScrollView>
+
+		<StackLayout>
+
+			<StackLayout IsVisible="{Binding DisplayErrors, Converter={StaticResource not}}">
+				<Image Source="{extensions:ImageResourceExtension ButtonImages.SuccessIcon.png}" Margin="0, 40, 0, 20" HorizontalOptions="Center" VerticalOptions="Center"  />
+				<Label Text="{Binding Message}" Style="{StaticResource title}" />
+			</StackLayout>
+
+			<StackLayout IsVisible="{Binding DisplayErrors}">
+				<Image Source="{extensions:ImageResourceExtension ButtonImages.ErrorIcon.png}" Margin="0, 40, 0, 20" HorizontalOptions="Center" VerticalOptions="Center" />
+				<Label Text="Service Not Allowed" Style="{StaticResource title}" />
+				<control:Repeater ItemsSource="{Binding ValidationResponse.Errors}">
+					<control:Repeater.ItemTemplate>
+						<DataTemplate>
+							<Label Text="{Binding .}" Style="{StaticResource validationError}" />
+						</DataTemplate>
+					</control:Repeater.ItemTemplate>
+				</control:Repeater>
+			</StackLayout>
+
+			<StackLayout IsVisible="{Binding ValidationResponse.Warnings, Converter={StaticResource any}}">
+				<Label Text="Warnings" Style="{StaticResource title}" />
+				<control:Repeater ItemsSource="{Binding ValidationResponse.Warnings}">
+					<control:Repeater.ItemTemplate>
+						<DataTemplate>
+							<Label Text="{Binding .}" Style="{StaticResource validationWarning}" />
+						</DataTemplate>
+					</control:Repeater.ItemTemplate>
+				</control:Repeater>
+			</StackLayout>
+
+			<StackLayout IsVisible="{Binding ValidationResponse.Messages, Converter={StaticResource any}}">
+				<Label Text="Messages" Style="{StaticResource title}" />
+				<control:Repeater ItemsSource="{Binding ValidationResponse.Messages}">
+					<control:Repeater.ItemTemplate>
+						<DataTemplate>
+							<Label Text="{Binding .}" Style="{StaticResource validationMessage}" />
+						</DataTemplate>
+					</control:Repeater.ItemTemplate>
+				</control:Repeater>
+			</StackLayout>
+
+			<StackLayout Orientation="Horizontal" Margin="0, 10, 0, 0">
+				<Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand" Style="{StaticResource cancel}" IsVisible="{Binding DisplayCancelButton}" />
+				<Button Text="Continue" Command="{Binding ContinueCommand}" HorizontalOptions="FillAndExpand" Style="{StaticResource primary}" IsVisible="{Binding DisplayContinueButton}" />
+			</StackLayout>
+
+		</StackLayout>
+
+	</ScrollView>
+</control:LoggedInPage>

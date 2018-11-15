@@ -1,0 +1,299 @@
+﻿@model AABC.Web.Models.Cases.SummaryVM
+
+
+<script type="text/javascript" id="dxss_CaseSummaryScriptsPageEmbedded">
+
+    function btnReactivateClick() {
+        var caseID = $("input[name='ID']").val();
+        $.ajax({
+            type: 'POST',
+            url: '/Case/Reactivate',
+            data: { caseID: caseID },
+            success: function () {
+                window.location.reload(true);
+            }
+        });
+    }
+
+    function btnDischargeClick() {
+        var caseID = $("input[name='ID']").val();
+        App.Popup.Show({
+            url: "/Case/CaseDischarge",
+            data: { caseID: caseID },
+            options: {
+                width: 500,
+                height: 300,
+                title: "Discharge"
+            },
+            finished: function (r) {
+                if (r.substring(0, 4) == "ERR:") {
+                    App.Dialogs.Error(r.substring(5));
+                } else if (r == 'ok') {
+                    loadPatientSearch();
+                }
+            },
+            error: function () {
+                App.Dialogs.Error("We're sorry, we seem to have encountered an error with that request.");
+            }
+        });
+    }
+
+
+    function loadPatientSearch() {
+        $.ajax({
+            url: '/Patients/Search',
+            success: function (r) {
+                $("#" + App.Content.ContentElementID).empty().append(r);
+            },
+            error: function () {
+                App.Dialogs.Error("Sorry, we can't seem to load this page.  The discharge was successful.");
+            }
+        });
+    }
+
+</script>
+
+<div class="case-patient-headerlink">
+    @Html.DevExpress().HyperLink(s =>
+        {
+            s.Name = "PatientName";
+            s.NavigateUrl = "/Patients/Edit/" + Model.ID;
+            s.Properties.Text = Model.Patient.CommonName + (Model.Patient.Gender.HasValue ? " (" + Model.Patient.Gender.Value.ToString().First().ToString() + ")" : string.Empty) ;
+        }
+    ).GetHtml()
+    @{Html.RenderAction("CaseHighRiskLabel", "Patients", new { CaseId = Model.ID });}
+</div>
+
+@using (Html.BeginForm("SummaryEdit", "Case", FormMethod.Post, new { id = "form-default" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.HiddenFor(m => m.ID);
+    <div class="section-expander" id="expander-case-info">
+        <div class="section-expander-header">
+            <span>Case Summary</span>
+        </div>
+        <div class="section-expander-content">
+            <!-- Expander Content Here -->
+            <div class="form-section">
+                <div class="form-section-header"><span>Overview</span></div>
+                <div class="form-section-content">
+                    <div class="form-section-content-col1">
+                        <!-- Column 1 Content Here -->
+                        <table>
+                            <tr>
+                                <td>
+                                    @Html.DevExpress().TextBox(s =>
+                               {
+                                            s.Name = "StatusDisplay";
+                                            s.Width = 150;
+                                            s.Properties.Caption = "Status";
+                                            s.Properties.CaptionCellStyle.Width = 100;
+                                            s.Enabled = false;
+                                        }).Bind(Model.StatusDisplay).GetHtml()
+                                </td>
+                                @if (Model.Status == AABC.Domain.Cases.CaseStatus.History)
+                                {
+                                    <td style="padding-left: 5px;">
+                                        @Html.DevExpress().Button(s =>
+                                   {
+                                                        s.Name = "btnReactivate";
+                                                        s.Text = "Re-activate Patient";
+                                                        s.UseSubmitBehavior = false;
+                                                        s.ClientSideEvents.Click = "btnReactivateClick";
+                                                    }).GetHtml()
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td style="padding-left: 5px;">
+                                        @{
+                                            Html.DevExpress().Button(s =>
+                                                {
+                                                    s.Name = "btnSetStatusCFD";
+                                                    s.Text = Model.Status == AABC.Domain.Cases.CaseStatus.ConsiderForDischarge ? "Unset CFD" : "Set as CFD";
+                                                    s.UseSubmitBehavior = false;
+                                                }).GetHtml();
+                                        }
+                                    </td>
+                                    <td style="padding-left: 5px;">
+                                        @Html.DevExpress().Button(s =>
+                                   {
+                                                s.Name = "btnDischarge";
+                                                s.Text = "Discharge";
+                                                s.ClientSideEvents.Click = "btnDischargeClick";
+                                                s.UseSubmitBehavior = false;
+                                            }).GetHtml()
+                                    </td>
+                                }
+                            </tr>
+                        </table>
+
+                        @Html.HiddenFor(m => m.Status)
+                        @Html.HiddenFor(m => m.StatusReason)
+
+                        @Html.DevExpress().DateEdit(s =>
+                            {
+                                s.Name = "StartDate";
+                                s.Width = 150;
+                                s.Properties.Caption = "Start Date";
+                                s.Properties.CaptionCellStyle.Width = 100;
+                            }).Bind(Model.StartDate).GetHtml()
+
+
+
+                        @Html.DevExpress().ComboBox(s =>
+                            {
+                                s.Name = "AssignedStaff.ID";
+                                s.Width = 150;
+                                s.Properties.ValueField = "ID";
+                                s.Properties.ValueType = typeof(int);
+                                s.Properties.Caption = "Assigned Staff";
+                                s.Properties.TextField = "FirstName";
+                                s.Properties.TextFormatString = "{0} {1}";
+                                s.Properties.CaptionCellStyle.Width = 100;
+                                s.Properties.Columns.Add("FirstName", "FirstName", 100);
+                                s.Properties.Columns.Add("LastName", "LastName", 100);
+                                s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRender(sender, Model.AssignedStaff);
+                            }).BindList(Model.ViewHelper.OfficeStaffList).Bind(Model.AssignedStaff).GetHtml()
+
+
+                        @Html.DevExpress().ComboBox(s =>
+                   {
+                       s.Name = "DefaultServiceLocation.ID";
+                       s.Width = 150;
+                       s.Properties.ValueField = "ID";
+                       s.Properties.ValueType = typeof(int);
+                       s.Properties.Caption = "Service Location";
+                       s.Properties.TextField = "Name";
+                       //s.Properties.TextFormatString = "{0}";
+                       s.Properties.CaptionCellStyle.Width = 100;
+                       s.Properties.Columns.Add("Name", "Name", 100);
+                       s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRender(sender, Model.DefaultServiceLocation);
+                   }).BindList(Model.ViewHelper.ServiceLocationList).Bind(Model.DefaultServiceLocation).GetHtml()
+
+                        @Html.DevExpress().ComboBox(s =>
+                            {
+                                s.Name = "FunctioningLevelID";
+                                s.Width = 150;
+                                s.Properties.ValueField = "ID";
+                                s.Properties.ValueType = typeof(int);
+                                s.Properties.Caption = "Functioning Level";
+                                s.Properties.TextField = "Name";
+                                //s.Properties.TextFormatString = "{0}";
+                                s.Properties.CaptionCellStyle.Width = 100;
+                                s.Properties.Columns.Add("Name", "Name", 100);
+                                s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRender(sender, Model.FunctioningLevel);
+                            }).BindList(Model.ViewHelper.FunctioningLevelList).Bind(Model.FunctioningLevelID).GetHtml()
+
+                    </div>
+                    <div id="referral-dismissal-info" class="form-section-content-col2">
+                    @Html.DevExpress().CheckBox(i => 
+                   {
+                                i.Name = "HasPrescription";
+                                i.Text = "Has Prescription?";
+                                i.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+                            }).Bind(Model.HasPrescription).GetHtml()
+
+                        @Html.DevExpress().CheckBox(i =>
+                   {
+                                i.Name = "HasAssessment";
+                                i.Text = "Has Assessment?";
+                                i.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+                            }).Bind(Model.HasAssessment).GetHtml()
+
+                        @Html.DevExpress().CheckBox(i => 
+                   {
+                                i.Name = "HasAuthorization";
+                                i.Text = "Has Authorization?";
+                                i.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+                                i.Enabled = false;
+                            }).Bind(Model.HasAuthorization).GetHtml()
+
+                        @Html.DevExpress().CheckBox(i => 
+                   {
+                                i.Name = "HasIntake";
+                                i.Text = "Has Intake?";
+                                i.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+                            }).Bind(Model.HasIntake).GetHtml()
+
+                        @Html.DevExpress().CheckBox(i => 
+                   {
+                                i.Name = "HasSupervisor";
+                                i.Text = "Has Supervisor?";
+                                i.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+                                i.Enabled = false;
+                            }).Bind(Model.HasSupervisor).GetHtml()
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+
+
+            <div class="form-section" style="margin-top: 20px;">
+                <div class="form-section-header"><span>Auth Hours (General)</span></div>
+                <div class="form-section-content">
+                    @Html.Partial("ManageGeneralHours", Model)
+                </div>
+            </div>
+
+
+            <div class="form-section" style="margin-top: 20px;">
+                <div class="form-section-header"><span>Notes</span></div>
+                <div class="form-section-content">
+                    @Html.DevExpress().Memo(i => 
+               {
+                                i.Name = "StatusNotes";
+                                i.Width = Unit.Percentage(100);
+                                i.Properties.Rows = 6;
+                                i.Properties.Caption = "Notes on requirements for Overall Status";
+                                //i.Properties.CaptionCellStyle.Width = 100;
+                                i.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                            }).Bind(Model.StatusNotes).GetHtml()
+
+                    @Html.DevExpress().Memo(i => 
+               {
+                                i.Name = "RequiredHoursNotes";
+                                i.Width = Unit.Percentage(100);
+                                i.Properties.Rows = 6;
+                                i.Properties.Caption = "Notes on requirements for Hours";
+                                //i.Properties.CaptionCellStyle.Width = 100;
+                                i.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                            }).Bind(Model.RequiredHoursNotes).GetHtml()
+
+                    @Html.DevExpress().Memo(i => 
+               {
+                                i.Name = "RequiredServicesNotes";
+                                i.Width = Unit.Percentage(100);
+                                i.Properties.Rows = 6;
+                                i.Properties.Caption = "Notes on requirements for Services";
+                                //i.Properties.CaptionCellStyle.Width = 100;
+                                i.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                            }).Bind(Model.RequiredServicesNotes).GetHtml()
+
+                </div>
+                <div class="clearfix"></div>
+
+
+                <div class="form-section" style="margin-top: 20px;">
+                    <div class="form-section-header"><span>Actions</span></div>
+                    <div class="form-section-content">
+                        @Html.DevExpress().Button(s => 
+                   {
+                    s.Name = "btnSubmit";
+                    s.Text = "Save Case";
+                    s.UseSubmitBehavior = true;
+                }).GetHtml()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script id="dxss_CaseManagerSummaryJs" type="text/javascript">
+    console.log('getting case summary page scripts');
+    $.getScript("/Scripts/Pages/CaseManageSummary.js", function () {
+        initComponent();
+        App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+    });
+</script>

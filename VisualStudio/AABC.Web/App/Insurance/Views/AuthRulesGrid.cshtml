@@ -1,0 +1,81 @@
+﻿@model List<AABC.Web.App.Insurance.Models.AuthRuleListItem>
+
+@Html.DevExpress().GridView(
+    s => {
+        s.Name = "AuthRulesGrid";
+        s.KeyFieldName = "ID";
+
+        s.Width = Unit.Percentage(100);
+
+        s.CallbackRouteValues = new { Controller = "Insurance", Action = "AuthRuleItems" };
+
+        s.SettingsBehavior.AllowFocusedRow = true;
+        s.SettingsBehavior.AllowSelectByRowClick = true;
+        s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+        // GROUPING/SORTING ECT
+        s.SettingsBehavior.AllowSort = false;
+        s.SettingsBehavior.AllowGroup = false;
+        s.Settings.ShowFilterRow = false;
+
+        // PAGING
+        s.SettingsPager.PageSize = 10;
+        s.SettingsPager.AlwaysShowPager = false;
+
+        s.HtmlDataCellPrepared = (sender, e) => {
+            e.Cell.Attributes.Add("data-dym-cellClick", "AuthRulesGrid");
+            e.Cell.Attributes.Add("data-dym-visibleIndex", e.VisibleIndex.ToString());
+            e.Cell.Attributes.Add("data-dym-fieldName", e.DataColumn.FieldName);
+        };
+
+
+        s.Columns.Add("ProviderType").Width = 50;
+        s.Columns.Add("Service").Width = 35;
+        s.Columns.Add("InitialStats");
+        s.Columns.Add("FinalStats");
+        s.Columns.Add("AllowOverlap", "Overlap", MVCxGridViewColumnType.CheckBox).Width = 35;
+        s.Columns.Add("RequiresBCBA", "BCBA", MVCxGridViewColumnType.CheckBox).Width = 35;
+        s.Columns.Add("RequiresPreAuth", "PreAuth", MVCxGridViewColumnType.CheckBox).Width = 35;
+
+
+
+        s.Settings.ShowTitlePanel = true;
+
+        s.SetTitlePanelTemplateContent(h => {
+
+            var vw = ViewContext.Writer;
+
+            string c = "<div style='text-align: right;'>";
+
+            c += "<table align='right'><tr><td>";
+
+            vw.Write(c);
+
+            c = Html.DevExpress().Button(bs => {
+                bs.Name = "btnRemoveSelectedRule";
+                bs.Text = "Remove Selected";
+                bs.UseSubmitBehavior = false;
+                bs.ClientSideEvents.Click = "function(s, e) { Insurance.Detail.RemoveSelectedAuthRule(); }";
+            }).GetHtml().ToHtmlString();
+
+            c = "</td><td style='padding-left: 5px;'>";
+
+            vw.Write(c);
+
+            c = Html.DevExpress().Button(bs => {
+                bs.Name = "btnAddNewRule";
+                bs.Text = "Add New";
+                bs.UseSubmitBehavior = false;
+                bs.ClientSideEvents.Click = "function(s, e) { Insurance.Detail.AddAuthRule(); }";
+            }).GetHtml().ToHtmlString();
+
+            c = "</td></tr></table></div>";
+            
+            vw.Write(c);
+
+        });
+
+
+    }
+).Bind(Model).GetHtml()

@@ -1,0 +1,79 @@
+//JSON structure of UI Configuration for Session Notes for Aides
+{
+  "fields": [
+    {
+      "name": "Summary",
+      "controlType": "text"
+    },
+    {
+      "options": [
+        {"name":"Elopement"},
+        {"name":"Hand Flapping"},
+        {"name":"Aggression"},
+        {"name":"Inappropriate Vocalizations"},
+        {"name":"Non-compliance"},
+        {"name":"Property Destruction"},
+        {"name":"Tantrum Behavior"}
+      ],
+      "name": "Behaviors",
+      "controlType": "multiSelect"
+    },
+    {
+      "options": [
+        {
+          "name": "Differential Reinforcement",
+          "responses": [
+            {"name":"Patient responded very well to intervention"},
+            {"name":"Patient responded somewhat well to intervention"},
+            {"name":"Patient was neutral to intervention"},
+            {"name":"Patient condition regressed due to intervention"}
+          ]
+        },
+        {
+          "name": "Positive Punishment",
+          "responses": [
+            {"name":"Patient responded very well to intervention"},
+            {"name":"Patient responded somewhat well to intervention"},
+            {"name":"Patient was neutral to intervention"},
+            {"name":"Patient condition regressed due to intervention"}
+          ]
+        },
+        {
+          "name": "Negative reinforcement",
+          "responses": [
+            {"name":"Patient responded very well to intervention"},
+            {"name":"Patient responded somewhat well to intervention"},
+            {"name":"Patient was neutral to intervention"},
+            {"name":"Patient condition regressed due to intervention"}
+          ]
+        }
+      ],
+      "name": "Interventions",
+      "controlType": "multiSelect"
+    },
+    {
+      "options": [
+        {"name":"Tangibles"},
+        {"name":"Edibles"},
+        {"name":"Praise"},
+        {"name":"Token board"}
+      ],
+      "name": "Reinforcers",
+      "controlType": "multiSelect"
+    },
+    {
+      "name": "Goals",
+      "controlType": "goals"
+    },
+    {
+      "options": [
+        {"name":"Behavioral"},
+        {"name":"Environmental"},
+        {"name":"Peers"},
+        {"name":"NA"}
+      ],
+      "name": "Barriers",
+      "controlType": "multiSelect"
+    }
+  ]
+}

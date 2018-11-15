@@ -1,0 +1,19 @@
+﻿@model AABC.Web.Models.Providers.ProviderVM 
+    
+@Html.DevExpress().ComboBox(s =>
+{
+    s.Name = "ProviderSubTypeID";
+    s.Properties.ValueField = "ID";
+    s.Properties.ValueType = typeof(int);
+    s.Properties.Caption = "SubType";
+    s.Properties.TextField = "Name";
+    s.Properties.TextFormatString = "{0}";
+    s.Width = 75;
+    s.Properties.CaptionCellStyle.Width = 100;
+    s.Properties.DropDownWidth = 350;
+    s.Properties.Columns.Add("Code", "Code", 30);
+    s.Properties.Columns.Add("Name", "Name");
+    //s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRender(sender, Model.ProviderSubTypeID);
+    s.CallbackRouteValues = new { Controller = "Providers", Action = "GetSubTypes" };
+    s.Properties.ClientSideEvents.BeginCallback = "function (s,e) { e.customArgs['ProviderTypeID'] = App.DevEx.GetControl('Type.ID').GetValue(); }";
+}).BindList(Model.ViewHelper.ProviderSubTypesList).Bind(Model.ProviderSubTypeID).GetHtml()

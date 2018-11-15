@@ -1,0 +1,50 @@
+﻿<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <span class="clear">
+                            <span class="block m-t-xs">
+                                <strong class="font-bold" id="navigation-user-displayname">@Html.App().User.CurrentUser.FirstName @Html.App().User.CurrentUser.LastName</strong>
+                            </span> @*<span class="text-muted text-xs block">Profile <b class="caret"></b></span>*@
+                        </span>
+                    </a>
+                    @*<ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href="~/Account/Manage">Manage</a></li>
+                        <li><a href="~/Account/Logout">Logout</a></li>
+                    </ul>*@
+                </div>
+                <div class="logo-element">
+                    AABC
+                </div>
+            </li>
+
+            <li>
+                <a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> <span class="nav-label">Home</span> </a>
+            </li>
+
+            @if (AABC.PatientPortal.AppService.Current.Settings.ShowPaymentsNavItem) {
+                <li>
+                    <a href="#">
+                        <i class="fa fa-money"></i> <span class="nav-label">Payments</span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="@Url.Action("Index", "Payments")">New Payments</a></li>
+                        <li><a href="@Url.Action("Scheduled", "Payments")">Scheduled Payments</a></li>
+                        <li><a href="@Url.Action("History", "Payments")">Payment History</a></li>
+                    </ul>
+                </li>
+            }
+            
+            <li>
+                <a href="@Url.Action("Index", "Settings")"><i class="fa fa-cog"></i> <span class="nav-label">Settings</span></a>
+            </li>
+
+
+
+
+
+        </ul>
+    </div>
+</nav>

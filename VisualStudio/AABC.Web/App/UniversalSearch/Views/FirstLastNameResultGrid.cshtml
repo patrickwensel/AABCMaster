@@ -1,0 +1,34 @@
+﻿@model AABC.Web.Models.UniversalSearch.FirstLastNameResultGridVM
+
+@Html.DevExpress().GridView(
+    s => {
+
+        s.Name = "gvUniversalSearchGenericResults";
+        s.KeyFieldName = "ID";
+
+        s.SettingsBehavior.AllowFocusedRow = true;
+        s.KeyboardSupport = true;
+        //s.ClientSideEvents.RowDblClick = "gvUniversalSearchGenericResultsRowDblClick";
+
+        var col = s.Columns.Add("colFirstName");
+        col.FieldName = "FirstName";
+        col.Caption = "First Name";
+
+        col = s.Columns.Add("colLastName");
+        col.FieldName = "LastName";
+        col.Caption = "Last Name";
+
+        col = s.Columns.Add("colPhoneNum");
+        col.FieldName = "Phone";
+        col.Caption = "Phone";
+
+        col = s.Columns.Add("colEmail");
+        col.FieldName = "Email";
+        col.Caption = "Email";
+        col.ColumnType = MVCxGridViewColumnType.HyperLink;
+        HyperLinkProperties prop = col.PropertiesEdit as HyperLinkProperties;
+        prop.NavigateUrlFormatString = "mailto:{0}";
+        prop.TextField = "Email";
+
+    }
+).Bind(Model.Items).GetHtml()

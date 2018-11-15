@@ -1,0 +1,83 @@
+﻿@model List<AABC.Web.App.Insurance.Models.InsuranceListItem>
+
+
+@Html.DevExpress().GridView(
+    s => {
+        s.Name = "InsurancesGrid";
+        s.KeyFieldName = "ID";
+
+        s.CallbackRouteValues = new { Controller = "Insurance", Action = "ListGrid" };
+
+        s.Height = Unit.Percentage(100);
+        s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+        s.ClientSideEvents.Init = "function(s, e) { App.Content.GridViews.InitializeForStretchHeight(s); }";
+        s.ClientSideEvents.EndCallback = "function(s, e) { App.Content.GridViews.InitializeForStretchHeight(s); }";
+        s.SettingsBehavior.AllowFocusedRow = true;
+        s.SettingsBehavior.AllowSelectByRowClick = true;
+        s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+        // GROUPING/SORTING ECT
+        s.SettingsBehavior.AllowSort = true;
+        s.SettingsBehavior.AllowGroup = false;
+        s.Settings.ShowFilterRow = true;
+
+        // PAGING
+        s.SettingsPager.PageSize = 100;
+        s.SettingsPager.AlwaysShowPager = true;
+        s.SettingsPager.Visible = true;
+
+        s.HtmlDataCellPrepared = (sender, e) => {
+            e.Cell.Attributes.Add("data-dym-cellClick", "InsurancesGrid");
+            e.Cell.Attributes.Add("data-dym-visibleIndex", e.VisibleIndex.ToString());
+            e.Cell.Attributes.Add("data-dym-fieldName", e.DataColumn.FieldName);
+        };
+
+        s.Settings.ShowTitlePanel = true;
+
+        s.SetTitlePanelTemplateContent(h => {
+
+            var vw = ViewContext.Writer;
+
+            string c = "<div style='text-align: right;'>";
+
+            c += "<table align='right'><tr><td>";
+
+            vw.Write(c);
+
+            c = Html.DevExpress().Button(bs => {
+                bs.Name = "btnRemoveSelectedInsurance";
+                bs.Text = "Remove Selected";
+                bs.UseSubmitBehavior = false;
+            }).GetHtml().ToHtmlString();
+
+            c = "</td><td style='padding-left: 5px;'>";
+
+            vw.Write(c);
+
+            c = Html.DevExpress().Button(bs => {
+                bs.Name = "btnAddNewInsurance";
+                bs.Text = "Add New";
+                bs.UseSubmitBehavior = false;
+            }).GetHtml().ToHtmlString();
+
+            c = "</td><td style='padding-left: 5px;'>";
+
+            vw.Write(c);
+
+            c = Html.DevExpress().Button(bs =>
+            {
+                bs.Name = "btnCopyInsurance";
+                bs.Text = "Copy";
+                bs.UseSubmitBehavior = false;
+            }).GetHtml().ToHtmlString();
+
+            c = "</td></tr></table></div>";
+
+            vw.Write(c);
+
+        });
+
+        s.Columns.Add("Name");
+    }
+).Bind(Model).GetHtml()

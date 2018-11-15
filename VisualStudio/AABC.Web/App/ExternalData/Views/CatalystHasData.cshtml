@@ -1,0 +1,63 @@
+﻿<script type="text/javascript" src="~/Scripts/Pages/ExternalDataCatalyst.js" id="dxis_ExternalCatalystPageScripts"></script>
+
+<div style="width: 100%; padding: 10px;">
+
+    <div style="float: left; width: 350px; padding-right: 15px;">
+
+        @using (Html.BeginForm())
+        {
+
+            <h3>Catalyst Student Attendance Report</h3>
+
+            <p>Uploading the Report Data file will mark appropriate hours entries as having data, based on the date of service, patient name and provider initials.</p>
+
+            @Html.DevExpress().UploadControl(
+                     s =>
+                     {
+                         s.Name = "uploadCatalystHoursSignoffData";
+                         s.ShowProgressPanel = false;
+                         s.UploadMode = UploadControlUploadMode.Auto;
+                         s.AutoStartUpload = true;
+                         s.Width = Unit.Percentage(100);
+                         s.DialogTriggerID = "StudentAttendanceReportDropZone";
+                         s.AdvancedModeSettings.EnableDragAndDrop = true;
+                         s.AdvancedModeSettings.EnableFileList = false;
+                         s.AdvancedModeSettings.EnableMultiSelect = false;
+                         s.AdvancedModeSettings.ExternalDropZoneID = "StudentAttendanceReportDropZone";
+                         s.AdvancedModeSettings.DropZoneText = "";
+                         s.ClientSideEvents.DropZoneEnter = "function(s, e) { Catalyst.Import.DropZoneEnter(); }";
+                         s.ClientSideEvents.DropZoneLeave = "function(s, e) { Catalyst.Import.DropZoneLeave(); }";
+                         s.ClientSideEvents.FileUploadComplete = "function(s, e) { Catalyst.Import.UploadFileComplete(s, e); }";
+                         s.CallbackRouteValues = new { Controller = "ExternalData", Action = "CatalystStudentAttendanceUpload" };
+                         s.ValidationSettings.Assign(AABC.Web.Models.ExternalData.Catalyst.StudentAttendenceReportValidationSettings.Settings);
+                         s.ClientSideEvents.FilesUploadComplete = "function(s, e) { Catalyst.Import.UploadFilesComplete(s, e); }";
+
+                     }
+                     ).GetHtml()
+
+
+        }
+
+        <div class="spacer-10"></div>
+
+        <div id="StudentAttendanceReportDropZone" style="width: 100%; height: 350px; border: 1px dashed #BFDBFF;">
+            <div id="dragZone" style="width: 100%; height: 100%;">
+                <div style="padding-top: 100px;"><span style="margin-left: 75px; font-size: large; color: gray;"><em>Drag Has Data file here</em></span></div>
+            </div>
+        </div>
+    </div>
+
+    <div style="padding-left: 10px;">
+
+        <p>Example excel report to upload:</p>
+
+        <img src="~/Content/Images/example-csar.jpg" />
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+    });
+</script>

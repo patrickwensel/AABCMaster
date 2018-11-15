@@ -1,0 +1,29 @@
+﻿@model Dymeng.Framework.Web.Mvc.Views.GridTitlePanelSettings
+
+<div class="grid-title-panel-container">
+    <div style="display: table; width: 100%;">
+        <div style="display: table-row;">
+            <div class="grid-title" style="display: table-cell; width: 1px; white-space: nowrap;">@Model.Title</div>
+            <div style="display: table-cell;">
+                @Html.DevExpress().Button(s =>
+           {
+               s.Name = "btnAddProviders";
+               s.Text = "Add Providers";
+               s.ImagePosition = ImagePosition.Left;
+               s.Images.Image.IconID = "actions_newproducts_16x16devav";
+               s.Width = 100;
+               s.ClientSideEvents.Click = "AddProviders";
+               s.ClientSideEvents.Init = "AddProvidersButtonInit";
+           }).GetHtml()
+                @Html.DevExpress().Button(s =>
+           {
+               s.Name = "btnOpenEmailProvidersModal";
+               s.Text = "Email Providers";
+               s.Width = 100;
+               s.ClientSideEvents.Click = "openEmailProvidersModal";
+               s.ClientSideEvents.Init = "AddProvidersButtonInit";
+           }).GetHtml()
+            </div>
+        </div>
+    </div>
+</div>

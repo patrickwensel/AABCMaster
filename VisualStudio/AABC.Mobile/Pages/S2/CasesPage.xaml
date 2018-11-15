@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<control:LoggedInPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+			 xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+			 xmlns:extensions="clr-namespace:AABC.Mobile.MarkupExtensions;assembly=AABC.Mobile"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="AABC.Mobile.Pages.S2.CasesPage"
+			 Title="Cases"
+			 BackgroundColor="#f1f1f1"
+			 Padding="0">
+
+	<ListView x:Name="Cases" ItemsSource="{Binding DisplayCases}" RowHeight="75" ItemTapped="ListView_ItemTapped" VerticalOptions="Start" >
+		<ListView.ItemTemplate>
+			<DataTemplate>
+				<ViewCell>
+					<Grid BackgroundColor="{Binding ActiveSession, Converter={StaticResource backgroundColorConverter}}" Margin="0" Padding="10" HeightRequest="75" >
+						<Grid.RowDefinitions>
+							<RowDefinition Height="30" />
+							<RowDefinition Height="20" />
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="50" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<Image Grid.Row="0" Grid.Column="0"  Grid.RowSpan="2" Source="{Binding Case.Patient.Gender, Converter={StaticResource genderImageConverter}}" />
+						<Label Grid.Row="0" Grid.Column="1" Text="{Binding Case.Patient.PatientLastName}" TextColor="{Binding ActiveSession, Converter={StaticResource textColorConverter}}" FontSize="Large" FontAttributes="Bold" />
+						<Label Grid.Row="1" Grid.Column="1" Text="{Binding Case.Patient.PatientFirstName}" TextColor="{Binding ActiveSession, Converter={StaticResource textColorConverter}}" />
+					</Grid>
+				</ViewCell>
+			</DataTemplate>
+		</ListView.ItemTemplate>
+	</ListView>
+
+</control:LoggedInPage>

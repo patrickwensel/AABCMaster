@@ -1,0 +1,118 @@
+﻿@model AABC.Web.Models.OfficeStaff.OfficeStaffListModel
+
+@Html.DevExpress().GridView(settings => {
+
+    settings.Name = "gvOfficeStaff";
+    settings.Width = Unit.Percentage(100);
+
+    settings.Settings.ShowTitlePanel = true;
+    settings.SetTitlePanelTemplateContent(
+        c => {
+            Html.RenderPartial("GridTitlePane", Model.ListBase.GridTitlePanelSettings);
+        });
+
+    settings.SettingsBehavior.AllowSort = true;
+    settings.SettingsBehavior.AllowGroup = false;
+    settings.SettingsBehavior.AllowFocusedRow = true;
+    settings.SettingsBehavior.AllowSelectByRowClick = true;
+    settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    settings.SettingsBehavior.AllowDragDrop = false;
+
+    settings.Settings.ShowFilterRow = true;
+    settings.CallbackRouteValues = new { Action = "SearchGridFilter" };
+    settings.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['filter'] = '" + Model.ListBase.CallbackFilterValue + "'; e.customArgs['isFilterCallback'] = 'true'; }";
+
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    settings.ClientSideEvents.Init = "function(s, e) { App.Content.GridViews.InitializeForStretchHeight(s); }";
+    settings.ClientSideEvents.EndCallback = "function(s, e) { App.Content.GridViews.StretchHeight(s); }";
+
+
+    settings.KeyFieldName = "ID";
+
+    settings.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+    settings.SettingsCookies.StoreFiltering = true;
+    settings.SettingsCookies.StoreGroupingAndSorting = true;
+    settings.SettingsCookies.StorePaging = true;
+    settings.SettingsCookies.Enabled = true;
+    settings.SettingsCookies.CookiesID = "AABC.Web.SearchGrid.OfficeStaff";
+
+    settings.Columns.Add(column => {
+        column.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+        column.Caption = "Actions";
+        column.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        column.Width = 52;
+        column.SetDataItemTemplateContent(c => {
+
+            string itemID = DataBinder.Eval(c.DataItem, "ID").ToString();
+
+            string button = Html.DevExpress().Button(
+                b => {
+                    b.Images.Image.Url = "~/Content/Images/actionlist-med-light-16.png";
+                    b.Name = "pmButton" + itemID;
+                    b.Text = "";
+                    b.ControlStyle.CssClass = "action-button";
+                }).GetHtml().ToHtmlString();
+
+            string popup = @Html.DevExpress().PopupMenu(
+                menu => {
+                    menu.Name = "pmActions" + itemID;
+                    menu.PopupElementID = "pmButton" + itemID;
+
+                    menu.ClientSideEvents.ItemClick = "actionMenuItemClick";
+                    menu.PopupAction = PopupAction.LeftMouseClick;
+
+                    menu.Items.Add(i => {
+                        i.Text = "View/Edit";
+                        i.Name = "Edit";
+                        i.Image.IconID = "actions_edit_16x16devav";
+                    });
+
+                    menu.Items.Add(i => {
+                        i.Text = "Delete";
+                        i.Name = "Delete";
+                        i.Image.IconID = "edit_delete_16x16office2013";
+                        i.BeginGroup = true;
+                    });
+                }
+            ).GetHtml().ToHtmlString();
+
+            ViewContext.Writer.Write(button + popup);
+
+        });
+    });
+
+
+
+    var col = settings.Columns.Add("Staff Name");
+    col.FieldName = "FormalName";
+    col.Caption = "Staff Name (Last, First)";
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+
+
+    col = settings.Columns.Add("Phone");
+    col.FieldName = "Phone";
+    col.Width = 100;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+    col = settings.Columns.Add("Email");
+    col.FieldName = "Email";
+    col.Width = 175;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.ColumnType = MVCxGridViewColumnType.HyperLink;
+    HyperLinkProperties hlProps = col.PropertiesEdit as HyperLinkProperties;
+    hlProps.NavigateUrlFormatString = "mailto:{0}";
+
+
+    col = settings.Columns.Add("Active");
+    col.FieldName = "Active";
+    col.Width = 35;
+    col.ColumnType = MVCxGridViewColumnType.CheckBox;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+
+}).Bind(Model.DetailList).GetHtml()

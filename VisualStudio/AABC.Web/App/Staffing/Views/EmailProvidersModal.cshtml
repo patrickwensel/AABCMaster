@@ -1,0 +1,117 @@
+﻿@model IEnumerable<AABC.Domain2.Providers.Provider>
+
+@Html.DevExpress().GridView(s => {
+    s.Name = "EmailProvidersGrid";
+    s.KeyFieldName = "ID";
+    s.Width = Unit.Percentage(100);
+    s.Height = Unit.Percentage(100);
+
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    s.ClientSideEvents.SelectionChanged = "onSelectionChanged";
+    s.ClientSideEvents.Init = "onSelectionChanged";
+
+    s.CommandColumn.Visible = true;
+    s.CommandColumn.FixedStyle = GridViewColumnFixedStyle.Left;
+    s.CommandColumn.Width = Unit.Pixel(40);
+    s.CommandColumn.ShowSelectCheckbox = true;
+    s.CommandColumn.ShowClearFilterButton = true;
+    s.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+
+    s.SettingsBehavior.AllowSort = false;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = false;
+    s.SettingsBehavior.AllowSelectByRowClick = false;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = false;
+    s.SettingsBehavior.AllowDragDrop = false;
+    s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+    s.CommandButtonInitialize = (sender, e) =>
+    {
+        var grid = sender as MVCxGridView;
+        if (e.ButtonType == ColumnCommandButtonType.SelectCheckbox)
+        {
+            var value = grid.GetRowValues(e.VisibleIndex, "Email") as string;
+            e.Enabled = !string.IsNullOrEmpty(value);
+        }
+    };
+
+    s.CustomJSProperties = (sender,e) =>
+    {
+        var clientData = new Dictionary<int, object>();
+        var grid = sender as MVCxGridView;
+        for (int i = 0; i < grid.VisibleRowCount; i++)
+        {
+            var rowValues = grid.GetRowValues(i, new string[] { "ID", "Email", "FirstName", "LastName" }) as object[];
+            clientData.Add(Convert.ToInt32(rowValues[0]), new
+            {
+                Email = rowValues[1],
+                FirstName = rowValues[2],
+                LastName = rowValues[3]
+            });
+        }
+        e.Properties["cp_data"] = clientData;
+    };
+
+    s.Columns.Add(col => {
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.FieldName = "Provider";
+        col.ReadOnly = true;
+        col.Settings.ShowEditorInBatchEditMode = false;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.FieldName = "Email";
+        col.ReadOnly = true;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.FieldName = "Notes";
+        col.ReadOnly = true;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+    });
+
+    s.CustomUnboundColumnData = (sender, e) =>
+    {
+        if (e.Column.FieldName == "Provider")
+        {
+            string firstName = Convert.ToString(e.GetListSourceFieldValue("FirstName"));
+            string lastName = Convert.ToString(e.GetListSourceFieldValue("LastName"));
+            e.Value = firstName + " " + lastName;
+        }
+    };
+
+}).Bind(Model).GetHtml()
+<div style="width:100%;text-align:right">
+    <div class="spacer-10"></div>
+    @Html.DevExpress().Memo(
+        i =>
+        {
+            i.Name = "txtNotes";
+            i.Width = Unit.Percentage(100);
+            i.Properties.Rows = 6;
+            i.Properties.Caption = "Notes";
+            i.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+        }
+).GetHtml()
+
+    <div class="spacer-10"></div>
+    @Html.DevExpress().Button(s =>
+               {
+                   s.Name = "btnSendEmails";
+                   s.Text = "Email Providers";
+                   s.Width = 100;
+                   s.ClientSideEvents.Click = "sendEmails";
+               }).GetHtml()
+    @Html.DevExpress().Button(s =>
+               {
+                   s.Name = "btnCloseEmailProvidersModal";
+                   s.Text = "Close";
+                   s.Width = 100;
+                   s.ClientSideEvents.Click = "closeEmailProvidersModal";
+               }).GetHtml()
+</div>

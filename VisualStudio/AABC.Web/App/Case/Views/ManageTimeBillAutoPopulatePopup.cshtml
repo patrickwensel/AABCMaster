@@ -1,0 +1,189 @@
+﻿@model AABC.Web.Models.Cases.TimeBillAutoPopulateVM
+
+
+@using (Html.BeginForm("dummy", "dummy", FormMethod.Post, new { id = "hapForm" })) {
+
+
+
+    <table>
+        <tr>
+            <td>For this provider: </td>
+            <td>
+
+                @Html.DevExpress().ComboBox(
+                    s => {
+                        s.Name = "hapProvider";
+                        s.Width = 150;
+                        s.Properties.TextField = "CommonName";
+                        s.Properties.ValueField = "ID";
+                        s.Properties.ValueType = typeof(int);
+                        s.Properties.Columns.Add("CommonName", "Name", 200);
+                        
+                        s.Properties.Caption = " ";
+                        s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                    }
+                ).BindList(ViewBag.CaseProviderList).Bind(Model.hapProvider).GetHtml()
+
+            </td>
+        </tr>
+    </table>
+    <div class="spacer-10"></div>
+    <table>
+        <tr>
+            <td>Enter hours every week between</td>
+            <td>
+                @Html.DevExpress().DateEdit(
+                s => {
+                    s.Name = "hapStartDate";
+                    s.Properties.Caption = " ";
+                    s.Width = 100;
+                }
+            ).Bind(Model.hapStartDate).GetHtml()
+            </td>
+            <td>&nbsp;&nbsp; and</td>
+            <td>
+                @Html.DevExpress().DateEdit(
+                s => {
+                    s.Name = "hapEndDate";
+                    s.Properties.Caption = " ";
+                    s.Width = 100;
+                }
+            ).Bind(Model.hapEndDate).GetHtml()
+            </td>
+        </tr>
+    </table>
+
+    <p>On these days...</p>
+
+    @Html.DevExpress().CheckBox(
+        s => {
+            s.Name = "hapMonday";
+            s.Text = "Monday";
+        }
+    ).Bind(Model.hapMonday).GetHtml()
+
+    @Html.DevExpress().CheckBox(
+        s => {
+            s.Name = "hapTuesday";
+            s.Text = "Tuesday";
+        }
+    ).Bind(Model.hapTuesday).GetHtml()
+
+    @Html.DevExpress().CheckBox(
+        s => {
+            s.Name = "hapWednesday";
+            s.Text = "Wednesday";
+        }
+    ).Bind(Model.hapWednesday).GetHtml()
+
+    @Html.DevExpress().CheckBox(
+        s => {
+            s.Name = "hapThursday";
+            s.Text = "Thursday";
+        }
+    ).Bind(Model.hapThursday).GetHtml()
+
+    @Html.DevExpress().CheckBox(
+        s => {
+            s.Name = "hapFriday";
+            s.Text = "Friday";
+        }
+    ).Bind(Model.hapFriday).GetHtml()
+
+    @Html.DevExpress().CheckBox(
+        s => {
+            s.Name = "hapSaturday";
+            s.Text = "Saturday";
+        }
+    ).Bind(Model.hapSaturday).GetHtml()
+
+    @Html.DevExpress().CheckBox(
+        s => {
+            s.Name = "hapSunday";
+            s.Text = "Sunday";
+        }
+    ).Bind(Model.hapSunday).GetHtml()
+
+    <p>With these values...</p>
+
+    <table>
+        <tr>
+            <td>
+                @Html.DevExpress().TimeEdit(
+                    s => {
+                        s.Name = "hapTimeIn";
+                        s.Properties.Caption = "Time In";
+                        s.Width = 100;
+                        s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                    }
+                ).Bind(Model.hapTimeIn).GetHtml()
+            </td>
+            <td>
+                @Html.DevExpress().TimeEdit(
+                    s => {
+                        s.Name = "hapTimeOut";
+                        s.Properties.Caption = "Time Out";
+                        s.Width = 100;
+                        s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                    }
+                ).Bind(Model.hapTimeOut).GetHtml()
+            </td>
+            <td>
+                @Html.DevExpress().ComboBox(
+                    s => {
+                        s.Name = "hapService";
+                        s.Width = 150;
+                        s.Properties.TextField = "Code";
+                        s.Properties.ValueField = "ID";
+                        s.Properties.ValueType = typeof(int);
+                        s.Properties.TextFormatString = "{0}: {1}";
+                        s.Properties.Columns.Add("Code", "Code", 35);
+                        s.Properties.Columns.Add("Name", "Name", 115);
+
+                        s.Properties.Caption = "Service";
+                        s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                    }
+                ).BindList(ViewBag.ServiceList).Bind(Model.hapService).GetHtml()
+            </td>
+            <td>
+                @Html.DevExpress().TextBox(
+                    s => {
+                        s.Name = "hapNotes";
+                        s.Width = 210;
+                        s.Properties.Caption = "Notes";
+                        s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                    }
+                ).Bind(Model.hapNotes).GetHtml()
+            </td>
+        </tr>
+    </table>
+
+
+    <div style="width: 100%; text-align: right; margin-top: 20px">
+        <table>
+            <tr>
+                <td width="100%;">
+                    @Html.DevExpress().Button(
+                        s => {
+                            s.Name = "btnhapOK";
+                            s.Text = "OK";
+                            s.Width = 75;
+                            s.UseSubmitBehavior = true;
+                        }
+                    ).GetHtml()
+                </td>
+                <td style="padding-left: 5px;">
+                    @Html.DevExpress().Button(
+                        s => {
+                            s.Name = "btnhapCancel";
+                            s.Text = "Cancel";
+                            s.Width = 75;
+                            s.ClientSideEvents.Click = "function(s, e) { hapPopup.Hide(); }";
+                        }
+                    ).GetHtml()
+                </td>
+            </tr>
+        </table>
+    </div>
+
+}

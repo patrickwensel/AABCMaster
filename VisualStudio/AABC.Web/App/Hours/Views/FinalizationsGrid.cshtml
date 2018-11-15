@@ -1,0 +1,138 @@
+﻿@model AABC.Web.App.Hours.Models.FinalizationsVM
+
+@{ 
+    GridViewSettings s = new GridViewSettings();
+    s.Name = "HoursFinalizationsGrid";
+    s.KeyFieldName = "ID";
+    s.Width = Unit.Percentage(100);
+    s.Height = Unit.Percentage(100);
+
+    s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+    s.SettingsSearchPanel.Visible = true;
+
+    s.SettingsBehavior.AllowSort = true;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = true;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = false;
+    s.Settings.ShowFilterRow = true;
+    s.CallbackRouteValues = new { Action = "HoursFinalizationsGridCallback" };
+
+    s.ClientSideEvents.Init = "function(s, e) { HoursFinalizations.Grid.SelfInitialize(s, e); }";
+    s.ClientSideEvents.SelectionChanged = "HoursFinalizations.Grid.SelectionChanged";
+
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    s.SettingsPager.PageSize = 200;
+    s.Settings.ShowTitlePanel = true;
+
+    s.SetTitlePanelTemplateContent(
+        c => {
+
+
+            var vw = ViewContext.Writer;
+
+            // OPEN MAIN TABLE ADN ROW
+            vw.Write("<table style='width: 100%;'><tr>");
+
+            // OPEN LEFT MAIN CELL
+            vw.Write("<td style='width: 33%;'>");
+
+            // LEFT MAIN CELL CONTENT
+
+            vw.Write("<table><tr><td>");
+
+            Html.DevExpress().ComboBox(
+                cb => {
+                    cb.Name = "SelectedDate";
+                    cb.Properties.TextField = "Display";
+                    cb.Properties.ValueField = "Date";
+                    cb.Properties.ValueType = typeof(DateTime);
+                    cb.PreRender = (sender, e) => {
+                        AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model.SelectedDate, "Date");
+                    };
+                    cb.Properties.Caption = "Current Period";
+                }
+            ).BindList(Model.AvailableDates).Render();
+
+            //vw.Write("</td><td style='padding-left: 15px;'>");
+
+            //Html.DevExpress().RadioButtonList(rb => {
+            //    rb.Name = "HoursViewMode";
+            //    rb.Properties.RepeatColumns = 2;
+            //    rb.Properties.RepeatDirection = RepeatDirection.Horizontal;
+            //    rb.Properties.ValueType = typeof(AABC.Web.App.Hours.Models.EditVM.ViewModes);
+            //    rb.Properties.Items.Add("Finalized Only", 0);
+            //    rb.Properties.Items.Add("All Hours", 1);
+            //    rb.Properties.TextWrap = false;
+            //}).Bind(Model.ViewMode).Render();
+
+            vw.Write("</td></tr></table>");
+
+
+            // CLOSE LEFT MAIN CELL
+            vw.Write("</td>");
+
+            // RIGHT MAIN CELL
+            vw.Write("<td align='right'>");
+
+            //Html.DevExpress().Button(bttn =>
+            //{
+            //    bttn.Name = "btnScrubSelected";
+            //    bttn.Text = "Set Selected as Scrubbed";
+            //    bttn.ClientSideEvents.Click = "HoursEdit.Grid.ScrubSelected";
+            //}).Render();
+
+            // CLOSE RIGHT MAIN CELL
+            vw.Write("</td>");
+
+            // CLOSE MAIN ROW AND TABLE
+            vw.Write("</tr></table>");
+
+        }
+);
+
+
+    var col = s.Columns.Add("PatientFirstName");
+
+    col = s.Columns.Add("PatientLastName");
+
+    col = s.Columns.Add("ProviderFirstName");
+
+    col = s.Columns.Add("ProviderLastName");
+
+    col = s.Columns.Add("DateFinalized");
+    col.PropertiesEdit.DisplayFormatString = "d";
+    col.Width = 75;
+
+    col = s.Columns.Add("ViewDocuSignDocuments");
+    col.Caption = "DocuSign Documents";
+    col.SetDataItemTemplateContent(
+        c => {
+            string hasDocuSignDocuments = DataBinder.Eval(c.DataItem, "HasDocuSignDocuments").ToString();
+            string finalizationID = DataBinder.Eval(c.DataItem, "ID").ToString();
+
+            if (hasDocuSignDocuments != "True") {
+                Html.DevExpress().Label(l => {
+                    l.Name = "finalizationDocumentLink_" + finalizationID;
+                    l.Text = "No documents available";
+                }).Render();
+            } else {
+                Html.DevExpress().HyperLink(hl => {
+                    hl.Name = "finalizationDocumentLink_" + finalizationID;
+                    hl.Properties.Text = "View Documents";
+                    hl.Properties.Target = "_blank";
+                    hl.NavigateUrl = "/Hours/FinalizationDocs?finalizationID=" + finalizationID;
+                }).Render();
+            }
+
+        }
+    );
+
+
+}
+
+@Html.DevExpress().GridView(s).Bind(Model.Items).GetHtml()
+
+
+
+

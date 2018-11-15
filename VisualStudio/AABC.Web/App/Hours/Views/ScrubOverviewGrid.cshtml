@@ -1,0 +1,241 @@
+﻿@model List<AABC.Web.App.Hours.Models.ScrubOverviewItem>
+
+@{ 
+    GridViewSettings s = new GridViewSettings();
+    s.Name = "gvCaseHoursScrubOverviewGrid";
+    s.KeyFieldName = "ID";
+    s.Width = Unit.Percentage(100);
+    s.Height = Unit.Percentage(100);
+
+    s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+    
+    s.SettingsBehavior.AllowSort = true;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = true;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    s.Settings.ShowFilterRow = true;
+    s.CallbackRouteValues = new { Action = "ScrubGridCallback" };
+
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    s.ClientSideEvents.Init = "function(s, e) { App.Content.GridViews.InitializeForStretchHeight(s); }";
+    s.ClientSideEvents.BeginCallback = "function(s, e) { HoursScrub.ScrubGrid.BeginCallback(s, e); }";
+    s.ClientSideEvents.EndCallback = "function(s, e) { HoursScrub.ScrubGrid.EndCallback(s, e); }";
+
+    s.SettingsPager.PageSize = 100;
+
+    s.Settings.ShowTitlePanel = true;
+    s.SetTitlePanelTemplateContent(
+        c => {
+            string content = "<table style='width: 100%;'><tr><td style='width: 300px;'>";
+            ViewContext.Writer.Write(content);
+
+            Html.DevExpress().ComboBox(
+                cb => {
+                    cb.Name = "SelectedDate";
+                    cb.Properties.TextField = "Display";
+                    cb.Properties.ValueField = "Date";
+                    cb.Properties.ValueType = typeof(DateTime);
+                    cb.PreRender = (sender, e) => {
+                        AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, ViewBag.SelectedDate, "Date");
+                    };
+                    cb.Properties.Caption = "Current Period";
+                    cb.Properties.ClientSideEvents.ValueChanged = "function(s, e) { HoursScrub.ScrubGrid.TargetDate.AfterUpdate(); }";
+                }
+            ).BindList(ViewBag.AvailableDates).Render();
+
+
+            ViewContext.Writer.Write("</td><td style='padding-left: 10px;'>");
+
+            ViewContext.Writer.Write("<table><tr><td>");
+
+            Html.DevExpress().Button(
+                b => {
+                    b.Name = "btnScrubHoursOverviewPreviewExportPeriodToExcel";
+                    b.Text = "Preview Export";
+                    b.Width = 150;
+                    b.ClientSideEvents.Click = "function(s, e) { HoursScrub.ScrubGrid.PeriodExport.Preview(); }";
+                }
+            ).Render();
+
+            ViewContext.Writer.Write("</td><td style='padding-left: 5px;'>");
+
+            Html.DevExpress().Button(
+                b => {
+                    b.Name = "btnScrubHoursOverviewExportPeriodToExcel";
+                    b.Text = "Commit and Export";
+                    b.Width = 150;
+                    b.ClientSideEvents.Click = "function(s, e) { HoursScrub.ScrubGrid.PeriodExport.CommitAndExport(); }";
+                }
+            ).Render();
+
+
+
+            ViewContext.Writer.Write("</td></tr></table></td><td align='right'><table><tr><td>");
+
+            Html.DevExpress().Button(
+                b => {
+                    b.Name = "btnScrubHoursOverviewGridDownloadUnfinalized";
+                    b.Text = "Download Unfinalized Providers";
+                    b.ClientSideEvents.Click = "function(s, e) { HoursScrub.UnfinalizedProviders.Download(); }";
+                }
+            ).Render();
+
+
+            ViewContext.Writer.Write("</td><td style='padding-left: 5px;'>");
+
+            Html.DevExpress().Button(
+                b => {
+                    b.Name = "btnScrubHoursOverviewGridRefresh";
+                    b.Text = "Refresh";
+                    b.ClientSideEvents.Click = "function(s, e) { gvCaseHoursScrubOverviewGrid.Refresh(); }";
+                }
+            ).Render();
+
+            ViewContext.Writer.Write("</td></tr></table></td></tr></table>");
+
+
+        }
+    );
+
+
+    var col = s.Columns.Add("colPatientFirstName");
+    col.FieldName = "FirstName";
+    col.Caption = "First Name";
+
+    col = s.Columns.Add("colPatientLastName");
+    col.FieldName = "LastName";
+    col.Caption = "Last Name";
+
+    col = s.Columns.Add("colActiveProviders");
+    col.FieldName = "ActiveProviders";
+    col.Caption = "Active<br />Providers";
+    col.Width = 60;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("colProvidersWithHours");
+    col.FieldName = "ProvidersWithHours";
+    col.Caption = "Providers<br />w/ Hours";
+    col.Width = 60;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("colProvidersFinalized");
+    col.FieldName = "ProvidersFinalized";
+    col.Caption = "Providers<br />Finalized";
+    col.Width = 60;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("colProvidersNotFinalized");
+    col.FieldName = "ProvidersNotFinalized";
+    col.Caption = "Providers<br />Not<br />Finalized";
+    col.Width = 60;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("colScrubbedRecords");
+    col.FieldName = "ScrubbedRecords";
+    col.Caption = "Scrubbed<br />Records";
+    col.Width = 60;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("colUnscrubbedRecords");
+    col.FieldName = "UnscrubbedRecords";
+    col.Caption = "Unscrubbed<br />Records";
+    col.Width = 60;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("colCommittedRecords");
+    col.FieldName = "CommittedRecords";
+    col.Caption = "Committed<br />Records";
+    col.Width = 60;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("colBilledRecords");
+    col.FieldName = "BilledRecords";
+    col.Caption = "Billed<br />Records";
+    col.Width = 60;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("colPaidHours");
+    col.FieldName = "TotalPayable";
+    col.Caption = "Total<br />Payable";
+    col.Width = 60;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("colTotalHours");
+    col.FieldName = "TotalBillable";
+    col.Width = 60;
+    col.Caption = "Total<br />Billable";
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("colBCBAHours");
+    col.FieldName = "BCBABillable";
+    col.Width = 60;
+    col.Caption = "BCBA<br />Billable";
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("colAideHours");
+    col.FieldName = "AideBillable";
+    col.Width = 60;
+    col.Caption = "Aide<br />Billable";
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+    col = s.Columns.Add("colBCBAPercent");
+    col.FieldName = "BCBAPercent";
+    col.Width = 60;
+    col.Caption = "BCBA<br />Percent";
+    col.PropertiesEdit.DisplayFormatString = "{0}%";
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+
+    col = s.Columns.Add("colScrub");
+    col.Caption = " ";
+    col.Width = 75;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+    col.SetDataItemTemplateContent(
+        c => {
+            Html.DevExpress().HyperLink(
+                hl => {
+                    string id = DataBinder.Eval(c.DataItem, "ID").ToString();
+                    hl.Name = "hlScrubOverviewGridGotoScrub_" + id;
+                    hl.Properties.Text = "Scrub";
+                    hl.Properties.Target = "_blank";
+                    hl.NavigateUrl = "/Case/" + id + "/Manage/TimeAndBilling";
+                }
+            ).Render();
+        }
+    );
+    col.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+}
+
+@Html.DevExpress().GridView(s).Bind(Model).GetHtml()
+
+
+

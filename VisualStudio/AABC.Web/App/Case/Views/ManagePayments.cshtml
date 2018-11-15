@@ -1,0 +1,475 @@
+﻿@model AABC.Web.App.Case.Models.CasePaymentVM
+<style type="text/css">
+    #payment-page-wrapper .form-group {
+        overflow: auto;
+        margin-bottom: 10px;
+    }
+
+        #payment-page-wrapper .form-group p {
+            margin: 0;
+        }
+
+    #payment-page-wrapper label {
+        width: 150px;
+        display: block;
+    }
+
+    #payment-page-wrapper .validationMessage {
+        display: block;
+        color: red;
+    }
+
+    #payment-page-wrapper table.table {
+        width: 100%;
+    }
+
+        #payment-page-wrapper table.table td, #payment-page-wrapper table.table th {
+            border-bottom: 1px solid gray;
+            padding: 5px 10px;
+        }
+
+        #payment-page-wrapper table.table td {
+            vertical-align: top;
+        }
+</style>
+<div id="payment-page-wrapper" class="form-section">
+    <div class="form-section-content">
+        <div class="row">
+            <div>
+                <div>
+                    <button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:goToNewPayment, css: {active: isOnNewPayment}, disable: isOnNewPayment"><div class="dxb"><span class="dx-vam">New Payment</span></div></button>
+                    <button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:goToScheduledPayments, css: {active: isOnScheduledPayments}, disable: isOnScheduledPayments"><div class="dxb"><span class="dx-vam">Scheduled Payments</span></div></button>
+                    <button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:goToPaymentHistory, css: {active: isOnPaymentHistory}, disable: isOnPaymentHistory"><div class="dxb"><span class="dx-vam">Payment History</span></div></button>
+                </div>
+                <div data-bind="with:newPaymentVM">
+                    @Html.Partial("ManagePaymentsForm")
+                </div>
+                <div data-bind="with:scheduledPaymentsVM">
+                    <h3>Scheduled Payments</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Child/Case</th>
+                                <th>Payment Type</th>
+                                <th>Frequency</th>
+                                <th>Schedule</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: payments">
+                            <tr data-bind="style: { textDecoration: active ? '' : 'line-through'  }">
+                                <td data-bind="text: patientName"></td>
+                                <td data-bind="text: paymentType"></td>
+                                <td data-bind="text: recurringFrequency"></td>
+                                <td>
+                                    <table>
+                                        <tbody data-bind="foreach: schedules">
+                                            <tr data-bind="style: { textDecoration: paymentChargeId() == null ? '' : 'line-through'  }">
+                                                <td data-bind="text: moment(scheduledDate()).format('MM/DD/YYYY')"></td>
+                                                <td data-bind="text: '$ ' + numeral(amount()).format('0,0.00')"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td>
+                                    <button class="dxbButton_Aqua dxbButtonSys dxbTSys" type="button" data-bind="visible: active, click: $parent.stopScheduled">
+                                        <div class="dxb"><span class="dx-vam">Stop</span></div>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div data-bind="with:paymentHistoryVM">
+                    <h3>Payment History</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Child/Case</th>
+                                <th>Payment Type</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Transaction Generator</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: charges">
+                            <tr>
+                                <td data-bind="text: patientName"></td>
+                                <td data-bind="text: description"></td>
+                                <td data-bind="text: '$ ' + numeral(amount()).format('0,0.00')"></td>
+                                <td data-bind="text: moment(chargeDate()).format('MM/DD/YYYY')"></td>
+                                <td data-bind="text: isPatientGeneratedStr"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="dxss_CaseManagerPaymentJs" type="text/javascript">
+    $.getScript("/Scripts/Pages/CaseManagePayment2.js", function () {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+    });
+</script>
+<script id="dxss_ddCaseManagerPaymentJs" type="text/javascript">
+    $(function () {
+        function PageViewModel(caseId) {
+            var self = {};
+            self.caseId = caseId;
+            self.newPaymentVM = ko.observable();
+            self.scheduledPaymentsVM = ko.observable();
+            self.paymentHistoryVM = ko.observable();
+            self.isOnNewPayment = ko.pureComputed(function () {
+                return self.newPaymentVM();
+            });
+            self.isOnScheduledPayments = ko.pureComputed(function () {
+                return self.scheduledPaymentsVM();
+            });
+            self.isOnPaymentHistory = ko.pureComputed(function () {
+                return self.paymentHistoryVM();
+            });
+            self.goToNewPayment = function () {
+                $.ajax({
+                    url: "/Payments/GetPayment",
+                    type: "GET",
+                    data: {
+                        caseId: self.caseId
+                    }
+                }).done(function (data) {
+                    self.newPaymentVM(new NewPaymentViewModel(data, function (r) {
+                        if (r.response.success) {
+                            if (r.data.paymentType == 0 && r.response.paymentChargeId) {
+                                self.goToPaymentHistory();
+                            } else {
+                                self.goToScheduledPayments();
+                            }
+                        }
+                    }));
+                    self.scheduledPaymentsVM(null);
+                    self.paymentHistoryVM(null);
+                }).fail(function (err) {
+                    alert(err.ErrorMessage);
+                });
+            };
+            self.goToScheduledPayments = function () {
+                var vm = new ScheduledPaymentsVM(self.caseId);
+                vm.load().done(function () {
+                    self.newPaymentVM(null);
+                    self.scheduledPaymentsVM(vm);
+                    self.paymentHistoryVM(null);
+                });
+            };
+            self.goToPaymentHistory = function () {
+                $.ajax({
+                    url: "/payments/getcharges",
+                    type: "GET",
+                    data: {
+                        caseId: self.caseId
+                    }
+                }).done(function (data) {
+                    self.newPaymentVM(null);
+                    self.scheduledPaymentsVM(null);
+                    self.paymentHistoryVM(new PaymentHistoryVM(data));
+                }).fail(function (err) {
+                    alert(err.ErrorMessage);
+                });
+            };
+            self.goToNewPayment();
+            return self;
+        }
+
+        function NewPaymentViewModel(data, successCallback) {
+            var self = {};
+            self.step = ko.observable(1);
+            self.configuration = data.configuration;
+            self.paymentTypes = ko.observableArray(data.paymentTypes || []);
+            self.months = ko.observableArray(data.months || []);
+            self.years = ko.observableArray(data.years || []);
+            self.frequencies = ko.observableArray(data.frequencies || []);
+            self.patientLogins = ko.observableArray(data.patientLogins || []);
+            self.data = {
+                paymentType: ko.observable(),
+                patientId: ko.observable(),
+                patientLoginId: ko.observable(),
+                amount: ko.observable(),
+                oneTimePaymentDate: ko.observable(),
+                recurringFrequency: ko.observable(),
+                recurringDateStart: ko.observable(),
+                recurringDateEnd: ko.observable(),
+                cardHolder: ko.observable(),
+                cardNumber: ko.observable(),
+                cardExpiryMonth: ko.observable(),
+                cardExpiryYear: ko.observable(),
+                cardSecurityCode: ko.observable(),
+            };
+            self.data.paymentType.extend({ required: true });
+            self.data.patientId.extend({ required: true });
+            self.data.patientLoginId.extend({ required: true });
+            self.data.amount.extend({ required: true, min: 1, digit: true });
+            self.data.oneTimePaymentDate.extend({
+                required:
+                    {
+                        onlyIf: function () { return self.data.paymentType() == 0; }
+                    },
+                date: true
+            });
+            self.data.recurringFrequency.extend({
+                required:
+                    {
+                        onlyIf: function () { return self.data.paymentType() == 1; }
+                    }
+            });
+            self.data.recurringDateStart.extend({
+                required:
+                    {
+                        onlyIf: function () { return self.data.paymentType() == 1; }
+                    },
+                date: true
+            });
+            self.data.recurringDateEnd.extend({
+                required:
+                    {
+                        onlyIf: function () { return self.data.paymentType() == 1; }
+                    },
+                date: true
+            });
+            self.data.cardHolder.extend({ required: true });
+            self.data.cardNumber.extend({ required: true, digit: true });
+            self.data.cardExpiryYear.extend({ cardExpiry: self.data.cardExpiryMonth });
+            self.data.cardSecurityCode.extend({ required: true, digit: true });
+
+            self.shouldOneTimeTransactionTimeWindowWarningBeShown = ko.pureComputed(function () {
+                var date = self.data.oneTimePaymentDate();
+                return date && moment(date).isAfter(moment().add(self.configuration.oneTimeTransactionTimeWindowWarning, "days"), "day");
+            });
+
+            self.paymentTypeStr = ko.pureComputed(function () {
+                var d = self.data.paymentType();
+                var match = ko.utils.arrayFirst(self.paymentTypes(), function (item) {
+                    return item.value == d;
+                });
+                return match ? match.text : "Unknown";
+            });
+
+            self.frequencyStr = ko.pureComputed(function () {
+                var d = self.data.recurringFrequency();
+                var match = ko.utils.arrayFirst(self.frequencies(), function (item) {
+                    return item.value == d;
+                });
+                return match ? match.text : "Unknown";
+            });
+
+            self.oneTimePaymentDatepickerOptions = {
+                format: "yyyy-mm-dd",
+                startDate: moment().format('YYYY-MM-DD'),
+                endDate: moment().add(self.configuration.oneTimeTransactionTimeWindow, 'days').format('YYYY-MM-DD')
+            };
+            self.recurringDatesDatepickerOptions = {
+                format: "yyyy-mm-dd",
+                startDate: moment().format('YYYY-MM-DD'),
+                endDate: moment().add(self.configuration.recurringTransactionTimeWindow, 'months').format('YYYY-MM-DD')
+            };
+            self.hasErrorsOnStep1 = ko.pureComputed(function () {
+                var r = ko.validation.group([
+                    self.data.paymentType,
+                    self.data.patientLoginId,
+                    self.data.amount,
+                    self.data.oneTimePaymentDate,
+                    self.data.recurringFrequency,
+                    self.data.recurringDateStart,
+                    self.data.recurringDateEnd
+                ]);
+                return ko.unwrap(r).length > 0;
+            });
+            self.hasErrorsOnStep2 = ko.pureComputed(function () {
+                var r = ko.validation.group([
+                    self.data.cardHolder,
+                    self.data.cardNumber,
+                    self.data.cardExpiryMonth,
+                    self.data.cardExpiryYear,
+                    self.data.cardSecurityCode,
+                ]);
+                return ko.unwrap(r).length > 0;
+            });
+
+            self.gotoStepTwo = function () {
+                if (!self.hasErrorsOnStep1()) {
+                    self.step(2);
+                }
+            };
+
+            self.pay = function () {
+                var data = ko.mapping.toJS(self.data);
+                $.ajax({
+                    url: "/Payments/SavePayment",
+                    type: "POST",
+                    data: data
+                }).done(function (r) {
+                    if (r.message) {
+                        alert(r.message);
+                    }
+                    successCallback({ data: data, response: r});
+                }).fail(function (err) {
+                    alert(err.ErrorMessage);
+                });
+            };
+            if (data) {
+                ko.mapping.fromJS(data.data, {}, self.data);
+            }
+            return self;
+        }
+
+        function PaymentChargeVM(data) {
+            var self = {};
+            self.id = ko.observable();
+            self.description = ko.observable();
+            self.patientName = ko.observable();
+            self.amount = ko.observable();
+            self.chargeDate = ko.observable();
+            self.isPatientGenerated = ko.observable();
+            self.isPatientGeneratedStr = ko.pureComputed(function () {
+                var isPatientGenerated = self.isPatientGenerated();
+                return isPatientGenerated ? "Patient Account" : "AABC Office";
+            });
+
+            self.update = function (data) {
+                ko.mapping.fromJS(data, {
+                    key: function (data) {
+                        return ko.unwrap(data.id);
+                    },
+                }, self);
+            };
+
+            if (data) {
+                self.update(data);
+            }
+
+            return self;
+        }
+
+        function PaymentHistoryVM(data) {
+            var self = {};
+            self.charges = ko.observableArray([]);
+            self.update = function (data) {
+                ko.mapping.fromJS(data, {
+                    key: function (data) {
+                        return ko.unwrap(data.id);
+                    },
+                    create: function (options) {
+                        return new PaymentChargeVM(options.data);
+                    }
+                }, self.charges);
+            };
+
+            if (data) {
+                self.update(data);
+            }
+            return self;
+        }
+
+        function ScheduledPaymentVM(data) {
+            var self = {};
+            self.id = ko.observable();
+            self.paymentType = ko.observable();
+            self.scheduledDate = ko.observable();
+            self.amount = ko.observable();
+            self.paymentChargeId = ko.observable();
+
+            self.update = function (data) {
+                ko.mapping.fromJS(data, {
+                    key: function (data) {
+                        return ko.unwrap(data.id);
+                    },
+                }, self);
+            };
+
+            if (data) {
+                self.update(data);
+            }
+
+            return self;
+        }
+
+        function PaymentVM(data) {
+            var self = {};
+            self.id = ko.observable();
+            self.active = ko.observable();
+            self.patientName = ko.observable();
+            self.recurringFrequency = ko.observable();
+            self.schedules = ko.observableArray([]);
+
+            self.update = function (data) {
+                ko.mapping.fromJS(data, {
+                    key: function (data) {
+                        return ko.unwrap(data.id);
+                    },
+                    schedules: {
+                        create: function (options) {
+                            return new ScheduledPaymentVM(options.data);
+                        }
+                    }
+                }, self);
+            };
+
+            if (data) {
+                self.update(data);
+            }
+            return self;
+        }
+
+        function ScheduledPaymentsVM(caseId) {
+            var self = {};
+            self.caseId = caseId;
+            self.payments = ko.observableArray([]);
+            self.update = function (data) {
+                ko.mapping.fromJS(data, {
+                    key: function (data) {
+                        return ko.unwrap(data.id);
+                    },
+                    create: function (options) {
+                        return new PaymentVM(options.data);
+                    }
+                }, self.payments);
+            };
+            self.load = function () {
+                return $.ajax({
+                    url: "/payments/getScheduledPayments",
+                    type: "GET",
+                    data: {
+                        caseId: self.caseId
+                    }
+                }).done(function (data) {
+                    self.update(data);
+                }).fail(function (err) {
+                    alert(err.ErrorMessage);
+                });
+            };
+            self.stopScheduled = function (payment) {
+                App.Dialogs.ConfirmDelete({
+                    message: "Are you sure you want to stop this payment?",
+                    confirmed: function () {
+                        $.ajax({
+                            url: "/Payments/StopScheduled",
+                            type: "POST",
+                            data: { id: payment.id() }
+                        }).done(function (r) {
+                            if (r.message) {
+                                alert(r.message);
+                            }
+                            if (r.success) {
+                                self.load();
+                            }
+                        }).fail(function (err) {
+                            alert(err.ErrorMessage);
+                        });
+                    }
+                });
+            }
+            return self;
+        }
+
+        ko.applyBindings(new PageViewModel(@Model.CaseID), $("#payment-page-wrapper")[0]);
+    });
+</script>

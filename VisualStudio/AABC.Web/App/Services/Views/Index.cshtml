@@ -1,0 +1,24 @@
+﻿
+<div class="content">
+
+    <table style="width:100%;">
+        <tr>
+            <td>
+                <p>services grid here</p>
+
+            </td>
+            <td>
+                <p>insurance detail here</p>
+
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+
+<script type="text/javascript">
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+    });
+</script>

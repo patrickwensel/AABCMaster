@@ -1,0 +1,49 @@
+﻿@model AABC.Web.App.Scheduler.Models.SchedulerDataObject
+
+
+
+@Html.DevExpress().Scheduler(
+    s =>
+    {
+        s.Name = "CaseProviderScheduler";
+        s.CallbackRouteValues = new { Controller = "Scheduler", Action = "Index" };
+        s.ClientSideEvents.Init = "function(s, e){ s.GetMainElement().ondblclick = function(evt){ clientSchedulerOnDoubleClick(s, evt); }; }";
+        s.ClientSideEvents.BeginCallback = "OnBeginCallback";
+
+        s.Storage.Appointments.Assign(AABC.Web.App.Scheduler.Models.SchedulerStorageProvider.DefaultAppointmentStorage);
+        s.Storage.Resources.Assign(AABC.Web.App.Scheduler.Models.SchedulerStorageProvider.DefaultResourceStorage);
+        s.Storage.EnableReminders = false;
+
+        s.OptionsCustomization.AllowAppointmentCreate = DevExpress.XtraScheduler.UsedAppointmentType.None;
+        s.OptionsCustomization.AllowAppointmentEdit = DevExpress.XtraScheduler.UsedAppointmentType.None;
+        s.OptionsCustomization.AllowAppointmentDelete = DevExpress.XtraScheduler.UsedAppointmentType.None;
+
+        s.GroupType = DevExpress.XtraScheduler.SchedulerGroupType.None;
+
+        s.ActiveViewType = DevExpress.XtraScheduler.SchedulerViewType.Month;
+
+        s.Views.DayView.Enabled = false;
+        s.Views.WorkWeekView.Enabled = false;
+        s.Views.WeekView.Enabled = false;
+        s.Views.TimelineView.Enabled = false;
+        s.Views.MonthView.Enabled = true;
+
+        s.OptionsBehavior.ShowViewSelector = true;
+        s.OptionsToolTips.ShowAppointmentToolTip = false;
+
+        // turn off appt navigators
+        //SchedulerNavigationButtonOptions snvo = s.OptionsView.NavigationButtons as SchedulerNavigationButtonOptions;
+        //snvo.Visibility = NavigationButtonVisibility.Never;
+
+        s.OptionsLoadingPanel.Enabled = false;
+
+        // hide popup and popup hover arrow
+        s.OptionsToolTips.ShowSelectionToolTip = false;
+        s.PopupMenuShowing = (sender, e) =>
+        {
+            e.Menu.Items.Clear();
+        };
+
+    }
+).Bind(Model.Appointments, Model.Resources).GetHtml()
+

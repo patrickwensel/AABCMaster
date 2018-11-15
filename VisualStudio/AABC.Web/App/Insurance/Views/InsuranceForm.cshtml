@@ -1,0 +1,45 @@
+﻿@model AABC.Web.App.Insurance.Models.InsuranceEditVM
+
+@using (Html.BeginForm("InsuranceForm", "Insurance", FormMethod.Post, new { id = "InsuranceForm" }))
+{
+    @Html.AntiForgeryToken();
+
+    @Html.HiddenFor(m => m.ID);
+    <div class="row" style="height:50px;">
+        <div class="col-4">
+            @Html.DevExpress().TextBox(
+                s =>
+                {
+                    s.Name = "Name";
+                    s.Properties.Caption = "Name";
+                    s.Properties.MaxLength = 50;
+                }
+            ).Bind(Model.Name).GetHtml()
+
+
+        </div>
+        <div class="col-4">
+            @Html.DevExpress().CheckBox(
+                i =>
+                {
+                    i.Name = "RequireCredentialsForBCBA";
+                    i.Text = "Require Credentials For BCBA";
+                }
+            ).Bind(Model.RequireCredentialsForBCBA).GetHtml()
+
+
+        </div>
+        <div class="col-4">
+            @Html.DevExpress().Button(
+                s =>
+                {
+                    s.Name = "InsuranceFormSaveButton";
+                    s.UseSubmitBehavior = false;
+                    s.Text = "Save Details";
+                }
+            ).GetHtml()
+        </div>
+    </div>
+
+
+}

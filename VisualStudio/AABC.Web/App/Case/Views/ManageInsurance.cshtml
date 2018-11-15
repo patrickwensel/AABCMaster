@@ -1,0 +1,326 @@
+﻿@model AABC.Web.Models.Cases.CaseInsuranceVM
+
+<div id="case-insurance-page" class="new-layout">
+    <div class="case-patient-headerlink">
+        @Html.DevExpress().HyperLink(
+                s =>
+                {
+                    s.NavigateUrl = "/Patients/Edit/" + Model.CaseID;
+                    s.Properties.Text = Model.PatientName + (!string.IsNullOrEmpty(Model.PatientGender) ? " (" + Model.PatientGender + ")" : string.Empty);
+                }
+            ).GetHtml()
+
+        @{Html.RenderAction("CaseHighRiskLabel", "Patients", new { CaseId = Model.CaseID });}
+    </div>
+
+    <div class="section-expander" id="expander-case-info">
+        <div class="section-expander-header">
+            <span>Insurance</span>
+        </div>
+        <div class="form-section">
+            <div class="form-section-header"><span>History</span></div>
+            <div class="form-section-content">
+                <div id="InsuranceGridContainer">
+                    @Html.Partial("ManageInsuranceGrid", Model.History)
+                </div>
+                <p>
+                    <button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:create"><div class="dxb"><span class="dx-vam">Add new</span></div></button>
+                </p>
+            </div>
+        </div>
+        <div class="form-section" data-bind="with:currentInsurance">
+            <div class="form-section-header"><span>Details</span></div>
+            <div class="form-section-content">
+                <div id="InsuranceFormContainer">
+                    @{ Html.RenderPartial("ManageInsuranceForm");}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" id="dxss_CaseInsuranceViewModelScripts">
+    function CaseInsuranceMaxOutOfPocket(data) {
+        var self = {};
+        self.id = ko.observable();
+        self.caseInsuranceId = ko.observable();
+        self.effectiveDate = ko.observable();
+        self.maxOutOfPocket = ko.observable();
+
+        self.effectiveDate.extend({ required: true, date: true });
+        self.maxOutOfPocket.extend({ required: true, number: true });
+
+        self.update = function (data) {
+            ko.mapping.fromJS(data, {
+                key: function (data) {
+                    return ko.unwrap(data.id);
+                }
+            }, self);
+        };
+
+        self.isValid = ko.pureComputed(function () {
+            var errors = ko.validation.group(self, { deep: true });
+            return errors().length === 0;
+        });
+
+        self.toJS = function () {
+            return JSON.parse(ko.mapping.toJSON(self));
+        };
+
+        self.reset = function () {
+            self.update({ id: 0, caseInsuranceId: 0, maxOutOfPocket: "", effectiveDate: "" });
+        };
+
+
+        if (data) {
+            self.update(data);
+        } else {
+            self.reset();
+        }
+
+        return self;
+    }
+
+    function CaseInsuranceFormVM(data) {
+        var self = {};
+        self.id = ko.observable(0);
+        self.insuranceCaseId = ko.observable(0);
+        self.insuranceId = ko.observable(0);
+        self.insuranceCarrierId = ko.observable(null);
+        self.memberName = ko.observable("");
+        self.memberId = ko.observable("");
+        self.primaryCardholderName = ko.observable("");
+        self.datePlanEffective = ko.observable(null);
+        self.datePlanTerminated = ko.observable(null);
+        self.fundingType = ko.observable("");
+        self.benefitType = ko.observable("");
+        self.coPayAmount = ko.observable(null);
+        self.coInsuranceAmount = ko.observable(null);
+        self.deductibleTotal = ko.observable(null);
+        self.otherNotes = ko.observable("");
+        self.hardshipWaiverLike = ko.observable(false);
+        self.hardshipWaiverApplied = ko.observable(false);
+        self.hardshipWaiverApproved = ko.observable(false);
+        self.maxOutOfPocket = ko.observableArray([]);
+
+        self.insuranceId.extend({ required: true });
+        self.datePlanEffective.extend({ date: true });
+        self.datePlanTerminated.extend({ date: true });
+        self.coPayAmount.extend({ number: true });
+        self.coInsuranceAmount.extend({ number: true });
+        self.deductibleTotal.extend({ number: true });
+
+        self.isNew = ko.pureComputed(function () {
+            return !ko.unwrap(self.id);
+        });
+
+        self.isValid = ko.pureComputed(function () {
+            var errors = ko.validation.group(self, { deep: true });
+            return errors().length === 0;
+        });
+
+        self.update = function (data) {
+            ko.mapping.fromJS(data, {
+                key: function (data) {
+                    return ko.unwrap(data.id);
+                },
+                "maxOutOfPocket": {
+                    create: function (options) {
+                        return new CaseInsuranceMaxOutOfPocket(options.data);
+                    }
+                }
+            }, self);
+        };
+
+        self.toJS = function () {
+            return JSON.parse(ko.mapping.toJSON(self, { ignore: "maxOutOfPocket" }));
+        };
+
+        if (data) {
+            self.update(data);
+        }
+
+        return self;
+    }
+
+    function CaseInsuranceVM(caseId) {
+        var self = {};
+        self.caseId = caseId;
+        self.insurances = ko.observableArray([]);
+        self.localCarriers = ko.observableArray([]);
+        self.fundingTypes = ko.observableArray([]);
+        self.benefitTypes = ko.observableArray([]);
+        self.maxOutOfPocket = new CaseInsuranceMaxOutOfPocket();
+        self.currentInsurance = ko.observable();
+        self.currentInsurance.subscribe(function (ins) {
+            if (ins) {
+                ins.insuranceId.subscribe(function (newValue) {
+                    var insuranceId = ko.unwrap(ins.insuranceId);
+                    if (insuranceId) {
+                        $.ajax({
+                            url: "/Case/GetLocalCarriers",
+                            type: "GET",
+                            data: {
+                                id: insuranceId
+                            }
+                        }).done(function (localCarriers) {
+                            self.localCarriers(localCarriers);
+                        }).fail(function () {
+                            App.Dialogs.Error("We're sorry, there was an error.");
+                        });
+                    }
+                });
+            }
+        });
+
+        self.isMaxOutOfPocketOnEdit = ko.pureComputed(function () {
+            return ko.unwrap(self.maxOutOfPocket.id);
+        });
+
+        self.addMaxOutOfPocket = function () {
+            var data = self.maxOutOfPocket.toJS();
+            var isNew = !self.isMaxOutOfPocketOnEdit();
+            var url = isNew ? "/Case/InsertCaseInsuranceMaxOutOfPocket" : "/Case/SaveCaseInsuranceMaxOutOfPocket";
+            if (isNew) {
+                data.caseInsuranceId = self.currentInsurance().id();
+            }
+            LoadingPanel.Show();
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data
+            }).done(function (response) {
+                if (isNew) {
+                    self.currentInsurance().maxOutOfPocket.push(new CaseInsuranceMaxOutOfPocket(response));
+                } else {
+                    var e = ko.utils.arrayFirst(self.currentInsurance().maxOutOfPocket(), function (item) {
+                        return item.id() === data.id;
+                    });
+                    if (e) {
+                        console.log(response);
+                        e.update(response);
+                    }
+                }
+                self.cancelEditMaxOutOfPocket();
+            }).fail(function () {
+                App.Dialogs.Error("We're sorry, there was an error.");
+            }).always(function () {
+                LoadingPanel.Hide();
+            });
+        };
+
+        self.editMaxOutOfPocket = function (maxOutOfPocket) {
+            var data = maxOutOfPocket.toJS();
+            self.maxOutOfPocket.update(data)
+        };
+
+        self.cancelEditMaxOutOfPocket = function () {
+            self.maxOutOfPocket.reset();
+        };
+
+        self.deleteMaxOutOfPocket = function (maxOutOfPocket) {
+            if (confirm("Are you sure you want to delete this record?")) {
+                LoadingPanel.Show();
+                $.ajax({
+                    url: "/Case/DeleteCaseInsuranceMaxOutOfPocket",
+                    type: "POST",
+                    data: {
+                        id: maxOutOfPocket.id
+                    }
+                }).done(function () {
+                    self.currentInsurance().maxOutOfPocket.remove(maxOutOfPocket);
+                }).fail(function () {
+                    App.Dialogs.Error("We're sorry, there was an error.");
+                }).always(function () {
+                    LoadingPanel.Hide();
+                });
+            }
+        };
+
+        self.cleaveOptions = {
+            date: true,
+            datePattern: ['m', 'd', 'Y'],
+            getDisplay: function (value) {
+                return moment(value).format("MM/DD/YYYY");
+            },
+            getValue: function (value) {
+                return moment(value, "MM/DD/YYYY").toISOString();
+            }
+        };
+
+        self.canSelectCarrier = ko.pureComputed(function () {
+            var ins = self.currentInsurance();
+            return ins && ins.insuranceId() && self.localCarriers().length > 0;
+        });
+
+        self.create = function () {
+            var _new = new CaseInsuranceFormVM();
+            _new.insuranceCaseId(self.caseId);
+            self.currentInsurance(_new);
+        };
+
+        self.save = function () {
+            var ins = self.currentInsurance();
+            if (ins) {
+                var data = ins.toJS();
+                var url = !ins.isNew() ? "/Case/SaveInsurance" : "/Case/InsertInsurance";
+                LoadingPanel.Show();
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: data
+                }).done(function (response) {
+                    if (response.error) {
+                        alert('Please make sure the insurance dates do not overlap an existing insurance.  Note if no date is specified, it will be considered infinite.');
+                    } else {
+                        location.reload();
+                    }
+                }).fail(function () {
+                    App.Dialogs.Error("We're sorry, there was an error.");
+                }).always(function () {
+                    LoadingPanel.Hide();
+                });
+            }
+        }
+        return self;
+    }
+    $(function () {
+        var vm = new CaseInsuranceVM(@Model.CaseID);
+        var grid = App.DevEx.GetControl("CaseInsuranceEditGrid");
+
+
+        grid.RowDblClick.AddHandler(function (s, e) {
+            var id = s.keys[s.GetFocusedRowIndex()];
+            LoadingPanel.Show();
+            $.ajax({
+                url: "/Case/GetInsurance",
+                type: "GET",
+                data: {
+                    caseInsuranceId: id
+                }
+            }).done(function (data) {
+                var ins = new CaseInsuranceFormVM();
+                vm.currentInsurance(ins);
+                ins.update(data);
+            }).fail(function (response) {
+                App.Dialogs.Error("We're sorry, but we couldn't seem to load the case insurance.");
+            }).always(function () {
+                LoadingPanel.Hide();
+            });
+        });
+
+
+        $.ajax({
+            url: "/Case/GetMetadata"
+        }).done(function (data) {
+            vm.insurances(data.insuranceCompanies);
+            vm.fundingTypes(data.insuranceFundingTypes);
+            vm.benefitTypes(data.insuranceBenefitTypes);
+            var element = $('#case-insurance-page')[0];
+            ko.cleanNode(element);
+            ko.applyBindings(vm, element);
+        });
+
+
+        App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+    })
+</script>

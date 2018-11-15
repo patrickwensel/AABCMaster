@@ -1,0 +1,84 @@
+﻿
+<script type="text/javascript">
+    function tabInit(s, e) {
+        acPage.PerformCallback();
+    }
+
+    function tabBeginCallback(s, e) {
+        var tab = acPage.GetTab(acPage.GetActiveTabIndex());
+        e.customArgs["tabName"] = tab.name;
+    }
+
+    function activeTabChanging(s, e) {
+        e.reloadContentOnCallback = true;
+    }
+
+    function showTempPass(pass) {
+        App.Dialogs.MessageBox("The temp password is: \n\n" + pass);
+    }
+
+</script>
+
+@Html.DevExpress().PageControl(
+    s => {
+
+        s.Name = "acPage";
+        s.CallbackRouteValues = new { controller = "Admin", action = "GetTab" };
+        s.EnableClientSideAPI = true;
+        s.ActivateTabPageAction = ActivateTabPageAction.Click;
+        s.EnableHotTrack = true;
+        s.SaveStateToCookies = false;
+        s.TabAlign = TabAlign.Left;
+        s.TabPosition = TabPosition.Top;
+        s.Width = Unit.Percentage(100);
+        s.SettingsLoadingPanel.Enabled = false;
+        
+        s.TabPages.Add(
+            p => {
+                p.Name = "Users";
+                p.Text = "Users";
+            }
+        );
+
+        s.TabPages.Add(
+            p => {
+                p.Name = "ProviderPortal";
+                p.Text = "Provider Portal";
+            }
+        );
+
+        s.TabPages.Add(
+            p => {
+                p.Name = "PatientPortal";
+                p.Text = "Patient Portal";
+            }
+        );
+
+        s.TabPages.Add(
+            p => {
+                p.Name = "DataLists";
+                p.Text = "Data Lists";
+            }
+        );
+
+        s.TabPages.Add(
+            p => {
+                p.Name = "Commands";
+                p.Text = "Commands";
+            }
+        );
+
+
+
+        s.ClientSideEvents.Init = "tabInit";
+        s.ClientSideEvents.BeginCallback = "tabBeginCallback";
+        s.ClientSideEvents.ActiveTabChanging = "activeTabChanging";
+
+        s.ActiveTabIndex = ViewBag.TabIndex ?? 0;
+
+    }
+).GetHtml()
+
+@if (ViewBag.TempPass != null) {
+    <script type="text/javascript">showTempPass('@ViewBag.TempPass');</script>
+}

@@ -1,0 +1,27 @@
+﻿
+
+
+<p>This reports shows the time alloted to each authorization for a given hours entry.</p>
+<p>Select the date range and enter a Case ID to view.</p>
+
+@*@Html.DevExpress().GridView(
+    s => {
+        s.Name = "ReportingAuthsUnmatchedToInsurancesGrid";
+
+        s.Width = Unit.Percentage(100);
+
+        s.SettingsPager.PageSize = 200;
+
+        s.CallbackRouteValues = new { Controller = "Reporting", Action = "AuthsInvalidCaseAuthsGrid" };
+
+        s.Settings.ShowFilterRow = true;
+
+        s.Columns.Add("PatientLastName", "Last Name");
+        s.Columns.Add("PatientFirstName", "First Name");
+        s.Columns.Add("InsuranceName", "Insurance");
+        s.Columns.Add("CodeCode", "Auth Code");
+        s.Columns.Add("AuthStartDate", "Start Date").PropertiesEdit.DisplayFormatString = "d";
+        s.Columns.Add("AuthEndDate", "End Date").PropertiesEdit.DisplayFormatString = "d";
+        s.Columns.Add("CodeDescription", "Description");
+    }
+).Bind(Model).GetHtml()*@

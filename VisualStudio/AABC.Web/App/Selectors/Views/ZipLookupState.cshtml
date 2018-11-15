@@ -1,0 +1,21 @@
+﻿@model AABC.Web.Models.Shared.ZipLookupVM
+
+@Html.DevExpress().ComboBox(
+        s => {
+            s.Name = "zluState";
+            s.Properties.TextField = "Name";
+            s.Properties.ValueField = "Code";
+            s.Properties.ValueType = typeof(string);
+            s.Properties.TextFormatString = "{0} - {1}";
+            s.Properties.Width = 200;
+            s.Properties.Columns.Add("Code", "Code", 35);
+            s.Properties.Columns.Add("Name", "Name");
+            s.Properties.Caption = "State";
+            s.Properties.CaptionCellStyle.Width = 100;
+
+            s.CallbackRouteValues = new { Controller = "Selectors", Action = "ZipLookupStateCallback" };
+            s.Properties.ClientSideEvents.SelectedIndexChanged = "function(s, e) { zluCity.PerformCallback(); zluCounty.PerformCallback(); }";
+
+            //s.PreRender = (sender, e) => AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model.zluState, "Code");
+        }
+    ).BindList(Model.zluStatesList).Bind(Model.zluState).GetHtml()

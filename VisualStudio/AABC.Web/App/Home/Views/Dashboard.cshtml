@@ -1,0 +1,7 @@
+
+
+@if (ViewBag.PushState) {
+    <script type="text/javascript">initView('@ViewBag.Push.Route', '@ViewBag.Push.Title', null, @ViewBag.Push.GroupIndex, @ViewBag.Push.GroupItemIndex);</script>
+} else {
+    <script type="text/javascript">initView(null, null, null, @ViewBag.Push.GroupIndex, @ViewBag.Push.GroupItemIndex);</script>
+}

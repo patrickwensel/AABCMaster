@@ -1,0 +1,139 @@
+﻿@model System.Data.DataTable
+
+@Html.DevExpress().GridView(settings =>
+{
+
+    settings.Name = "gvGeneralHours";
+    settings.Width = Unit.Percentage(100);
+    settings.SettingsBehavior.AllowSort = false;
+    settings.SettingsBehavior.AllowGroup = false;
+    settings.SettingsBehavior.AllowFocusedRow = true;
+    settings.SettingsBehavior.AllowSelectByRowClick = true;
+    settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    settings.SettingsBehavior.AllowDragDrop = false;
+
+    //settings.CallbackRouteValues = new { Controller = "Case", Action = "GeneralHoursGridCallback" };
+    //settings.ClientSideEvents.BeginCallback = "function(s, e) { gvGeneralHours3BeginCallback(s, e); }";
+
+    settings.KeyFieldName = "AuthID";
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "InsuranceName";
+        col.Caption = "Insurance";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 40;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "AuthType";
+        col.Caption = "Type";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 40;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "AuthCode";
+        col.Caption = "Code";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 50;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "AuthDescription";
+        col.Caption = "Description";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.CssClass = "auth-description"; // settings.Styles.Cell.CssClass = "CellsEllipsis";
+        col.Width = 150;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "AuthStartDate";
+        col.Caption = "Start Date";
+        col.PropertiesEdit.DisplayFormatString = "d";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 50;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "AuthEndDate";
+        col.Caption = "End Date";
+        col.PropertiesEdit.DisplayFormatString = "d";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 50;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "AuthTotalHoursApproved";
+        col.Caption = "Total Hours";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 60;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "ExpectedAvgHoursWeek";
+        col.Caption = "Avg Hrs/Wk";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 60;
+        col.PropertiesEdit.DisplayFormatString = "0.00";
+        col.Settings.FilterMode = ColumnFilterMode.DisplayText;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "AuthBCBA";
+        col.Caption = "Auth BCBA";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 40;
+    });
+    DateTime d;
+    foreach (var c in Model.Columns.Cast<System.Data.DataColumn>().Where(m => DateTime.TryParse(m.ColumnName, out d)))
+    {
+        settings.Columns.Add(col =>
+        {
+            col.FieldName = c.ColumnName;
+            col.Caption = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(DateTime.Parse(c.ColumnName).Month);
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.Width = 35;
+            col.PropertiesEdit.DisplayFormatString = "0.00";
+            col.PropertiesEdit.NullDisplayText = 0.ToString("0.00");
+        });
+    }
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "AuthTotalHoursRemaining";
+        col.Caption = "Remaining";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 40;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "AvgRemainingHoursWeek";
+        col.Caption = "Avg/Wk Remaining";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 75;
+        col.PropertiesEdit.DisplayFormatString = "0.00";
+        col.Settings.FilterMode = ColumnFilterMode.DisplayText;
+    });
+
+}).Bind(Model).GetHtml()

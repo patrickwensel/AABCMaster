@@ -1,0 +1,202 @@
+﻿@model IEnumerable<AABC.Web.Models.Providers.CaseHoursListItemVM>
+
+@Html.DevExpress().GridView(s =>
+{
+    s.Name = "gvProviderHoursGrid";
+    s.KeyFieldName = "HoursID";
+    s.Width = Unit.Percentage(100);
+    s.Height = 700;
+    s.CallbackRouteValues = new { Controller = "Providers", Action = "ProviderHoursGridCallback" };
+
+    s.Settings.ShowTitlePanel = true;
+    s.SettingsPager.PageSize = 500;
+    s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+    //s.SettingsEditing.Mode = GridViewEditingMode.Batch;
+    //s.SettingsEditing.BatchEditSettings.EditMode = GridViewBatchEditMode.Row;
+    //s.SettingsEditing.BatchUpdateRouteValues = new { Controller = "Case", Action = "TimeBillGridBatchCallback" };
+
+    s.ClientSideEvents.BeginCallback = "function(s, e) { hours.beginCallback(s, e); }";
+    s.ClientSideEvents.EndCallback = "function(s, e) { hours.endCallback(s, e); }";
+
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colStatus";
+        col.Caption = "Status";
+        col.FieldName = "StatusCode";
+        col.Width = 30;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.EditCellStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colHasData";
+        col.Caption = "Has Data";
+        col.FieldName = "HasCatalystData";
+        col.Width = 30;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.EditCellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.ColumnType = MVCxGridViewColumnType.CheckBox;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colBilled";
+        col.Caption = "Billed";
+        col.FieldName = "Billed";
+        col.Width = 30;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.EditCellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.EditFormSettings.Visible = DefaultBoolean.False;
+        col.ColumnType = MVCxGridViewColumnType.CheckBox;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colPaid";
+        col.Caption = "Paid";
+        col.FieldName = "Paid";
+        col.Width = 30;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.EditCellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.EditFormSettings.Visible = DefaultBoolean.False;
+        col.ColumnType = MVCxGridViewColumnType.CheckBox;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colCaseAuth";
+        col.FieldName = "CaseAuth.ID";
+        col.Caption = "Auth";
+        col.Width = 75;
+        col.ColumnType = MVCxGridViewColumnType.ComboBox;
+        var cbProps = col.PropertiesEdit as ComboBoxProperties;
+        cbProps.Columns.Add("Class", "Class");
+        cbProps.Columns.Add("Code", "Code");
+        cbProps.Columns.Add("Start", "Start");
+        cbProps.Columns.Add("End", "End");
+        cbProps.TextFormatString = "{1}";
+        cbProps.ValueField = "ID";
+        cbProps.ValueType = typeof(int);
+        cbProps.DataSource = ViewBag.CaseAuthList;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colDate";
+        col.Caption = "Date";
+        col.FieldName = "Date";
+        col.Width = 75;
+        col.PropertiesEdit.DisplayFormatString = "d";
+        col.ColumnType = MVCxGridViewColumnType.DateEdit;
+        var deProps = col.PropertiesEdit as DateEditProperties;
+        deProps.DisplayFormatString = "d";
+        deProps.Width = 75;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colTimeIn";
+        col.FieldName = "TimeIn";
+        col.Caption = "Time In";
+        col.PropertiesEdit.DisplayFormatString = "t";
+        col.ColumnType = MVCxGridViewColumnType.TimeEdit;
+        var teProps = col.PropertiesEdit as TimeEditProperties;
+        teProps.DisplayFormatString = "t";
+        teProps.Width = 75;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colTimeOut";
+        col.FieldName = "TimeOut";
+        col.Caption = "Time Out";
+        col.PropertiesEdit.DisplayFormatString = "t";
+        col.ColumnType = MVCxGridViewColumnType.TimeEdit;
+        var teProps = col.PropertiesEdit as TimeEditProperties;
+        teProps.DisplayFormatString = "t";
+        teProps.Width = 75;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colService";
+        col.FieldName = "Service.ID";
+        col.Caption = "Service";
+        col.ColumnType = MVCxGridViewColumnType.ComboBox;
+        var cbProps = col.PropertiesEdit as ComboBoxProperties;
+        cbProps.TextField = "Name";
+        cbProps.ValueField = "ID";
+        cbProps.ValueType = typeof(int);
+        cbProps.DataSource = ViewBag.ServiceList;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colHours";
+        col.FieldName = "Hours";
+        col.Caption = "Hours";
+        col.Width = 50;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colPayable";
+        col.FieldName = "Payable";
+        col.Caption = "Payable";
+        col.Width = 50;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colBillable";
+        col.FieldName = "Billable";
+        col.Caption = "Billable";
+        col.Width = 50;
+    });
+
+    s.Columns.Add(col =>
+    {
+        col.Name = "colPatient";
+        col.Caption = "Patient";
+        col.FieldName = "PatientName";
+        col.EditFormSettings.Visible = DefaultBoolean.False;
+    });
+
+    s.SetTitlePanelTemplateContent(c => 
+    {
+        ViewContext.Writer.Write("<div style='float: left;'>");
+        ViewContext.Writer.Write("<table><tr><td>");
+        Html.DevExpress().ComboBox(cb => {
+            cb.Name = "SelectedDate";
+            cb.Properties.TextField = "Display";
+            cb.Properties.ValueField = "Date";
+            cb.Properties.ValueType = typeof(DateTime);
+            cb.PreRender = (sender, e) =>
+            {
+            AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, ViewBag.SelectedDate, "Date");
+            };
+            cb.Properties.Caption = "Current Period";
+            cb.Properties.ClientSideEvents.ValueChanged = "function(s, e) { hours.periodSelected(); }";
+        }).BindList(ViewBag.AvailableDates).Render();
+        ViewContext.Writer.Write("</td><td style='padding-left: 5px;'>");
+        ViewContext.Writer.Write("</td></tr></table>");
+        ViewContext.Writer.Write("</div>");
+        ViewContext.Writer.Write("<div style='float: right;'><em>(Total Hours, Payable, Billable)</em> &nbsp;&nbsp ");
+        ViewContext.Writer.Write(Model.Sum(h => h.Hours) + "|" + Model.Sum(h => h.Payable)+ "|" + Model.Sum(h => h.Billable));
+    });
+
+    s.HtmlRowPrepared = (settings, e) => 
+    {
+        var statusCode = e.GetValue("StatusCode") as string;
+        if (statusCode == "F")
+        {
+            e.Row.ForeColor = System.Drawing.Color.DarkGray;
+        }
+        else if (statusCode == "P")
+        {
+            e.Row.ForeColor = System.Drawing.Color.DarkSlateGray;
+        }
+    };
+}).Bind(Model).GetHtml()

@@ -1,0 +1,240 @@
+/* dym:SQLSource Version 1.0
+---------------------------------------------------------------------
+dym:TargetStartingVersion: 2.2.2.0
+dym:TargetEndingVersion: 2.2.3.0
+---------------------------------------------------------------------
+
+	Note field lengths
+	Patient Search County
+
+---------------------------------------------------------------------*/
+
+-- ============================
+-- Increase note field sizes
+-- ============================
+ALTER TABLE dbo.Cases ALTER COLUMN CaseStatusNotes NVARCHAR(MAX) NULL;
+ALTER TABLE dbo.Cases ALTER COLUMN CaseRequiredHoursNotes NVARCHAR(MAX) NULL;
+ALTER TABLE dbo.Cases ALTER COLUMN CaseRequiredServicesNotes NVARCHAR(MAX) NULL;
+ALTER TABLE dbo.Cases ALTER COLUMN CaseDischargeNotes NVARCHAR(MAX) NULL;
+GO
+ALTER TABLE dbo.CaseNotes ALTER COLUMN Comments NVARCHAR(MAX) NULL;
+ALTER TABLE dbo.CaseNotes ALTER COLUMN FollowupComment NVARCHAR(MAX) NULL;
+GO
+ALTER TABLE dbo.CaseNoteTasks ALTER COLUMN CompletedRemarks NVARCHAR(MAX) NULL;
+GO
+
+
+
+-- ============================
+-- Add County to Patients Search data
+-- ============================
+
+ALTER PROCEDURE [dbo].[GetDischargedPatientSearchViewData](@ABATypeID INT) AS BEGIN
+	/* TEST DATA
+	DECLARE @ABATypeID INT
+	SET @ABATypeID = (SELECT ID FROM dbo.ProviderTypes WHERE ProviderTypeCode = 'AIDE')
+	-- */
+
+	SELECT
+		c.ID,
+		p.ID AS PatientID,
+		p.PatientFirstName AS FirstName,
+		p.PatientLastName AS LastName,
+		p.PatientCity,
+		p.PatientState,
+		p.PatientZip AS Zip,
+		z.ZipCounty AS County,
+		c.CaseStatus AS Status,
+		c.CaseStatusReason AS StatusReason,
+		c.CaseStartDate AS StartDate,
+		auth.LatestEndDate AS EndingAuthDate,
+		c.CaseHasPrescription AS HasPrescription,
+		c.CaseHasAssessment AS HasAssessment,
+		c.CaseHasIntake AS HasIntake,
+		CASE WHEN sup.CaseID IS NOT NULL THEN 1 ELSE 0 END AS HasSupervisor,
+		sup.ProviderID AS PrimaryBCBAID,
+		sup.ProviderFirstName AS BCBAFirstName,
+		sup.ProviderLastName AS BCBALastName,
+		aide.ProviderID AS PrimaryAideID,
+		aide.ProviderFirstName AS AideFirstName,
+		aide.ProviderLastName AS AideLastName,
+		-- p.PatientInsuranceCompanyName,
+		i.InsuranceName AS PatientInsuranceCompanyName,
+		s.ID AS AssignedStaffID,
+		s.StaffFirstName AS AssignedStaffFirstName,
+		s.StaffLastName AS AssignedStaffLastName,
+		c.CaseNeedsStaffing AS NeedsStaffing,
+		c.CaseNeedsRestaffing AS NeedsRestaffing,
+		c.CaseRestaffingReason AS RestaffingReason
+		
+	FROM dbo.Patients AS p
+	INNER JOIN dbo.Cases AS c ON p.ID = c.PatientID
+
+	LEFT JOIN dbo.PatientCurrentInsurance AS pci ON c.ID = pci.CaseID
+
+	LEFT JOIN dbo.Insurances AS i ON i.ID = pci.InsuranceID
+
+	LEFT JOIN dbo.ZipCodes AS z ON z.ZipCode = p.PatientZip
+
+	LEFT JOIN (
+		SELECT base.CaseID, base.ProviderID, tmp.ProviderFirstName, tmp.ProviderLastName
+		FROM (
+			SELECT 
+				cp.CaseID,
+				MAX(subP.ID) AS ProviderID			
+			FROM dbo.CaseProviders AS cp 
+			INNER JOIN dbo.Providers AS subP ON cp.ProviderID = subP.ID
+			WHERE cp.Active = 1 AND cp.IsSupervisor = 1 
+			GROUP BY cp.CaseID
+		) AS base
+		INNER JOIN dbo.Providers AS tmp ON base.ProviderID = tmp.ID
+	) AS sup ON sup.CaseID = c.ID
+
+	LEFT JOIN (
+		SELECT
+			cac.CaseID,
+			MAX(cac.AuthEndDate) AS LatestEndDate
+		FROM dbo.CaseAuthCodes AS cac
+		WHERE cac.AuthEndDate IS NOT NULL
+		GROUP BY cac.CaseID
+	) AS auth ON c.ID = auth.CaseID
+
+	LEFT JOIN (
+		SELECT base.CaseID, base.ProviderID, tmp.ProviderFirstName, tmp.ProviderLastName
+		FROM (
+			SELECT
+				cp.CaseID,
+				MIN(subP.ID) AS ProviderID		
+			FROM dbo.CaseProviders AS cp 
+			INNER JOIN dbo.Providers AS subP ON cp.ProviderID = subP.ID
+			WHERE cp.Active = 1 AND subP.ProviderType = @ABATypeID
+			GROUP BY cp.CaseID
+		) AS base
+		INNER JOIN dbo.Providers AS tmp ON base.ProviderID = tmp.ID
+	) AS aide ON aide.CaseID = c.ID
+
+	LEFT JOIN dbo.Staff AS s ON s.ID = c.CaseAssignedStaffID
+
+	WHERE c.CaseStatus = -1
+
+	ORDER BY LastName, FirstName;
+
+	RETURN
+	END
+GO
+
+
+
+
+
+ALTER PROCEDURE [dbo].[GetPatientSearchViewData](@ABATypeID INT) AS BEGIN
+	/* TEST DATA
+	DECLARE @ABATypeID INT
+	SET @ABATypeID = (SELECT ID FROM dbo.ProviderTypes WHERE ProviderTypeCode = 'AIDE')
+	-- */
+
+	SELECT
+		c.ID,
+		p.ID AS PatientID,
+		p.PatientFirstName AS FirstName,
+		p.PatientLastName AS LastName,
+		p.PatientCity,
+		p.PatientState,
+		p.PatientZip AS Zip,
+		z.ZipCounty AS County,
+		c.CaseStatus AS Status,
+		c.CaseStatusReason AS StatusReason,
+		auth.LatestStartDate AS StartDate,
+		auth.LatestEndDate AS EndingAuthDate,
+		c.CaseHasPrescription AS HasPrescription,
+		c.CaseHasAssessment AS HasAssessment,
+		c.CaseHasIntake AS HasIntake,
+		CASE WHEN sup.CaseID IS NOT NULL THEN 1 ELSE 0 END AS HasSupervisor,
+		sup.ProviderID AS PrimaryBCBAID,
+		sup.ProviderFirstName AS BCBAFirstName,
+		sup.ProviderLastName AS BCBALastName,
+		aide.ProviderID AS PrimaryAideID,
+		aide.ProviderFirstName AS AideFirstName,
+		aide.ProviderLastName AS AideLastName,
+		-- p.PatientInsuranceCompanyName,
+		i.InsuranceName AS PatientInsuranceCompanyName,
+		ilc.CarrierName,
+		s.ID AS AssignedStaffID,
+		s.StaffFirstName AS AssignedStaffFirstName,
+		s.StaffLastName AS AssignedStaffLastName,
+		c.CaseNeedsStaffing AS NeedsStaffing,
+		c.CaseNeedsRestaffing AS NeedsRestaffing,
+		c.CaseRestaffingReason AS RestaffingReason,
+		c.CaseRestaffReasonID AS RestaffingReasonID
+
+		
+	FROM dbo.Patients AS p
+	INNER JOIN dbo.Cases AS c ON p.ID = c.PatientID
+	
+	LEFT JOIN dbo.PatientCurrentInsurance AS pci ON pci.CaseID = c.ID
+
+	LEFT JOIN dbo.InsuranceLocalCarriers AS ilc ON pci.CaseInsuranceCarrierID = ilc.ID
+
+	LEFT JOIN dbo.Insurances AS i ON i.ID = pci.InsuranceID
+
+	LEFT JOIN dbo.ZipCodes AS z ON z.ZipCode = p.PatientZip
+
+	LEFT JOIN (
+		SELECT base.CaseID, base.ProviderID, tmp.ProviderFirstName, tmp.ProviderLastName
+		FROM (
+			SELECT 
+				cp.CaseID,
+				MAX(subP.ID) AS ProviderID			
+			FROM dbo.CaseProviders AS cp 
+			INNER JOIN dbo.Providers AS subP ON cp.ProviderID = subP.ID
+			WHERE cp.Active = 1 AND cp.IsSupervisor = 1 
+			GROUP BY cp.CaseID
+		) AS base
+		INNER JOIN dbo.Providers AS tmp ON base.ProviderID = tmp.ID
+	) AS sup ON sup.CaseID = c.ID
+
+	LEFT JOIN (
+		SELECT
+			cac.CaseID,
+			MAX(cac.AuthEndDate) AS LatestEndDate,
+			MAX(cac.AuthStartDate) AS LatestStartDate
+		FROM dbo.CaseAuthCodes AS cac
+		WHERE cac.AuthEndDate IS NOT NULL
+		GROUP BY cac.CaseID
+	) AS auth ON c.ID = auth.CaseID
+
+	LEFT JOIN (
+		SELECT base.CaseID, base.ProviderID, tmp.ProviderFirstName, tmp.ProviderLastName
+		FROM (
+			SELECT
+				cp.CaseID,
+				MIN(subP.ID) AS ProviderID		
+			FROM dbo.CaseProviders AS cp 
+			INNER JOIN dbo.Providers AS subP ON cp.ProviderID = subP.ID
+			WHERE cp.Active = 1 AND subP.ProviderType = @ABATypeID
+			GROUP BY cp.CaseID
+		) AS base
+		INNER JOIN dbo.Providers AS tmp ON base.ProviderID = tmp.ID
+	) AS aide ON aide.CaseID = c.ID
+
+	LEFT JOIN dbo.Staff AS s ON s.ID = c.CaseAssignedStaffID
+
+	WHERE c.CaseStatus <> -1
+
+	ORDER BY LastName, FirstName;
+
+	RETURN
+	END
+
+GO
+
+
+
+
+
+
+
+GO
+EXEC meta.UpdateVersion '2.2.3.0'
+GO
+

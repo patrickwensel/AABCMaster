@@ -1,0 +1,70 @@
+﻿@model AABC.Web.App.Account.Models.PermissionListVM
+
+@Html.DevExpress().GridView(s => {
+
+    s.Name = "permissionsGrid";
+    s.KeyFieldName = "UserPermissionID";
+    s.Width = Unit.Percentage(100);
+
+    s.CallbackRouteValues = new { Controller = "Admin", Action = "UserPermissionGridCallback" };
+    s.ClientSideEvents.BeginCallback = "permissionsGridBeginCallback";
+
+    s.SettingsPager.PageSize = 10;
+
+    s.SettingsBehavior.AllowSort = false;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = true;
+    s.SettingsBehavior.AllowSelectByRowClick = true;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    s.SettingsBehavior.AllowDragDrop = false;
+
+    s.HtmlDataCellPrepared = (sender, e) => {
+        e.Cell.Attributes.Add(
+            "onclick",
+            string.Format("OnCellClick('{0}', '{1}');", e.VisibleIndex, e.DataColumn.FieldName)
+         );
+    };
+
+    var col = s.Columns.Add("isAllowed");
+    col.FieldName = "isAllowed";
+    col.Caption = "Allowed";
+    col.ColumnType = MVCxGridViewColumnType.CheckBox;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.PropertiesEdit.Style.HorizontalAlign = HorizontalAlign.Center;
+    col.Width = 45;
+
+    col = s.Columns.Add("Permission");
+    col.FieldName = "PermissionName";
+    col.Caption = "Permission";
+    col.ReadOnly = true;
+    col.EditFormSettings.Visible = DefaultBoolean.False;
+
+    col = s.Columns.Add("Description");
+    col.FieldName = "Description";
+    col.Caption = "Description";
+    col.ReadOnly = true;
+    col.EditFormSettings.Visible = DefaultBoolean.False;
+
+    // add remove button
+
+    //settings.Columns.Add(
+    //    s => {
+    //        s.Caption = "Type";
+    //        s.UnboundType = DevExpress.Data.UnboundColumnType.String;
+    //        s.Width = 75;
+    //        s.SetDataItemTemplateContent(
+    //            c => {
+    //                AABC.Domain.Providers.ProviderType Type = DataBinder.Eval(c.DataItem, "Type") as AABC.Domain.Providers.ProviderType;
+    //                string type = DataBinder.Eval(c.DataItem, "Type.Code") as string;
+    //                System.Diagnostics.Debug.WriteLine(DataBinder.Eval(c.DataItem, "Type").GetType().ToString());
+    //                System.Diagnostics.Debug.WriteLine("string: " + type + "; obj: " + Type.ToString());
+    //                ViewContext.Writer.Write(Type.Code);
+    //            }
+    //        );
+    //    }
+    //);
+
+}).Bind(Model.PermissionList).GetHtml()
+
+

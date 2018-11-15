@@ -1,0 +1,77 @@
+﻿<style type="text/css">
+    #auth-resolution-details-modal-body {
+        height: 300px;
+        overflow-y: scroll;
+        border-top: 1px solid silver;
+        border-bottom: 1px solid silver;
+    }
+
+        #auth-resolution-details-modal-body ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+            #auth-resolution-details-modal-body ul li {
+                border-bottom: 1px solid silver;
+                padding: 10px;
+            }
+
+                #auth-resolution-details-modal-body ul li:last-child {
+                    border-bottom: none;
+                }
+
+        #auth-resolution-details-modal-body label.fixed {
+            width: 125px;
+            display: block;
+            float: left;
+        }
+</style>
+
+<div id="auth-resolution-details-modal-body">
+    <!-- ko ifnot: items().length > 0 -->
+    <ul>
+        <li>No records.</li>
+    </ul>
+    <!-- /ko -->
+    <!-- ko if: items().length > 0 -->
+    <ul data-bind="foreach:items">
+        <li>
+            <label class="fixed"><strong>Was Resolved: </strong></label><span data-bind="text:wasResolved"></span><br /><br />
+            <div style="width:50%;float:left">
+                <label class="fixed"><strong>Date: </strong></label><span data-bind="text:moment(hoursDate).format('MM/DD/YYYY')"></span><br />
+                <label class="fixed"><strong>Billable Hours</strong></label><span data-bind="text:numeral(billableHours).format('0,0.00')"></span><br />
+                <label class="fixed"><strong>Service: </strong></label><span data-bind="text:serviceCode"></span><br />
+                <label class="fixed"><strong>Insurance: </strong></label><span data-bind="text:insuranceName"></span><br />
+                <label class="fixed"><strong>Provider Code: </strong></label><span data-bind="text:providerTypeCode"></span><br />
+            </div>
+            <div style="width:50%;float:left">
+                <!-- ko if: resolvedAuthCode -->
+                <label class="fixed"><strong>Auth Code: </strong></label><span data-bind="text:resolvedAuthCode"></span><br />
+                <!-- /ko -->
+                <!-- ko if: resolvedCaseAuthStartDate || resolvedCaseAuthEndDate -->
+                <label class="fixed"><strong>Auth Start - End: </strong></label>
+                <span data-bind="text:resolvedCaseAuthStartDate ? moment(resolvedCaseAuthStartDate).format('MM/DD/YYYY') : ''"></span> - <span data-bind="text: resolvedCaseAuthEndDate ? moment(resolvedCaseAuthEndDate).format('MM/DD/YYYY') : ''"></span>
+                <br />
+                <!-- /ko -->
+                <!-- ko if: resolvedMinutes -->
+                <label class="fixed"><strong>Minutes: </strong></label><span data-bind="text:resolvedMinutes"></span>
+                <!-- /ko -->
+            </div>
+
+            <br class="clearfix" />
+            <div style="width:50%;float:left">
+                <!-- ko if: (authMatchRuleDetailJSON || "").trim().length > 0 -->
+                <br /><label><strong>Rules: </strong></label><pre style="margin:0" data-bind="text:JSON.stringify(JSON.parse(authMatchRuleDetailJSON), null, 4)"></pre><br />
+                <!-- /ko -->
+            </div>
+            <div style="width:50%;float:left">
+                <!-- ko if: (activeAuthorizationsJSON || "").trim().length > 0 -->
+                <br /><label><strong>Active Authorization: </strong></label><pre style="margin:0" data-bind="text:JSON.stringify(JSON.parse(activeAuthorizationsJSON), null, 4)"></pre><br />
+                <!-- /ko -->
+            </div>
+            <br class="clearfix" />
+        </li>
+    </ul>
+    <!-- /ko -->
+</div>

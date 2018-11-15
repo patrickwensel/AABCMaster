@@ -1,0 +1,156 @@
+﻿@model AABC.Web.App.Staffing.Models.ProvidersListVM<AABC.Web.App.Staffing.Models.ProviderListItemVM>
+
+
+
+
+@Html.DevExpress().GridView(
+    s =>
+    {
+        s.Name = "providersGrid";
+        s.KeyFieldName = "ID";
+
+        s.Settings.ShowTitlePanel = true;
+        s.SetTitlePanelTemplateContent(
+            c =>
+            {
+                Html.RenderPartial("ProvidersGridHeader", Model.ListBase.GridTitlePanelSettings);
+            });
+
+        s.SettingsSearchPanel.Visible = true;
+        s.CommandColumn.Visible = true;
+        s.CommandColumn.ShowSelectCheckbox = true;
+        s.CommandColumn.ShowClearFilterButton = true;
+        s.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.Page;
+        s.CommandColumn.SetHeaderTemplateContent(c =>
+        {
+            Html.DevExpress().CheckBox(settingsCheckBox =>
+            {
+                settingsCheckBox.Name = "cbSelectAll";
+                settingsCheckBox.Properties.ClientSideEvents.CheckedChanged = string.Format("function(s, e) {{ if(s.GetChecked()) {0}.SelectRows(); else {0}.UnselectRows(); }}", s.Name);
+                settingsCheckBox.Checked = c.Grid.VisibleRowCount == c.Grid.Selection.Count;
+            }).Render();
+        });
+        s.ClientSideEvents.SelectionChanged = "SelectionChanged";
+
+        s.Width = Unit.Percentage(100);
+        s.Height = Unit.Percentage(100);
+        s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+        s.ClientSideEvents.Init = "function(s, e) { App.Content.GridViews.InitializeForStretchHeight(s); }";
+        s.ClientSideEvents.EndCallback = "function(s, e) { App.Content.GridViews.StretchHeight(s); }";
+
+        s.SettingsPager.PageSize = 500;
+        s.SettingsPager.AlwaysShowPager = true;
+        s.SettingsPager.Visible = true;
+
+        s.SettingsCookies.StoreFiltering = true;
+        s.SettingsCookies.StoreGroupingAndSorting = true;
+        s.SettingsCookies.StorePaging = true;
+        s.SettingsCookies.Enabled = true;
+        s.SettingsCookies.CookiesID = "AABC.Web.App.Staffing.Models.SelectableProviders";
+
+        s.SettingsBehavior.AllowSort = true;
+        s.SettingsBehavior.AllowGroup = false;
+        s.SettingsBehavior.AllowFocusedRow = true;
+        s.SettingsBehavior.AllowSelectByRowClick = true;
+        s.SettingsBehavior.AllowSelectSingleRowOnly = false;
+        s.SettingsBehavior.AllowDragDrop = false;
+        s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+        s.Settings.ShowFilterRow = true;
+        s.CallbackRouteValues = new { Controller = "Staffing", Action = "SelectableProviders", caseID = Model.CaseID };
+        s.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['filter'] = '" + Model.ListBase.CallbackFilterValue + "'; }";
+
+        s.PreRender = (source, e) =>
+        {
+            MVCxGridView grid = (MVCxGridView) source;
+            grid.AutoFilterByColumn(grid.Columns["colProviderGender"], Model.PreferredGender);
+        };
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colType";
+            col.Width = 40;
+            col.FieldName = "ProviderTypeCode";
+            col.Caption = "Type";
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colProvider";
+            col.FieldName = "ProviderFullName";
+            col.Caption = "Provider";
+            col.ReadOnly = true;
+            col.Settings.ShowEditorInBatchEditMode = false;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colProviderStatus";
+            col.FieldName = "ProviderStatus";
+            col.Caption = "Status";
+            col.ReadOnly = true;
+            col.Width = 60;
+            col.Settings.ShowEditorInBatchEditMode = false;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colProviderGender";
+            col.FieldName = "ProviderGender";
+            col.Caption = "Gender";
+            col.ReadOnly = true;
+            col.Width = 40;
+            col.Settings.ShowEditorInBatchEditMode = false;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colCity";
+            col.FieldName = "ProviderCity";
+            col.Caption = "City";
+            col.Width = 100;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colState";
+            col.FieldName = "ProviderState";
+            col.Caption = "State";
+            col.Width = 30;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colZip";
+            col.FieldName = "ProviderZip";
+            col.Caption = "Zip";
+            col.Width = 75;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colServiceAreas";
+            col.FieldName = "ProviderServiceAreas";
+            col.Caption = "Service Areas";
+            col.Width = 100;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        });
+
+        s.Columns.Add(col =>
+        {
+            col.Name = "colServiceCounties";
+            col.FieldName = "ProviderServiceCounties";
+            col.Caption = "Service Counties";
+            col.Width = 100;
+            col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+            col.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        });
+
+    }
+).Bind(Model.Providers).GetHtml()

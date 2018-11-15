@@ -1,0 +1,9 @@
+<div class="footerMenu">
+    
+</div>
+<div class="copyright">
+    @Html.DevExpress().Label(settings => {
+        settings.EncodeHtml = false;
+        settings.Text = "Copyright &copy; " + DateTime.Now.Year + " Applied Behavioral Mental Health Counseling";
+    }).GetHtml()
+</div>

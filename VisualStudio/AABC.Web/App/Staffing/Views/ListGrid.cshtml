@@ -1,0 +1,164 @@
+﻿@model AABC.Web.App.Staffing.Models.StaffingListVM
+
+@Html.DevExpress().GridView(s => {
+    s.Name = "gridList";
+    s.KeyFieldName = "ID";
+
+    s.Settings.ShowTitlePanel = true;
+    s.SetTitlePanelTemplateContent(
+        c => {
+            Html.RenderPartial("GridTitlePane", Model.ListBase.GridTitlePanelSettings);
+        });
+
+    s.SettingsSearchPanel.Visible = true;
+
+    s.Width = Unit.Percentage(100);
+    s.Height = Unit.Percentage(100);
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    s.ClientSideEvents.Init = "function(s, e) { App.Content.GridViews.InitializeForStretchHeight(s); }";
+    s.ClientSideEvents.EndCallback = "function(s, e) { App.Content.GridViews.StretchHeight(s); }";
+
+    s.SettingsPager.PageSize = 500;
+    s.SettingsPager.AlwaysShowPager = true;
+    s.SettingsPager.Visible = true;
+
+    s.SettingsBehavior.AllowSort = true;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = true;
+    s.SettingsBehavior.AllowSelectByRowClick = true;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    s.SettingsBehavior.AllowDragDrop = false;
+    s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+    s.SettingsCookies.StoreFiltering = true;
+    s.SettingsCookies.StoreGroupingAndSorting = true;
+    s.SettingsCookies.StorePaging = true;
+    s.SettingsCookies.Enabled = true;
+    s.SettingsCookies.CookiesID = "AABC.Web.SearchGrid.Staffing";
+
+    s.Settings.ShowFilterRow = true;
+    s.CallbackRouteValues = new { Controller = "Staffing", Action = "Search" };
+    s.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['isFilterCallback'] = 'true'; e.customArgs['filter'] = '" + Model.ListBase.CallbackFilterValue + "'; }";
+
+    s.HtmlDataCellPrepared = (sender, e) => {
+        e.Cell.Attributes.Add(
+            "ondblclick",
+            string.Format("OnCellDblClick('{0}', '{1}');", e.VisibleIndex, e.DataColumn.FieldName)
+        );
+    };
+
+
+    s.HtmlRowPrepared = (sender, e) => {
+        if (e.RowType == GridViewRowType.Data)
+        {
+            var restaffDate = e.GetValue("DateWentToRestaff") as DateTime?;
+            if (restaffDate.HasValue)
+            {
+                var timespan = DateTime.Now - restaffDate.Value;
+                if (timespan.TotalDays > 35) {
+                    e.Row.BackColor = System.Drawing.Color.FromArgb(255, 127, 127);
+                } else if (timespan.TotalDays > 28) {
+                    e.Row.BackColor = System.Drawing.Color.FromArgb(255, 219, 153);
+                } else if (timespan.TotalDays > 21) {
+                    e.Row.BackColor = System.Drawing.Color.FromArgb(255, 255, 153);
+                }
+            }
+        }
+    };
+
+    s.Columns.Add(col => {
+        col.Name = "colFirstName";
+        col.FieldName = "FirstName";
+        col.Caption = "First Name";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Left;
+        col.ReadOnly = true;
+        col.EditFormSettings.Visible = DefaultBoolean.False;
+    });
+
+    s.Columns.Add(col => {
+        col.Name = "colLastName";
+        col.FieldName = "LastName";
+        col.Caption = "Last Name";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Left;
+        col.ReadOnly = true;
+        col.EditFormSettings.Visible = DefaultBoolean.False;
+    });
+
+    s.Columns.Add(col => {
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.FieldName = "Age";
+        col.Caption = "Age";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Left;
+        col.Width = 50;
+        col.ReadOnly = true;
+        col.Settings.ShowEditorInBatchEditMode = false;
+    });
+
+    s.CustomUnboundColumnData = (sender, e) => {
+        if (e.Column.FieldName == "Age") {
+            var dob = e.GetListSourceFieldValue("DateOfBirth") as DateTime?;
+            if (dob.HasValue) {
+                e.Value = AABC.DomainServices.Utils.AgeCalculator.Age(dob.Value).ToString();
+            }
+        }
+    };
+
+    s.Columns.Add(col => {
+        col.Name = "colAddress";
+        col.FieldName = "Address";
+        col.Caption = "Address";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Left;
+    });
+
+    s.Columns.Add(col => {
+        col.Name = "colCity";
+        col.FieldName = "City";
+        col.Caption = "City";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    s.Columns.Add(col => {
+        col.Name = "colState";
+        col.FieldName = "State";
+        col.Caption = "State";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 40;
+    });
+
+    s.Columns.Add(col => {
+        col.Name = "colZip";
+        col.FieldName = "Zip";
+        col.Caption = "Zip";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 95;
+    });
+
+    s.Columns.Add(col => {
+        col.Name = "colCounty";
+        col.FieldName = "County";
+        col.Caption = "County";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+
+    s.Columns.Add(col =>        {
+        col.Name = "colCaseManager";
+        col.FieldName = "CaseManager";
+        col.Caption = "Case manager";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Left;
+        col.ReadOnly = true;
+        col.EditFormSettings.Visible = DefaultBoolean.False;
+    });
+
+    s.Columns.Add(col =>        {
+        col.Name = "colDateWentToRestaff";
+        col.FieldName = "DateWentToRestaff";
+        col.Caption = "Date went to Restaff";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.PropertiesEdit.DisplayFormatString = "d";
+        col.Width = 135;
+    });
+}
+).Bind(Model.DetailList).GetHtml()

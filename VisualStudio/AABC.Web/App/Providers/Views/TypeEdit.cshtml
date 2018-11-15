@@ -1,0 +1,108 @@
+﻿
+@model AABC.Web.Models.Providers.ProviderTypeVM
+
+@using (Html.BeginForm("TypeEdit", "Providers", FormMethod.Post, new { id="form-default" })) {
+
+    @Html.AntiForgeryToken();
+
+    @Html.HiddenFor(m => m.ID);
+    
+    <div class="section-expander clearfix" id="general-info">
+        <div class="section-expander-header">
+            <span>Provider Type Information</span>
+        </div>
+        <div class="section-expander-content">
+
+
+
+            <div class="form-section">
+                <div class="form-section-header"><span></span></div>
+                <div class="form-section-content">
+                    <div class="form-section-content-col1">
+
+
+                        @Html.DevExpress().TextBox(
+                            i => {
+                                i.Name = "Code";
+                                i.Width = 75;
+                                i.Properties.Caption = "Code";
+                                i.Properties.CaptionCellStyle.Width = 100;
+                            }
+                        ).Bind(Model.Code).GetHtml()
+                        <span id="CodeError" class="validation-label">Code is required</span>
+
+                        @Html.DevExpress().TextBox(
+                            i => {
+                                i.Name = "Name";
+                                i.Width = Unit.Percentage(100);
+                                i.Properties.Caption = "Name";
+                                i.Properties.CaptionCellStyle.Width = 100;
+                            }
+                        ).Bind(Model.Name).GetHtml()
+                        <span id="NameError" class="validation-label">Name is required</span>
+
+
+                    </div>
+
+                    <div class="form-section-content-col2">
+
+                        @Html.DevExpress().CheckBox(
+                            i => {
+                                i.Name = "IsOutsourced";
+                                i.Text = "Outsourced?";
+                            }
+                        ).Bind(Model.IsOutsourced).GetHtml()
+
+                        @Html.DevExpress().CheckBox(
+                            i => {
+                                i.Name = "CanSuperviseCase";
+                                i.Text = "Can Supervise Cases?";
+                            }
+                        ).Bind(Model.CanSuperviseCase).GetHtml()
+                        
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+
+
+
+    <div class="section-expander clearfix" id="expander-actions-info">
+        <div class="section-expander-header">
+            <span>Actions</span>
+        </div>
+        <div class="section-expander-content section-expander-content-last">
+
+            <div class="actions-content">
+
+                @Html.DevExpress().Button(bs => {
+               bs.UseSubmitBehavior = true;
+               bs.Name = "btnSubmit";
+               bs.Text = "Save Provider Type";
+           }).GetHtml()
+
+            </div>
+
+        </div>
+    </div>
+
+}
+
+<script type="text/javascript">
+    $.getScript("/Scripts/Pages/ProviderTypeEdit.js", function () {
+        initComponent(
+            '@Model.Base.PushState',
+            '@Model.Base.PushStateRoute',
+            '@Model.Base.PushStateTitle',
+            @Model.Base.NavGroupIndex,
+            @Model.Base.NavGroupItemIndex);
+    });
+</script>

@@ -1,0 +1,108 @@
+﻿@model AABC.ProviderPortal.Models.Shared.MessageBoxModel
+
+
+
+@Html.DevExpress().PopupControl(s => {
+
+    s.Name = "MessageBox";
+    s.PopupElementID = "MessageBoxAnchor";
+
+    s.Width = 350;
+
+    s.AllowDragging = false;
+    s.AllowResize = false;
+    s.CloseAction = CloseAction.None;
+    s.ShowCloseButton = true;
+    s.CloseOnEscape = true;
+    s.PopupAnimationType = AnimationType.None;
+    s.Modal = true;
+    s.HeaderText = Model.Title;
+    s.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    s.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+
+    s.SetContent(() => {
+        using (Html.BeginForm()) {
+
+            ViewContext.Writer.Write("<div id='dlg-form-content'>");
+            ViewContext.Writer.Write("  <div class='dlg-form-row'>");
+            ViewContext.Writer.Write("      <div class='dlg-form-col-icon'>");
+
+            if (Model.Icon != AABC.ProviderPortal.Models.Shared.DialogIcon.None) {
+                Html.DevExpress().Image(i => {
+                    i.Width = 48;
+                    i.Height = 48;
+                    i.ImageUrl = "~/Content/Images/" + Model.ImageFilename;
+                }).Render();
+            }
+            
+            ViewContext.Writer.Write("</div><div class='dlg-form-col-message'>" + Model.Message.Replace("\n", "<br />") + "</div>");
+
+            ViewContext.Writer.Write("  </div>");
+            ViewContext.Writer.Write("  <div class='dlg-form-row dlg-form-row-buttons'>");
+
+            Html.DevExpress().Button(b => {
+                b.Name = "btn1";
+                b.Text = "Ok";
+                b.Width = 80;
+                b.UseSubmitBehavior = false;
+                b.ClientSideEvents.Click = "function(s, e) { MessageBox.Hide(); }";
+            }).Render();
+
+            ViewContext.Writer.Write("  </div>");
+            ViewContext.Writer.Write("</div>");
+
+        }
+    });
+
+
+}).GetHtml()
+
+
+
+
+
+
+
+
+
+
+@using (Html.BeginForm()) {
+
+    <div id='dlg-form-content'>
+        <div class='dlg-form-row'>
+            <div class='dlg-form-col-icon'>
+
+                @if (Model.Icon != AABC.ProviderPortal.Models.Shared.DialogIcon.None) {
+                    @Html.DevExpress().Image(i => {
+                   i.Width = 48;
+                   i.Height = 48;
+                   i.ImageUrl = "~/Content/Images/" + Model.ImageFilename;
+               }).GetHtml()
+                }
+            </div>
+            
+            <div id="messagebox-message" class='dlg-form-col-message'>
+                <span>@Model.Message</span>
+            </div>
+        
+        </div>
+    
+        <div class='dlg-form-row dlg-form-row-buttons'>
+
+            @Html.DevExpress().Button(
+             b => {
+                 b.Name = "messageboxOkButton";
+                 b.Text = "Ok";
+                 b.Width = 80;
+                 b.UseSubmitBehavior = false;
+                 b.EnableClientSideAPI = true;
+                 b.ClientSideEvents.Click = "function(s, e) { console.log('hiding'); App.MessageBox.Hide(); }";
+             }).GetHtml()
+
+            @*<script id="dxss_MessageBoxScripts" type="text/javascript">
+                messageboxOkButton.Click.AddHandler(function (s, e) { console.log('hiding'); App.MessageBox.Hide(); });
+            </script>*@
+
+        </div>
+    </div>
+}

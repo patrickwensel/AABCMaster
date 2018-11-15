@@ -1,0 +1,24 @@
+﻿@model AABC.Web.Models.ProviderPortal.UserVM
+<script id="dxss_ProviderPortalsJs" type="text/javascript">
+    console.log('loading script to call AdminProviderPortal.js');
+    $.getScript("/Scripts/Pages/AdminProviderPortal.js", function () {
+
+        initComponent();
+
+
+        // after the script is loaded, load the providers grid
+        $.ajax({
+            url: "/ProviderPortal/IndexGrid",
+            success: function(r) {
+                $("#ProviderPortalUserListContainer").empty().append(r);
+            },
+            error: function() {
+                App.Dialogs.Error();
+            }
+        });
+
+    });
+</script>
+
+
+<div id="ProviderPortalUserListContainer"></div>

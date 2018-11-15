@@ -1,0 +1,110 @@
+﻿@model AABC.Web.Models.Cases.CaseBillingCorrespondenceVM
+
+@using (Html.BeginForm("BillingCorrespondenceSave", "Case", FormMethod.Post, new { id = "BillingCorrespondenceForm" }))
+{
+
+    @Html.AntiForgeryToken();
+
+    @Html.HiddenFor(m => m.Id);
+    @Html.HiddenFor(m => m.BillingCorrespondenceCaseId);
+
+    <h1 style="color: #4b4b57; font-size: large; font-weight: 200;">
+        Id : @if(Model.Id == 0) {<strong>( New )</strong>}else{<strong>@Model.Id</strong>}
+    </h1>
+
+    <div class="spacer-10"></div>
+        @Html.DevExpress().DateEdit(
+        s =>
+        {
+            s.Name = "CorrespondenceDate";
+            s.Properties.Caption = "Correspondence Date";
+            s.Properties.CaptionCellStyle.Width = 150;
+            s.Width = 150;
+            s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+            s.Properties.ValidationSettings.ValidationGroup = "BillingCorrespondence";
+        }
+    ).Bind(Model.CorrespondenceDate).GetHtml()
+    <div class="spacer-10"></div>
+        @Html.DevExpress().ComboBox(
+                s =>
+                {
+                    s.Name = "StaffId";
+                    s.Properties.Caption = "Staff";
+                    s.Properties.CaptionCellStyle.Width = 150;
+                    s.Width = 150;
+                    s.Properties.TextField = "CommonName";
+                    s.Properties.ValueField = "ID";
+                    s.Properties.ValueType = typeof(int);
+                }
+            ).BindList(Model.StaffList).GetHtml()
+
+    <div class="spacer-10"></div>
+        @Html.DevExpress().ComboBox(
+            s =>
+            {
+                s.Name = "CorrespondenceTypeId";
+                s.Properties.Caption = "Correspondence Type";
+                s.Properties.CaptionCellStyle.Width = 150;
+                s.Properties.ValueType = Type.GetType("System.Int32");
+                s.Properties.TextField = "Name";
+                s.Properties.ValueField = "Id";
+                s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                s.Properties.ValidationSettings.ValidationGroup = "BillingCorrespondence";
+            }
+        ).BindList(Model.CaseBillingCorrespondenceTypes).Bind(Model.CorrespondenceTypeId).GetHtml()
+    <div class="spacer-10"></div>
+        @Html.DevExpress().TextBox(
+        s =>
+        {
+            s.Name = "ContactPerson";
+            s.Properties.Caption = "Person Spoken To ";
+            s.Properties.CaptionCellStyle.Width = 150;
+            s.Properties.MaxLength = 50;
+            s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+            s.Properties.ValidationSettings.ValidationGroup = "BillingCorrespondence";
+        }
+    ).Bind(Model.ContactPerson).GetHtml()
+    <div class="spacer-10"></div>
+    <div style="margin-left: 150px; margin-top: 5px;">
+        <table>
+            <tr>
+                <td style="padding-left:5px;">
+
+                    @Html.DevExpress().UploadControl(
+i =>
+{
+    i.Name = "Attachments";
+    i.NullText = "Upload an attachment";
+    i.ValidationSettings.Assign(AABC.Web.Controllers.CaseController.ValidationSettings);
+}).GetHtml()
+                </td>
+
+            </tr>
+        </table>
+
+    </div>
+
+
+    <div class="spacer-10"></div>
+        @Html.DevExpress().Memo(
+            i =>
+            {
+                i.Name = "Notes";
+                i.Width = Unit.Percentage(100);
+                i.Properties.Rows = 6;
+                i.Properties.Caption = "Notes";
+                i.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+            }
+    ).Bind(Model.Notes).GetHtml()
+
+    <div class="spacer-10"></div>
+    @Html.DevExpress().Button(
+        s =>
+        {
+            s.Name = "bnSaveBillingCorrespondence";
+            s.Text = "Save";
+            s.UseSubmitBehavior = true;
+            s.ValidationGroup = "BillingCorrespondence";
+        }
+    ).GetHtml()
+}

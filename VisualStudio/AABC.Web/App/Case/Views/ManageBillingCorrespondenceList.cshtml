@@ -1,0 +1,26 @@
+﻿@model List<AABC.Web.Models.Cases.CaseBillingCorrespondenceVM>
+
+@foreach (var note in Model)
+{
+
+
+    <div class="notesum">
+
+        <div class="notesum-heading">@note.CorrespondenceDate.ToShortDateString() - @note.CorrespondenceTypeName - @note.ContactPerson</div>
+
+        <div class="notesum-comments">
+            <p>@note.Notes</p>
+            <p>
+                - @note.StaffName
+            </p>
+            @if (note.AttachmentFilename != null)
+            {
+                <p>
+                    @Html.ActionLink("Download Attachment", "GetAttachment", new { Id = note.Id, filename = note.AttachmentFilename })
+                </p>
+            }
+        </div>
+
+
+    </div>
+}

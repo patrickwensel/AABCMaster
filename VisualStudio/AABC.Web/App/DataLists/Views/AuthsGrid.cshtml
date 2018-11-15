@@ -1,0 +1,46 @@
+﻿@model AABC.Web.Models.DataLists.AuthGridVM
+
+@Html.DevExpress().GridView(
+    s => {
+
+        s.Name = "gvDataListsAuths";
+        s.KeyFieldName = "ID";
+        s.CallbackRouteValues = new { Controller = "DataLists", Action = "AuthsGrid" };
+        s.SettingsBehavior.AllowFocusedRow = true;
+        //s.SettingsBehavior.AllowSelectByRowClick = true;
+        //s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+        s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+        // GENERAL APPEARANCE
+        //s.Width = Unit.Percentage(100);
+        s.Height = 600; // Unit.Percentage(100);
+        s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto; // for stretch height
+
+        // HEADER
+        s.Settings.ShowTitlePanel = false;
+
+        // GROUPING/SORTING ECT
+        s.SettingsBehavior.AllowSort = true;
+        s.SettingsBehavior.AllowGroup = false;
+        s.Settings.ShowFilterRow = false;
+
+        // PAGING
+        s.SettingsPager.PageSize = 100;
+        //s.SettingsPager.AlwaysShowPager = false;
+        //s.SettingsPager.Visible = true;
+
+        // EVENTS
+        s.ClientSideEvents.FocusedRowChanged = "gvDataListsAuthsFocusedRowChanged";
+
+        var col = s.Columns.Add("colCode");
+        col.FieldName = "Code";
+        col.Caption = "Code";
+        col.Width = 100;
+
+        col = s.Columns.Add("colDescription");
+        col.FieldName = "Description";
+        col.Caption = "Description";
+        col.Width = 250;
+
+    }
+).Bind(Model.Items).GetHtml()

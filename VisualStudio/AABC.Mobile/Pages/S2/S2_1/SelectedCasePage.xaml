@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<control:LoggedInPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+			 xmlns:control="clr-namespace:AABC.Mobile.Controls;assembly=AABC.Mobile"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="AABC.Mobile.Pages.S2_1.SelectedCasePage"
+			 Title="{Binding SelectedCase.Patient, Converter={StaticResource patientNameConverter}}"
+			 NavigationPage.BackButtonTitle="Back"
+			 Padding="0">
+
+	<ScrollView x:Name="ScrollView" VerticalOptions="Fill">
+
+		<StackLayout Spacing="1" BackgroundColor="{StaticResource separator}">
+
+			<ContentView BackgroundColor="#4085c0" HeightRequest="150">
+				<Image Source="{Binding SelectedCase.Patient.Gender, Converter={StaticResource largeGenderImageConverter}}" HorizontalOptions="Center" VerticalOptions="Center" HeightRequest="100" WidthRequest="100" />
+			</ContentView>
+
+			<ContentView VerticalOptions="FillAndExpand" BackgroundColor="{Binding ActiveSession, Converter={StaticResource backgroundColorConverter}}">
+				<control:IconButton Command="{Binding HomeSessionClicked}" Text="Home Session" ImageSource="HomeSession.png" VerticalOptions="Center" 
+							Highlight="{Binding ActiveSession}" Disabled="{Binding ActiveSessionDisabled}" DisabledText="{Binding ActiveSessionDisabledText}"/>
+			</ContentView>
+
+			<ContentView VerticalOptions="FillAndExpand" BackgroundColor="#ffffff">
+				<control:IconButton Command="{Binding ManualTimeClicked}" Text="Manual Time" ImageSource="ManualTime.png" VerticalOptions="Center" 
+					Disabled="{Binding ManualTimeDisabled}" DisabledText="{Binding ManualTimeDisabledText}"
+				/>
+			</ContentView>
+
+			<ContentView VerticalOptions="FillAndExpand" BackgroundColor="#ffffff">
+				<control:IconButton Command="{Binding ViewDetailsClicked}" Text="View Details" ImageSource="ViewDetails.png" VerticalOptions="Center" />
+			</ContentView>
+
+		</StackLayout>
+	</ScrollView>
+
+</control:LoggedInPage>

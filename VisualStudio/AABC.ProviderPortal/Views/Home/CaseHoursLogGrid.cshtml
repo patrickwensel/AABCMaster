@@ -1,0 +1,56 @@
+﻿@model List<AABC.ProviderPortal.Models.Home.CaseHoursDetailItem>
+
+@Html.DevExpress().GridView(
+    s => {
+        
+        s.Name = "gridCaseHoursDetail";
+        s.KeyFieldName = "ID";
+        s.Width = Unit.Percentage(98);
+        s.SettingsPager.PageSize = 25;
+        s.CallbackRouteValues = new { Controller = "Home", Action = "CaseHoursLogCallback" };
+        s.ClientSideEvents.BeginCallback = "CaseHoursLogBeginCallback";
+        s.ClientSideEvents.EndCallback = "CaseHoursLogEndCallback";
+        s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+        s.Settings.ShowFilterRow = true;
+
+        var col = s.Columns.Add("colDate");
+        col.FieldName = "Date";
+        col.Caption = "Date";
+        col.Width = 75;
+        col.PropertiesEdit.DisplayFormatString = "d";
+
+        col = s.Columns.Add("colProvider");
+        col.FieldName = "ProviderName";
+        col.Caption = "Provider";
+        col.Width = 150;
+
+        col = s.Columns.Add("colTimeIn");
+        col.FieldName = "StartTime";
+        col.Caption = "Time In";
+        col.Width = 50;
+        col.PropertiesEdit.DisplayFormatString = "t";
+
+        col = s.Columns.Add("colTimeOut");
+        col.FieldName = "EndTime";
+        col.Caption = "Time Out";
+        col.Width = 50;
+        col.PropertiesEdit.DisplayFormatString = "t";
+
+        col = s.Columns.Add("colHours");
+        col.FieldName = "Hours";
+        col.Caption = "Hours";
+        col.Width = 50;
+
+        col = s.Columns.Add("colService");
+        col.FieldName = "Service.Code";
+        col.Caption = "Service";
+        col.Width = 75;
+
+        col = s.Columns.Add("colNotes");
+        col.FieldName = "Notes";
+        col.Caption = "Notes";
+
+
+    }
+).Bind(Model).GetHtml()

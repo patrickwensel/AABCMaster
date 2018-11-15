@@ -1,0 +1,244 @@
+﻿@model AABC.Web.App.Hours.Models.EditVM
+
+@{ 
+    GridViewSettings s = new GridViewSettings();
+    s.Name = "HoursEditGrid";
+    s.KeyFieldName = "ID";
+    s.Width = Unit.Percentage(100);
+    s.Height = Unit.Percentage(100);
+
+    s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+    s.SettingsBehavior.AllowSort = true;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = true;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = false;
+    s.Settings.ShowFilterRow = true;
+    s.CallbackRouteValues = new { Action = "HoursEditGridCallback" };
+
+    s.ClientSideEvents.Init = "function(s, e) { HoursEdit.Grid.SelfInitialize(s, e); }";
+    s.ClientSideEvents.SelectionChanged = "HoursEdit.Grid.SelectionChanged";
+
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    s.SettingsPager.PageSize = 200;
+
+    s.Settings.ShowTitlePanel = true;
+
+    s.CommandColumn.Visible = true;
+    s.CommandColumn.Width = new Unit(28, UnitType.Pixel);
+    s.CommandColumn.ShowSelectCheckbox = true;
+    s.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+
+    // celll/row double click (http://kb.dymeng.com/kb/DevExMVCGridView)
+
+    s.HtmlDataCellPrepared = (sender, e) => {
+        e.Cell.Attributes.Add("data-dym-cellClick", "HoursEditGrid");
+        e.Cell.Attributes.Add("data-dym-visibleIndex", e.VisibleIndex.ToString());
+        e.Cell.Attributes.Add("data-dym-fieldName", e.DataColumn.FieldName);
+    };
+
+
+
+    s.SetTitlePanelTemplateContent(
+        c => {
+
+
+            var vw = ViewContext.Writer;
+
+            // OPEN MAIN TABLE ADN ROW
+            vw.Write("<table style='width: 100%;'><tr>");
+
+            // OPEN LEFT MAIN CELL
+            vw.Write("<td style='width: 33%;'>");
+
+            // LEFT MAIN CELL CONTENT
+
+            vw.Write("<table><tr><td>");
+
+            Html.DevExpress().ComboBox(
+                cb => {
+                    cb.Name = "SelectedDate";
+                    cb.Properties.TextField = "Display";
+                    cb.Properties.ValueField = "Date";
+                    cb.Properties.ValueType = typeof(DateTime);
+                    cb.PreRender = (sender, e) => {
+                        AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model.SelectedDate, "Date");
+                    };
+                    cb.Properties.Caption = "Current Period";
+                }
+            ).BindList(Model.AvailableDates).Render();
+
+            vw.Write("</td><td style='padding-left: 15px;'>");
+
+            Html.DevExpress().RadioButtonList(rb => {
+                rb.Name = "HoursViewMode";
+                rb.Properties.RepeatColumns = 2;
+                rb.Properties.RepeatDirection = RepeatDirection.Horizontal;
+                rb.Properties.ValueType = typeof(AABC.Web.App.Hours.Models.EditVM.ViewModes);
+                rb.Properties.Items.Add("Finalized Only", 0);
+                rb.Properties.Items.Add("All Hours", 1);
+                rb.Properties.TextWrap = false;
+            }).Bind(Model.ViewMode).Render();
+
+            vw.Write("</td></tr></table>");
+
+
+            // CLOSE LEFT MAIN CELL
+            vw.Write("</td>");
+
+            // RIGHT MAIN CELL
+            vw.Write("<td align='right'>");
+
+            Html.DevExpress().Button(bttn =>
+            {
+                bttn.Name = "btnScrubSelected";
+                bttn.Text = "Set Selected as Scrubbed";
+                bttn.ClientSideEvents.Click = "HoursEdit.Grid.ScrubSelected";
+            }).Render();
+
+            // CLOSE RIGHT MAIN CELL
+            vw.Write("</td>");
+
+            // CLOSE MAIN ROW AND TABLE
+            vw.Write("</tr></table>");
+
+        }
+);
+
+    var col = s.Columns.Add("StatusText");
+    col.Caption = "Status";
+    col.FieldName = "StatusText";
+
+    col.ColumnType = MVCxGridViewColumnType.ComboBox;
+    var comboBoxProperties = col.PropertiesEdit as ComboBoxProperties;
+    comboBoxProperties.DataSource = Model.StatusOptions;
+    comboBoxProperties.TextField = "Name";
+    comboBoxProperties.ValueField = "Name";
+    comboBoxProperties.ValueType = typeof(string);
+    comboBoxProperties.DropDownStyle = DropDownStyle.DropDown;
+
+    col.Width = 75;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+    col = s.Columns.Add("Billed");
+    col.ColumnType = MVCxGridViewColumnType.CheckBox;
+    col.Width = 35;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+    col = s.Columns.Add("Paid");
+    col.ColumnType = MVCxGridViewColumnType.CheckBox;
+    col.Width = 35;
+
+    col = s.Columns.Add("HasData", "Has<br />Data");
+    col.ColumnType = MVCxGridViewColumnType.CheckBox;
+    col.Width = 35;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+    col = s.Columns.Add("Reported");
+    col.ColumnType = MVCxGridViewColumnType.CheckBox;
+    col.Width = 55;
+
+    s.FormatConditions.AddHighlight(condition =>
+    {
+        condition.FieldName = "Reported";
+        condition.Rule = GridConditionRule.Expression;
+        condition.Expression = "[Reported]";
+        condition.Format = GridConditionHighlightFormat.LightRedFill;
+    });
+
+    col = s.Columns.Add("PatientName");
+    //col.Width = 150;
+    col.Caption = "Patient";
+    col.FieldName = "PatientName";
+    col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+    col.SetDataItemTemplateContent(
+        c => {
+            Html.DevExpress().HyperLink(
+                hl => {
+                    string caseID = DataBinder.Eval(c.DataItem, "CaseID").ToString();
+                    hl.Name = "hlHoursEditGridGotoPatient_" + caseID + "_" + DataBinder.Eval(c.DataItem, "ID");
+                    hl.Properties.Text = DataBinder.Eval(c.DataItem, "PatientName").ToString();
+                    hl.Properties.Target = "_blank";
+                    hl.NavigateUrl = "/Case/" + caseID + "/Manage/TimeAndBilling";
+                }
+            ).Render();
+        }
+    );
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+
+
+    col = s.Columns.Add("ProviderName");
+    //col.Width = 150;
+    col.Caption = "Provider";
+    col.FieldName = "ProviderName";
+    col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+    col.SetDataItemTemplateContent(
+        c => {
+            Html.DevExpress().HyperLink(
+                hl => {
+                    string providerID = DataBinder.Eval(c.DataItem, "ProviderID").ToString();
+                    hl.Name = "hlHoursEditGridGotoProvider_" + providerID + "_" + DataBinder.Eval(c.DataItem, "ID");
+                    hl.Properties.Text = DataBinder.Eval(c.DataItem, "ProviderName").ToString();
+                    hl.Properties.Target = "_blank";
+                    hl.NavigateUrl = "/Providers/Edit/" + providerID;
+                }
+            ).Render();
+        }
+    );
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+
+
+
+
+
+    col = s.Columns.Add("Date");
+    col.Caption = "Date";
+    col.FieldName = "Date";
+    col.PropertiesEdit.DisplayFormatString = "d";
+    col.Width = 75;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+    col = s.Columns.Add("TimeIn");
+    col.Caption = "Time In";
+    col.FieldName = "TimeIn";
+    col.PropertiesEdit.DisplayFormatString = "t";
+    col.Width = 75;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+    col = s.Columns.Add("TimeOut");
+    col.Caption = "Time Out";
+    col.FieldName = "TimeOut";
+    col.PropertiesEdit.DisplayFormatString = "t";
+    col.Width = 75;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+    col = s.Columns.Add("ServiceCode", "Service");
+    col.Width = 60;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+    col = s.Columns.Add("AuthCode", "Auth");
+    col.Width = 100;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+    col = s.Columns.Add("Notes");
+    col.Width = 200;
+    //s.Styles.Cell.CssClass = "CellsEllipsis";
+    col.CellStyle.CssClass = "CellsEllipsis";
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+
+}
+
+@Html.DevExpress().GridView(s).Bind(Model.Items).GetHtml()
+
+
+
+

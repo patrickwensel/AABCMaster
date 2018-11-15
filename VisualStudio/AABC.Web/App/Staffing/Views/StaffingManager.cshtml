@@ -1,0 +1,223 @@
+﻿<script type="text/javascript" src="@Url.Content("/Scripts/Pages/StaffingLogDetails.js")"></script>
+<script type="text/javascript">
+
+    function tabInit(s, e) {
+        pcPage.PerformCallback();
+    }
+
+    function tabBeginCallback(s, e) {
+        e.customArgs["tabIndex"] = pcPage.GetActiveTabIndex();
+        e.customArgs["caseID"] = @(ViewBag.CaseID);
+    }
+
+    function tabEndCallback(s, e) {
+        if (s.activeTabIndex === 0) {
+            StaffingLogDetails.ProviderContactLog.Init('#provider-contact-log-list', '#bcba-provider-contact-log-list', @(ViewBag.CaseID));
+            StaffingLogDetails.ParentContactLog.Init('#parent-contact-log-list', @(ViewBag.CaseID));
+        }
+    }
+
+    function activeTabChanging(s, e) {
+        e.reloadContentOnCallback = true;
+    }
+</script>
+
+<script type="text/javascript">
+    function getSelectedValues(grid, field, callback) {
+        var values = grid.GetSelectedKeysOnPage();
+        callback(values);
+        //grid.GetSelectedFieldValues(field, function(values) {
+        //    callback(values);
+        //});
+    }
+    function changeButtonEnabledState(grid, button, field) {
+        getSelectedValues(grid, field, function(values) {
+            //console.log({
+            //    field: field,
+            //    valuesTotal: values,
+            //    valuesInThisPage: grid.GetSelectedKeysOnPage()
+            //});
+            button.SetEnabled(values.length > 0);
+        });
+    }
+    function AddProvidersButtonInit(button, e) {
+        changeButtonEnabledState(ASPxClientControl.GetControlCollection().GetByName("providersGrid"), button, "ID");
+    }
+    function SelectionChanged(grid, e) {
+        changeButtonEnabledState(grid, ASPxClientControl.GetControlCollection().GetByName("btnAddProviders"), "ID");
+        changeButtonEnabledState(grid, ASPxClientControl.GetControlCollection().GetByName("btnOpenEmailProvidersModal"), "ID");
+    }
+    function AddProviders(s, e) {
+        var selectableProvidersGrid = ASPxClientControl.GetControlCollection().GetByName("providersGrid");
+        var selectedProvidersGrid = ASPxClientControl.GetControlCollection().GetByName("selectedProvidersGrid");
+        getSelectedValues(selectableProvidersGrid, "ID", function(values) {
+            if (values.length > 0) {
+                $.ajax({
+                    url: '@Url.Action("AddProviders", "Staffing")',
+                    type: "post",
+                    data: {
+                        staffingLogId: @ViewBag.CaseID,
+                        providers :  values
+                    }
+                }).done(function (){
+                    selectableProvidersGrid.Refresh();
+                    selectedProvidersGrid.Refresh();
+                });
+            }
+        });
+    }
+    function RemoveProvidersButtonInit(button, e) {
+        changeButtonEnabledState(ASPxClientControl.GetControlCollection().GetByName("selectedProvidersGrid"), button, "StaffingLogProviderID");
+    }
+    function SelectedProvidersSelectionChanged(grid, e) {
+        changeButtonEnabledState(grid, ASPxClientControl.GetControlCollection().GetByName("btnRemoveProviders"), "StaffingLogProviderID");
+    }
+    function RemoveProviders(s, e) {
+        var selectableProvidersGrid = ASPxClientControl.GetControlCollection().GetByName("providersGrid");
+        var selectedProvidersGrid = ASPxClientControl.GetControlCollection().GetByName("selectedProvidersGrid");
+        getSelectedValues(selectedProvidersGrid,"StaffingLogProviderID", function(values) {
+            if (values.length > 0) {
+                $.ajax({
+                    url: '@Url.Action("RemoveProviders", "Staffing")',
+                    type: "post",
+                    data: {
+                        staffingLogId: @ViewBag.CaseID,
+                        providers :  values
+                    }
+                }).done(function (){
+                    selectableProvidersGrid.Refresh();
+                    selectedProvidersGrid.Refresh();
+                });
+            }
+        });
+    }
+
+    function DetailsListInit() {
+        StaffingLogDetails.List.Initialize();
+    }
+
+    function SubmitForm(sender, args) {
+        StaffingLogDetails.Detail.Submit();
+    }
+
+    function dayCheckboxClick(element) {
+        var $this = $(element);
+        var checked = $this.is(":checked");
+        var index = $this.attr("data-index");
+        if(index && !checked){
+            var nameAM = "ScheduleRequest.AM[" + index + "]";
+            var namePM = "ScheduleRequest.PM[" + index + "]";
+            $("input[type='checkbox']:checked").filter("[name='" + nameAM + "'],[name='" + namePM + "']").prop('checked', false);
+        }
+    }
+
+    function ampmCheckboxClick(element) {
+        var $this = $(element);
+        var checked = $this.is(":checked");
+        var index = $this.attr("data-index");
+        if(index && checked){
+            var name = "ScheduleRequest.Days[" + index + "]";
+            $("input[type='checkbox'][name='" + name + "']:not(:checked)").prop('checked', true);
+        }
+    }
+
+    function openEmailProvidersModal() {
+        getSelectedValues(ASPxClientControl.GetControlCollection().GetByName("providersGrid"), "ID", function (values) {
+            if (values.length > 0) {
+                App.Popup.Show({
+                    url: '/Staffing/EmailProvidersModal',
+                    type: 'POST',
+                    data: { ids: values},
+                    options: {
+                        width: 500,
+                        height: 400,
+                        title: "Select Providers to Email"
+                    },
+                    finished: function () {
+                        App.Popup.Hide();
+                    },
+                    error: function () {
+                        App.Dialogs.Error();
+                    }
+                });
+            }
+        });
+    }
+
+    function getEmails() {
+        function validateEmail(email) {
+            var re = /^(([^<>()\[\]\\.,;:\s@@"]+(\.[^<>()\[\]\\.,;:\s@@"]+)*)|(".+"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+        var grid = ASPxClientControl.GetControlCollection().GetByName("EmailProvidersGrid");
+        var keys = grid.GetSelectedKeysOnPage();
+        var values = _.chain(grid.cp_data)
+            .pick(keys)
+            .map(function (i, key) {
+                i.Id = key;
+                return i;
+            })
+            .values()
+            .filter(function (i) {
+                return i.Email && validateEmail(i.Email);
+            })
+            .value();
+        return values;
+    }
+
+    function onSelectionChanged(s, e) {
+        var values = getEmails();
+        var button = ASPxClientControl.GetControlCollection().GetByName("btnSendEmails");
+        button.SetEnabled(values.length > 0);
+    }
+
+    function closeEmailProvidersModal() {
+        App.Popup.Hide();
+    }
+
+    function sendEmails() {
+        var values = getEmails();
+        if (values.length > 0 && confirm("This will create a new email and save this note for every selected provider. Do you want to continue?")) {
+            var l = "mailto:?bcc=" + _.map(values, function (i) {
+                var name = (i.FirstName + ' ' + i.LastName).trim();
+                var email = '<' + i.Email + '>';
+                return (name.length > 0 ? '"' + name + '"' : '') + email;
+            }).join();
+            var notes = ASPxClientControl.GetControlCollection().GetByName("txtNotes").GetText() || "";
+            if (notes.length > 0) {
+                var data = {
+                    ids: values.map(function (i) { return i.Id; }),
+                    text: notes
+                };
+                $.post("/Staffing/LogEmail", data);
+            }
+            window.open(l);
+            App.Popup.Hide();
+        }
+    }
+</script>
+@Html.DevExpress().PageControl(
+    s =>
+    {
+        s.Name = "pcPage";
+        s.CallbackRouteValues = new { controller = "Staffing", action = "GetTab" };
+        s.EnableClientSideAPI = true;
+        s.ActivateTabPageAction = ActivateTabPageAction.Click;
+        s.EnableHotTrack = true;
+        s.SaveStateToCookies = false;
+        s.TabAlign = TabAlign.Left;
+        s.TabPosition = TabPosition.Top;
+        s.Width = Unit.Percentage(100);
+        s.SettingsLoadingPanel.Enabled = false;
+
+        s.TabPages.Add("Summary").SetContent(() => { ViewContext.Writer.Write(""); });
+        s.TabPages.Add("Providers").SetContent(() => { ViewContext.Writer.Write(""); });
+        s.TabPages.Add("Timeline").SetContent(() => { ViewContext.Writer.Write(""); });
+        s.ClientSideEvents.Init = "tabInit";
+        s.ClientSideEvents.BeginCallback = "tabBeginCallback";
+        s.ClientSideEvents.EndCallback = "tabEndCallback";
+        s.ClientSideEvents.ActiveTabChanging = "activeTabChanging";
+
+        s.ActiveTabIndex = ViewBag.TabIndex ?? 0;
+    }
+).GetHtml()

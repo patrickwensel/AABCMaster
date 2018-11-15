@@ -1,0 +1,80 @@
+﻿@model AABC.Web.Models.Cases.CasePaymentPlanVM
+
+@using (Html.BeginForm("PaymentPlanForm", "Case", FormMethod.Post, new { id = "PaymentPlanForm" }))
+{
+
+    @Html.AntiForgeryToken();
+
+    @Html.HiddenFor(m => m.Id);
+    @Html.HiddenFor(m => m.PaymentPlanCaseId);
+
+    <h1 style="color: #4b4b57; font-size: large; font-weight: 200;">
+        Id : @if(Model.Id == 0) {<strong>( New )</strong>}else{<strong>@Model.Id</strong>}
+    </h1>
+
+        @Html.DevExpress().CheckBox(
+        i =>
+        {
+            i.ControlStyle.CssClass = "PaymentPlanActive";
+            i.Name = "PaymentPlanActive";
+            i.Text = "Active";
+        }
+    ).Bind(Model.PaymentPlanActive).GetHtml()
+        <div class="spacer-10"></div>
+        @Html.DevExpress().SpinEdit(
+        s =>
+        {
+            s.Name = "Amount";
+            s.Properties.Caption = "Amount";
+            s.Properties.CaptionCellStyle.Width = 150;
+            s.Properties.DisplayFormatString = "c";
+            s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+        }
+    ).Bind(Model.Amount).GetHtml()
+        <div class="spacer-10"></div>
+        @Html.DevExpress().ComboBox(
+            s =>
+            {
+                s.Name = "Frequency";
+                s.Properties.Caption = "Frequency";
+                s.Properties.CaptionCellStyle.Width = 150;
+                s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+            }
+        ).BindList(new[] { "Weekly", "Monthly"}).Bind(Model.Frequency).GetHtml()
+
+
+        <div class="spacer-10"></div>
+        @Html.DevExpress().DateEdit(
+            s =>
+            {
+                s.Name = "PaymentPlanStartDate";
+                s.Properties.Caption = "Start Date";
+                s.Properties.CaptionCellStyle.Width = 150;
+                s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                s.Width = 100;
+            }
+        ).Bind(Model.PaymentPlanStartDate).GetHtml()
+        <div class="spacer-10"></div>
+        @Html.DevExpress().DateEdit(
+            s =>
+            {
+                s.Name = "PaymentPlanEndDate";
+                s.Properties.Caption = "End Date";
+                s.Properties.CaptionCellStyle.Width = 150;
+                s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                s.Width = 100;
+            }
+        ).Bind(Model.PaymentPlanEndDate).GetHtml()
+        
+    <div class="spacer-10"></div>
+
+    @Html.DevExpress().Button(
+        s =>
+        {
+            s.Name = "bnSavePaymentPlan";
+            s.Text = "Save";
+            s.UseSubmitBehavior = false;
+            s.ClientSideEvents.Click = "function(s, e){ if (ASPxClientEdit.AreEditorsValid()){Case.Payment.Plan.save();}}";
+        }
+    ).GetHtml()
+}

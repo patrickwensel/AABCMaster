@@ -1,0 +1,62 @@
+
+
+
+
+<div class="leftPanel">
+
+    <script type="text/javascript">
+    function navBarItemClick(sender, e) {
+
+        //event = event || window.event || event.srcElement;
+        event = e.htmlEvent;
+        event.preventDefault();
+
+        LoadingPanel.Show();
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("Navigate", "Home")',
+            data: { group: e.item.group.index, item: e.item.index },
+            success: function (response) {
+                $("#MainPlaceholder").empty().append(response);
+                LoadingPanel.Hide();
+            },
+            error: function (response) {
+                LoadingPanel.Hide();
+                App.Dialogs.Error("We're sorry, we seem to have encountered an error trying to access that page.");
+            }
+        });
+
+        return false;
+
+    }
+    </script>
+
+        @* DXCOMMENT: Configure the left panel's menu *@
+    @Html.DevExpress().NavBar(settings => {
+    settings.Name = "LeftNavBar";
+    settings.AutoCollapse = true;
+    settings.EnableAnimation = true;
+    settings.AllowSelectItem = true;
+    settings.ItemLinkMode = ItemLinkMode.ContentBounds;
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+    settings.ClientSideEvents.ItemClick = "navBarItemClick";
+
+    settings.Groups.Add(group => {
+        group.Text = "Home";
+
+        //var i = group.Items.Add("Dashboard");
+        //i.NavigateUrl = DevExpressHelper.GetUrl(new { Controller = "Referrals", Action = "Dashboard" });
+
+        var i = group.Items.Add("Cases");
+        i.Text = "My Cases";
+        i.NavigateUrl = DevExpressHelper.GetUrl(new { Controller = "Home", Action = "Cases" });
+        
+    });
+    
+
+
+}).GetHtml()
+</div>

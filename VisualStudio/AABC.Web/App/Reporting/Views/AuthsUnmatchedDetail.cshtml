@@ -1,0 +1,35 @@
+﻿@model AABC.Web.App.Reporting.Models.AuthsUnmatchedDetailVM
+
+
+<div>
+
+    <p>Active authorization <b>@Model.AuthCode</b> for patient @Model.PatientName doesn't exist in the applied insurance <b>@Model.InsuranceName</b></p>
+    
+    <table style="width: 100%">
+        <tr>
+            <td valign="top" width="50%">
+                <h3>Authorizations <small><em><a href="/Case/@Model.CaseID/Manage/Summary" target="_blank">go to case summary</a></em></small></h3>
+                
+                <ul style="list-style-type: none;">
+                    @foreach(var auth in Model.Authorizations.OrderBy(x => x.AuthorizationCode.Code)) {
+                        <li style="border-bottom: 1px solid #bfdbff; padding: 5px;"><b>@auth.AuthorizationCode.Code</b> - @auth.AuthorizationCode.Description <br />Active @auth.StartDate.ToShortDateString() to @auth.EndDate.ToShortDateString()</li>
+                    }
+                </ul>
+            </td>
+            <td valign="top">
+                <h3>Insurance Rules <small><em><a href="/Insurance" target="_blank">go to insurance editor</a></em></small></h3>
+                @if (Model.MatchRuleDisplayList == null || Model.MatchRuleDisplayList.Count == 0) {
+                    <p>(no match rules on file for this insurance)</p>
+                } else {
+                    <ul style="list-style-type: none;">
+                        @foreach (var rule in @Model.MatchRuleDisplayList) {
+                            <li style="border-bottom: 1px solid #bfdbff; padding: 5px;">@rule</li>
+                        }
+                    </ul>
+                }
+                
+            </td>
+        </tr>
+    </table>
+
+</div>

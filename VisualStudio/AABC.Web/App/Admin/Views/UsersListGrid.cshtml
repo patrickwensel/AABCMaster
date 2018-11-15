@@ -1,0 +1,112 @@
+﻿@model AABC.Web.App.Account.Models.UserListVM
+@{ 
+    Layout = null;
+}
+@Html.DevExpress().GridView(s => {
+
+    s.Name = "userList";
+    s.KeyFieldName = "ID";
+    s.Width = Unit.Percentage(100);
+    s.Height = Unit.Percentage(50);
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    
+    s.Settings.VerticalScrollableHeight = 200;
+    s.CallbackRouteValues = new { Controller = "Admin", Action = "UserGridCallback" };
+    s.ClientSideEvents.FocusedRowChanged = "gvUsersFocusedRowChanged";
+    //s.ClientSideEvents.Init = "function(s, e) { App.Content.GridViews.InitializeForStretchHeight(s); }";
+    //s.ClientSideEvents.EndCallback = "function(s, e) { App.Content.GridViews.StretchHeight(s); }";
+    // s.ClientSideEvents.BeginCallback = "function(s, e) { e.customArgs['filter'] = '" + Model.ListBase.CallbackFilterValue + "'; e.customArgs['isFilterCallback'] = 'true'; }";
+
+    s.SettingsPager.PageSize = 50;
+
+
+    s.SettingsBehavior.AllowSort = true;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = true;
+    s.SettingsBehavior.AllowSelectByRowClick = true;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    s.SettingsBehavior.AllowDragDrop = false;
+
+    s.Settings.ShowFilterRow = true;
+
+    s.Columns.Add(column => {
+        column.EditFormSettings.Visible = DefaultBoolean.False;
+        column.Settings.AllowAutoFilter = DefaultBoolean.False;
+
+        column.Caption = "Actions";
+        column.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        column.Width = 52;
+        column.SetDataItemTemplateContent(c => {
+
+            string itemID = DataBinder.Eval(c.DataItem, "ID").ToString();
+
+            string button = Html.DevExpress().Button(
+                b => {
+                    b.Images.Image.Url = "~/Content/Images/actionlist-med-light-16.png";
+                    b.Name = "muButton" + itemID;
+                    b.Text = "";
+                    b.ControlStyle.CssClass = "action-button";
+                }).GetHtml().ToHtmlString();
+
+            string popup = @Html.DevExpress().PopupMenu(
+                menu => {
+                    menu.Name = "muActions" + itemID;
+                    menu.PopupElementID = "muButton" + itemID;
+
+                    menu.ClientSideEvents.ItemClick = "actionMenuItemClick";
+                    menu.PopupAction = PopupAction.LeftMouseClick;
+
+                    menu.Items.Add(i => {
+                        i.Text = "Reset Password";
+                        i.Name = "PWReset";
+                        i.Image.IconID = "actions_edit_16x16devav";
+                        i.BeginGroup = true;
+                    });
+
+                    menu.Items.Add(i => {
+                        i.Text = "Delete";
+                        i.Name = "Delete";
+                        i.Image.IconID = "edit_delete_16x16office2013";
+                        i.BeginGroup = true;
+                    });
+                }
+            ).GetHtml().ToHtmlString();
+
+            ViewContext.Writer.Write(button + popup);
+
+        });
+    });
+
+    var col = s.Columns.Add("FirstName");
+    col.FieldName = "FirstName";
+    col.Caption = "First Name";
+    col.ReadOnly = true;
+    col.EditFormSettings.Visible = DefaultBoolean.False;
+
+    col = s.Columns.Add("LastName");
+    col.FieldName = "LastName";
+    col.Caption = "Last Name";
+    col.ReadOnly = true;
+    col.EditFormSettings.Visible = DefaultBoolean.False;
+
+    col = s.Columns.Add("UserName");
+    col.FieldName = "UserName";
+    col.Caption = "Username";
+    col.ReadOnly = true;
+    col.EditFormSettings.Visible = DefaultBoolean.False;
+
+    col = s.Columns.Add("Email");
+    col.FieldName = "Email";
+    col.Caption = "Email Address";
+    col.ReadOnly = true;
+    col.EditFormSettings.Visible = DefaultBoolean.False;
+
+    col = s.Columns.Add("StaffMember");
+    col.FieldName = "StaffMember.CommonName";
+    col.Caption = "Staff Member";
+    col.ReadOnly = true;
+    col.EditFormSettings.Visible = DefaultBoolean.False;
+
+}).Bind(Model.DetailList).GetHtml()
+
+

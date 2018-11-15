@@ -1,0 +1,106 @@
+﻿@model AABC.Web.Models.Cases.CasePaymentPlanVM
+
+
+<div class="case-patient-headerlink">
+    @Html.DevExpress().HyperLink(
+        s =>
+        {
+            s.NavigateUrl = "/Patients/Edit/" + Model.PaymentPlanCaseId;
+            s.Properties.Text = Model.PatientName + (!string.IsNullOrEmpty(Model.PatientGender) ? " (" + Model.PatientGender + ")" : string.Empty);
+        }
+    ).GetHtml()
+
+    @{Html.RenderAction("CaseHighRiskLabel", "Patients", new { CaseId = Model.PaymentPlanCaseId });}
+</div>
+
+<div class="section-expander" id="expander-case-info">
+    <div class="section-expander-header">
+        <span>Payment Plans</span>
+    </div>
+    <div class="form-section">
+        <div class="form-section-content">
+            <div class="row">
+                <div class="col-6" style="padding-right: 10px;">
+                    <div id="PaymentPlanGridContainer">
+                        @{ Html.RenderAction("PaymentPlanGrid", new { CaseId = Model.PaymentPlanCaseId });}
+                    </div>
+                    <p>
+                        @Html.DevExpress().Button(
+                                s =>
+                                {
+                                    s.Name = "Add";
+                                    s.Text = "Add new";
+                                    s.UseSubmitBehavior = false;
+                                    s.ClientSideEvents.Click = "function(s, e){Case.Payment.Plan.get(" + Model.PaymentPlanCaseId + ", 0);}";
+                                }
+                            ).GetHtml()
+                    </p>
+                </div>
+                <div class="col-6">
+                    <p>
+                        Active plan information within the date range will show up in the parent's payment page in their portal. Please ensure accuracy before saving.
+                    </p>
+                    <div id="PaymentPlanFormContainer">
+                        @{ Html.RenderAction("PaymentPlanForm", new { CaseId = Model.PaymentPlanCaseId, CasePaymentPlanId = Model.Id });}
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+    <div class="section-expander-header">
+        <span>Payment History</span>
+    </div>
+    <div class="form-section">
+        <div class="form-section-content">
+            <div class="row">
+                <div class="col-12" style="padding-right: 10px;">
+                    <div id="InsurancePaymentGridContainer">
+                        @{ Html.RenderAction("InsurancePaymentGrid", new { CaseId = Model.PaymentPlanCaseId });}
+                    </div>
+                    <p>
+                        @Html.DevExpress().Button(
+                                s =>
+                                {
+                                    s.Name = "btnAddInsurancePayment";
+                                    s.Text = "Add new";
+                                    s.UseSubmitBehavior = false;
+                                    s.CausesValidation = false;
+                                    s.ClientSideEvents.Click = "function(s, e){Case.Payment.Insurance.get(" + Model.PaymentPlanCaseId + ", 0);}";
+                                }
+                            ).GetHtml()
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section-expander-header">
+        <span>Billing Correspondence</span>
+    </div>
+    <div class="form-section">
+        <div class="form-section-content">
+            <div class="row">
+
+                <div class="col-6">
+                    <div id="BillingCorrespondenceFormContainer">
+                        @{ Html.RenderAction("BillingCorrespondenceForm", new { CaseId = Model.PaymentPlanCaseId, BillingCorrespondenceId = 0});}
+                    </div>
+                </div>
+                <div class="col-6" style="padding:0 10px 0 10px">
+                    <div id="BillingCorrespondenceListContainer">
+                        @{ Html.RenderAction("BillingCorrespondenceList", new { CaseId = Model.PaymentPlanCaseId });}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" id="dxss_CasePaymentPlanViewModelScripts">
+    $(document).ready(function() {
+        Case.Payment.Plan.initialize({
+            caseId: @Model.PaymentPlanCaseId,
+            paymentPlanId: @Model.Id
+        });
+
+        App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+    });
+</script>

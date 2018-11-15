@@ -1,0 +1,96 @@
+﻿@model AABC.Web.App.Hours.Models.ValidateVM
+
+<div id="divValidateMaxPerDay">
+    <div id="divValidateMaxPerDayFilter">
+
+        @{Html.DevExpress().ComboBox(
+                                                    cb =>
+                                                    {
+                                                        cb.Name = "SelectedDate";
+                                                        cb.Properties.TextField = "Display";
+                                                        cb.Properties.ValueField = "Date";
+                                                        cb.Properties.ValueType = typeof(DateTime);
+                                                        cb.PreRender = (sender, e) =>
+                                                        {
+                                                            AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model.SelectedDate, "Date");
+                                                        };
+                                                        cb.Properties.Caption = "Current Period";
+                                                    }
+                                                ).BindList(Model.AvailableDates).Render();
+
+            Html.DevExpress().Button(
+                b =>
+                {
+                    b.Name = "btnProcessValidation";
+                    b.Text = "Re-process Validation";
+                    b.ClientSideEvents.Click = "function(s, e) { window.Hours.Validate.MaxHoursPerDay.refreshList(); }";
+                }
+            ).Render();
+        }
+
+    </div>
+    <div id="divValidateMaxPerDayResults">
+        <div id="divValidateMaxPerDayLeftPanel">
+            <div id="MaxPerDayPerPatientListContainer">
+                @Html.Action("MaxPerDayPerPatientList", new { period = DateTime.Today })
+            </div>
+
+        </div>
+        <div id="divValidateMaxPerDayRightPanel">
+            <div id="MaxPerDayPerPatientDaysContainer">@Html.Action("MaxPerDayPerPatientDays", new { patientId = 0, period = DateTime.Today })</div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dxgvControl_Aqua {
+        width:100% !important;
+    }
+    #divValidateMaxPerDayFilter {
+        width: 100%;
+        display: table;
+        padding-left: 12px;
+        padding-top: 10px;
+    }
+
+    #divValidateMaxPerDayLeftPanel {
+
+    width: 25%;
+    float: left;
+    display: block;
+    padding-left: 10px;
+    padding-right: 10px;
+    }
+
+    #divValidateMaxPerDayRightPanel {
+    width: 70%;
+    float: left;
+    display: block;
+    }
+
+    #btnProcessValidation {
+        float: left;
+        display: block;
+        margin-left: 10px;
+        margin-top: -2px;
+    }
+
+    #SelectedDate_ET {
+        display: block;
+        float: left;
+    }
+
+    #divValidateMaxPerDayResults {
+        width: 100%;
+        display: table;
+        margin-top: 10px;
+    }
+</style>
+<script type="text/javascript" id="dxss_HoursValidateMaxHoursPerDay">
+    $(document).ready(function(){
+        window.Hours.Validate.MaxHoursPerDay.initialize();
+        $(function() {
+            App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+        });
+    })
+</script>

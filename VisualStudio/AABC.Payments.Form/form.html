@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>AABC Payment Form</title>
+    <link rel="shortcut icon" href="http://www.appliedabc.com/wp-content/uploads/2017/02/favicon.jpg" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.4/ladda-themeless.min.css" />
+    <style type="text/css">
+        body {
+            font-family: "Roboto"
+        }
+
+        header {
+            height: 90px;
+            border-bottom: 1px solid #ededed;
+        }
+
+        header a {
+            display: block;
+        }
+
+        header img {
+            height: 89px;
+        }
+        .validationMessage {
+            display:block;
+            color:darkred;
+            margin:5px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="col-md-12">
+                <a href="http://www.appliedabc.com/" title="Applied Behavioral Counseling" tabindex="-1">
+                    <img class="mk-desktop-logo dark-logo" 
+                        title="Autism Therapy in New York, New Jersey, Connecticut, Massachusetts and Maryland" 
+                        alt="Autism Therapy in New York, New Jersey, Connecticut, Massachusetts and Maryland" 
+                        src="http://www.appliedabc.com/wp-content/uploads/2017/02/appliedabclogo.jpg" />
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container" style="padding-top:50px">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <!-- ko ifnot: isProcessed -->
+                <!-- ko if: hasErrors -->
+                <div class="alert alert-danger" role="alert">
+                    <ul data-bind="foreach:errors">
+                        <li data-bind="html:$data"></li>
+                    </ul>
+                </div>
+                <!-- /ko -->
+                <form action="https://manage.appliedabc.com/system/SubmitRBTCoursePayment" method="post" data-bind="submit: submit">
+					<h2>RBT Course Payment</h2>
+					<p>Please fill out the form to charge $49.00 for the RBT Course.</p>
+                    <!-- ko with: data -->
+                    <div class="form-group">
+                        <label for="Name">Name</label>
+                        <input type="text" class="form-control" name="Name" id="Name" data-bind="value: name, disable: $root.isBusy">
+                    </div>
+                    <div class="form-group">
+                        <label for="Phone">Phone</label>
+                        <input type="text" class="form-control" name="Phone" id="Phone" data-bind="value: phone, disable: $root.isBusy"></div>
+                    <div class="form-group">
+                        <label for="Email">Email</label>
+                        <input type="text" class="form-control" name="Email" id="Email" data-bind="value: email, disable: $root.isBusy">
+                    </div>
+                    <div class="form-group">
+                        <label for="CreditCard">Credit Card</label>
+                        <input type="text" class="form-control" name="CreditCard" id="CreditCard" data-bind="numeric, value: creditCard, disable: $root.isBusy">
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="ExpiryDate">Expiry Date</label>
+                            <input type="text" class="form-control" name="ExpiryDate" id="ExpiryDate" maxlength="4" placeholder="MMYY" data-bind="numeric, value: expiryDate, disable: $root.isBusy">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="CVC">CVC</label>
+                            <input type="text" class="form-control" name="CVC" id="CVC" data-bind="numeric, textInput : cvc, disable: $root.isBusy">
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                    <div class="form-group">
+                        <button class="btn btn-primary ladda-button" type="submit" data-style="expand-left" data-bind="ladda: isBusy, enable: canSubmit">Submit</button>
+                    </div>
+                </form>
+                <!-- /ko -->
+                <!-- ko if: isProcessed -->
+                <div class="alert alert-success" role="alert">
+                    <strong>Thank you!</strong><br/>
+                    Your payment has been processed. You will receive an email confirmation shortly.
+                </div>
+                <!-- /ko -->
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.4/spin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Ladda/1.0.4/ladda.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout-validation/2.0.3/knockout.validation.min.js"></script>
+    <script type="text/javascript">
+        ko.bindingHandlers.ladda = {
+            init: function(element, valueAccessor) {
+                var l = Ladda.create(element);
+                
+                ko.computed({
+                    read: function() {
+                        var state = ko.unwrap(valueAccessor());
+                        if (state)
+                            l.start();
+                        else
+                            l.stop();
+                    },
+                    disposeWhenNodeIsRemoved: element
+                });
+            }
+        };
+        ko.bindingHandlers.numeric = {
+            init: function (element, valueAccessor) {
+                $(element).on("keydown", function (event) {
+                    // Allow: backspace, delete, tab, escape, and enter
+                    if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+                        // Allow: Ctrl+A
+                        (event.keyCode == 65 && event.ctrlKey === true) ||
+                        // Allow: . ,
+                        (event.keyCode == 188 || event.keyCode == 190 || event.keyCode == 110) ||
+                        // Allow: home, end, left, right
+                        (event.keyCode >= 35 && event.keyCode <= 39)) {
+                        // let it happen, don't do anything
+                        return;
+                    }
+                    else {
+                        // Ensure that it is a number and stop the keypress
+                        if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105)) {
+                            event.preventDefault();
+                        }
+                    }
+                });
+            }
+        };
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            function PaymentViewModel() {
+                var self = {
+                    data: ko.validatedObservable({
+                        name: ko.observable().extend({ required: true }),
+                        phone: ko.observable().extend({ required: true, phoneUS: true }),
+                        email: ko.observable().extend({ required: true,  email: true }),
+                        creditCard: ko.observable().extend({ required: true }),
+                        expiryDate: ko.observable().extend({ required: true, minLength: 4, maxLength: 4 }),
+                        cvc: ko.observable().extend({ required: true, minLength: 3 })
+                    }),
+                    errors: ko.observableArray([]),
+                    isBusy: ko.observable(false),
+                    isProcessed: ko.observable(false)
+                };
+
+                self.canSubmit = ko.pureComputed(function () {
+                    return !self.isBusy() && self.data.isValid();
+                });
+
+                self.hasErrors = ko.pureComputed(function () {
+                    var errors = ko.unwrap(self.errors);
+                    return errors && errors.length > 0;
+                });
+
+                self.submit = function (form) {
+                    var $form = $(form);
+                    if (self.isBusy()) {
+                        return;
+                    }
+                    self.isBusy(true);
+                    self.errors([]);
+                    $.ajax({
+                        url: $form.attr("action"),
+                        method: "POST",
+                        data: ko.toJS(self.data)
+                    }).always(function () {
+                        self.isBusy(false);
+                    }).done(function (response) {
+                        if (response.Success) {
+                            self.isProcessed(true);
+                        } else {
+                            self.errors.push(response.Error);
+                        }
+                    }).fail(function(response) {
+                        self.errors.push("Unknown error.");
+                    });
+                }
+                return self;
+            };
+
+            ko.applyBindings(new PaymentViewModel());
+        });
+    </script>
+</body>
+</html>

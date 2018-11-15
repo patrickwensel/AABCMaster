@@ -1,0 +1,78 @@
+﻿@model List<AABC.Web.Models.Cases.CasePaymentPlanVM>
+
+@{
+    GridViewSettings s = new GridViewSettings();
+    s.Name = "CasePaymentPlanEditGrid";
+    s.KeyFieldName = "Id";
+    s.Width = Unit.Percentage(100);
+    s.Height = Unit.Percentage(100);
+
+    s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+
+    s.SettingsBehavior.AllowSort = true;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = true;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = false;
+
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+
+    s.SettingsPager.PageSize = 200;
+
+    s.Settings.ShowTitlePanel = true;
+
+    // celll/row double click (http://kb.dymeng.com/kb/DevExMVCGridView)
+
+    s.HtmlDataCellPrepared = (sender, e) =>
+    {
+        e.Cell.Attributes.Add("data-dym-cellClick", "CasePaymentPlanEditGrid");
+        e.Cell.Attributes.Add("data-dym-visibleIndex", e.VisibleIndex.ToString());
+        e.Cell.Attributes.Add("data-dym-fieldName", e.DataColumn.FieldName);
+    };
+
+    var col = s.Columns.Add("Active");
+    col.Width = 75;
+    col.Caption = "Active";
+    col.FieldName = "PaymentPlanActive";
+    col.ColumnType = MVCxGridViewColumnType.CheckBox;
+    col.UnboundType = DevExpress.Data.UnboundColumnType.Boolean;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+
+    col = s.Columns.Add("Amount");
+    col.Caption = "Amount";
+    col.FieldName = "Amount";
+    col.PropertiesEdit.DisplayFormatString = "c";
+    col.Width = 150;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Right;
+
+    col = s.Columns.Add("Frequency");
+    col.Caption = "Frequency";
+    col.FieldName = "Frequency";
+    col.Width = 75;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+    col = s.Columns.Add("StartDate");
+    col.Caption = "Start";
+    col.FieldName = "PaymentPlanStartDate";
+    col.PropertiesEdit.DisplayFormatString = "d";
+    col.Width = 75;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+    col = s.Columns.Add("EndDate");
+    col.Caption = "End";
+    col.FieldName = "PaymentPlanEndDate";
+    col.PropertiesEdit.DisplayFormatString = "d";
+    col.Width = 75;
+    col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+    col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+
+
+}
+
+@Html.DevExpress().GridView(s).Bind(Model).GetHtml()
+
+
+
+

@@ -1,0 +1,86 @@
+﻿@model AABC.Web.App.Staffing.Models.AddProviderContactLogVM
+
+@using (Html.BeginForm("AddProviderContactLog", "Staffing", FormMethod.Post, new { id = "AddProviderContactLogForm" }))
+{
+    @Html.HiddenFor(model => model.CaseId);
+    
+    @Html.DevExpress().ComboBox(s =>
+    {
+        s.Name = "ProviderId";
+        s.Properties.TextField = "FullName";
+        s.Properties.ValueField = "ProviderID";
+        s.Properties.ValueType = typeof(int);
+        s.Properties.Caption = "Provider";
+        s.Properties.CaptionCellStyle.Width = 100;
+    }).BindList(Model.Providers).Bind(Model.ProviderId).GetHtml()
+
+    <div class="spacer-10"></div>
+    
+    @Html.DevExpress().ComboBox(s =>
+        {
+            s.Name = "StatusId";
+            s.Properties.TextField = "StatusName";
+            s.Properties.ValueField = "ID";
+            s.Properties.ValueType = typeof(int);
+            s.Properties.Caption = "Status";
+            s.Properties.CaptionCellStyle.Width = 100;
+        }).BindList(Model.Statuses).Bind(Model.StatusId).GetHtml()
+
+    <div class="spacer-10"></div>
+    
+    @Html.DevExpress().DateEdit(s =>
+    {
+        s.Name = "ContactDate";
+        s.Properties.Caption = "Contact Date";
+        s.Properties.CaptionCellStyle.Width = 100;
+    }).Bind(Model.ContactDate).GetHtml()
+    
+    <div class="spacer-10"></div>
+    
+    @Html.DevExpress().DateEdit(s =>
+    {
+        s.Name = "FollowUpDate";
+        s.Properties.Caption = "Follow Up Date";
+        s.Properties.CaptionCellStyle.Width = 100;
+    }).Bind(Model.FollowUpDate).GetHtml()
+    
+    <div class="spacer-10"></div>
+
+    @Html.DevExpress().Memo(s =>
+    {
+        s.Name = "Notes";
+        s.Properties.Caption = "Notes";
+        s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+        s.Properties.Rows = 4;
+        s.Width = Unit.Percentage(100);
+    }).Bind(Model.Notes).GetHtml()
+
+    <div class="spacer-10"></div>
+
+    <div style="float: right;">
+        <table>
+            <tr>
+                <td>
+                    @Html.DevExpress().Button(s =>
+                    {
+                        s.Name = "btnAddContactOK";
+                        s.Width = 75;
+                        s.Text = "Ok";
+                        s.ClientSideEvents.Click = "function(s, e) { StaffingLogDetails.ProviderContactLog.Submit(); }";
+                    }).GetHtml()
+                </td>
+                <td style="padding-left: 5px;">
+                    @Html.DevExpress().Button(s =>
+                    {
+                        s.Name = "btnAddContactCancel";
+                        s.Width = 75;
+                        s.Text = "Cancel";
+                        s.ClientSideEvents.Click = "function(s, e) { App.Popup.Hide('cancel'); }";
+                    }).GetHtml()
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+}

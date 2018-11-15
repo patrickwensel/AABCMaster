@@ -1,0 +1,73 @@
+﻿
+
+
+<div class="section-expander" id="expander-existing-logins">
+    <div class="section-expander-header">
+        <span>Patient Portal Logins</span>
+    </div>
+    <div class="section-expander-content" id="existing-logins-content">
+
+        
+
+    </div>
+</div>
+
+<div class="spacer-10"></div>
+
+<div class="section-expander" id="expander-signin-summary">
+    <div class="section-expander-header">
+        <span>Sign In Summary</span>
+        <div style="float:right;margin-top:-12px;margin-left:3px;">
+            @Html.DevExpress().Button(
+        s =>
+        {
+            s.Name = "Go";
+            s.Text = "Go";
+            s.UseSubmitBehavior = false;
+            s.Height = Unit.Pixel(15);
+            s.ClientSideEvents.Click = "function(s, e){Admin.PatientPortal.Signin.refresh();}";
+        }
+    ).GetHtml()
+        </div>
+        <div style="float:right;margin-top:-10px;margin-left:3px;">
+            @Html.DevExpress().DateEdit(
+    s =>
+    {
+        s.Name = "ToDate";
+        s.Properties.Caption = "To";
+        s.Date = DateTime.Today;
+        s.Width = 100;
+    }
+).GetHtml()
+
+
+        </div>
+        <div style="float:right;margin-top:-10px">
+            @Html.DevExpress().DateEdit(
+    s =>
+    {
+        s.Name = "FromDate";
+        s.Properties.Caption = "From";
+        s.Date = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+        s.Width = 100;
+    }
+).GetHtml()
+
+        </div>
+
+
+        </div>
+    <div class="section-expander-content" id="signin-list-content">
+        @{Html.RenderAction("SignInSummary", "PatientPortal", new { StartDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1), EndDate = DateTime.Today });}
+    </div>
+</div>
+
+
+    <script type="text/javascript" id="dxss_34098756v73m49086b7m390b876m">
+        $(document).ready(function(){
+           
+            Admin.PatientPortal.Users.initialize();
+
+        })
+
+    </script>

@@ -1,0 +1,167 @@
+﻿@model AABC.Web.App.Insurance.Models.AuthRuleEditVM
+
+
+@Html.DevExpress().ComboBox(
+    s => {
+        s.Name = "AuthEditProviderType";
+        s.Properties.TextField = "Code";
+        s.Properties.ValueField = "ID";
+        s.Properties.ValueType = typeof(int);
+        s.Properties.TextFormatString = "{0} - {1}";
+        s.Width = 200;
+        s.Properties.Columns.Add("Code", "Code", 35);
+        s.Properties.Columns.Add("Name");
+        s.Properties.Caption = "Provider Type";
+        s.Properties.CaptionCellStyle.Width = 100;
+
+        s.PreRender = (sender, e) => {
+            AABC.Web.Helpers.DevEx.ComboPreRenderByValue(sender, Model.ProviderTypeID);
+        };
+    }
+).BindList(Model.ProviderTypesList).Bind(Model.ProviderTypeID).GetHtml()
+
+
+@Html.DevExpress().ComboBox(
+    s => {
+        s.Name = "AuthEditService";
+        s.Properties.TextField = "Code";
+        s.Properties.ValueField = "ID";
+        s.Properties.ValueType = typeof(int);
+        s.Properties.TextFormatString = "{0} - {1}";
+        s.Width = 200;
+        s.Properties.Columns.Add("Code", "Code", 35);
+        s.Properties.Columns.Add("Name");
+        s.Properties.Caption = "Service";
+        s.Properties.CaptionCellStyle.Width = 100;
+
+        s.PreRender = (sender, e) => {
+            AABC.Web.Helpers.DevEx.ComboPreRenderByValue(sender, Model.ServiceID);
+        };
+    }
+).BindList(Model.ServicesList).Bind(Model.ServiceID).GetHtml()
+
+@Html.DevExpress().CheckBox(
+    s => {
+        s.Name = "AuthEditIsUntimed";
+        s.Text = "Untimed?";
+        s.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+    }
+).Bind(Model.IsUntimed).GetHtml()
+
+
+@Html.DevExpress().CheckBox(
+    s => {
+        s.Name = "AuthEditAllowOverlapping";
+        s.Text = "Allow Overlap?";
+        s.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+    }
+).Bind(Model.AllowOverlapping).GetHtml()
+
+
+@Html.DevExpress().CheckBox(
+    s => {
+        s.Name = "AuthEditRequiresBCBA";
+        s.Text = "Require BCBA Auth?";
+        s.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+    }
+).Bind(Model.RequiresAuthorizedBCBA).GetHtml()
+
+
+@Html.DevExpress().CheckBox(
+    s => {
+        s.Name = "AuthEditRequiresPreAuth";
+        s.Text = "Require Pre-Auth?";
+        s.Properties.CheckBoxStyle.CssClass = "checkbox-standard-align";
+    }
+).Bind(Model.RequiresPreAuthorization).GetHtml()
+
+
+<h4>Initial Authorization</h4>
+
+@Html.DevExpress().ComboBox(
+    s => {
+        s.Name = "AuthEditInitialAuth";
+        s.Properties.TextField = "Code";
+        s.Properties.ValueField = "ID";
+        s.Properties.ValueType = typeof(int);
+        s.Properties.TextFormatString = "{0} - {1}";
+        s.Width = 200;
+        s.Properties.Columns.Add("Code", "Code", 35);
+        s.Properties.Columns.Add("Name");
+        s.Properties.Caption = "Auth Code";
+        s.Properties.CaptionCellStyle.Width = 100;
+
+        s.PreRender = (sender, e) => {
+            AABC.Web.Helpers.DevEx.ComboPreRenderByValue(sender, Model.InitialAuthorizationID);
+        };
+    }
+).BindList(Model.AuthCodes).Bind(Model.InitialAuthorizationID).GetHtml()
+
+
+@Html.DevExpress().TextBox(
+    s => {
+        s.Name = "AuthEditInitialMinimumMinutes";
+        s.Properties.Caption = "Minimum Minutes";
+        s.Properties.CaptionCellStyle.Width = 100;
+    }
+).Bind(Model.InitialMinimumMinutes).GetHtml()
+
+@Html.DevExpress().TextBox(
+    s => {
+        s.Name = "AuthEditInitialUnitSize";
+        s.Properties.Caption = "Unit Size";
+        s.Properties.CaptionCellStyle.Width = 100;
+    }
+).Bind(Model.InitialUnitSize).GetHtml()
+
+
+
+<h4>Final Authorization</h4>
+
+
+@Html.DevExpress().ComboBox(
+    s => {
+        s.Name = "AuthEditFinalAuth";
+        s.Properties.TextField = "Code";
+        s.Properties.ValueField = "ID";
+        s.Properties.ValueType = typeof(int);
+        s.Properties.TextFormatString = "{0} - {1}";
+        s.Width = 200;
+        s.Properties.Columns.Add("Code", "Code", 35);
+        s.Properties.Columns.Add("Name");
+        s.Properties.Caption = "Auth Code";
+        s.Properties.CaptionCellStyle.Width = 100;
+
+        s.PreRender = (sender, e) => {
+            AABC.Web.Helpers.DevEx.ComboPreRenderByValue(sender, Model.FinalAuthorizationID);
+        };
+    }
+).BindList(Model.AuthCodes).Bind(Model.FinalAuthorizationID).GetHtml()
+
+
+@Html.DevExpress().TextBox(
+    s => {
+        s.Name = "AuthEditFinalMinimumMinutes";
+        s.Properties.Caption = "Minimum Minutes";
+        s.Properties.CaptionCellStyle.Width = 100;
+    }
+).Bind(Model.FinalMinimumMinutes).GetHtml()
+
+@Html.DevExpress().TextBox(
+    s => {
+        s.Name = "AuthEditFinalUnitSize";
+        s.Properties.Caption = "Unit Size";
+        s.Properties.CaptionCellStyle.Width = 100;
+    }
+).Bind(Model.FinalUnitSize).GetHtml()
+
+
+<div class="spacer-10" style="margin-left: 107px;">
+    @Html.DevExpress().Button(
+        s => {
+            s.Name = "AuthEditSaveButton";
+            s.UseSubmitBehavior = false;
+            s.Text = "Save Auth Rule";
+        }
+    ).GetHtml()
+</div>

@@ -1,0 +1,94 @@
+﻿@model IEnumerable<AABC.Web.App.Case.Models.CaseAuthorizationDTO>
+
+@Html.DevExpress().GridView(settings =>
+{
+
+    settings.Name = "gvAuthGrid";
+    settings.Width = Unit.Percentage(100);
+    settings.SettingsBehavior.AllowSort = false;
+    settings.SettingsBehavior.AllowGroup = false;
+    settings.SettingsBehavior.AllowFocusedRow = true;
+    settings.SettingsBehavior.AllowSelectByRowClick = true;
+    settings.SettingsBehavior.AllowSelectSingleRowOnly = true;
+    settings.SettingsBehavior.AllowDragDrop = false;
+
+    settings.CallbackRouteValues = new { Controller = "Case", Action = "AllAuthsGridCallback" };
+    settings.ClientSideEvents.BeginCallback = "function(s, e) { gridBeginCallback(s, e); }";
+
+    settings.KeyFieldName = "ID";
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "Status";
+        col.Caption = "Status";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 40;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "InsuranceName";
+        col.Caption = "Insurance";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 40;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "Type";
+        col.Caption = "Type";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 40;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "Code";
+        col.Caption = "Code";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 50;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "Description";
+        col.Caption = "Description";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.CssClass = "auth-description";
+        col.Width = 150;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "StartDate";
+        col.Caption = "Start Date";
+        col.PropertiesEdit.DisplayFormatString = "d";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 50;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "EndDate";
+        col.Caption = "End Date";
+        col.PropertiesEdit.DisplayFormatString = "d";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 50;
+    });
+
+    settings.Columns.Add(col =>
+    {
+        col.FieldName = "TotalHoursApproved";
+        col.Caption = "Total Hours";
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.Width = 60;
+    });
+
+}).Bind(Model).GetHtml()

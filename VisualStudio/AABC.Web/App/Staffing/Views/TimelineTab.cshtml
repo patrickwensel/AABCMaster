@@ -1,0 +1,83 @@
+﻿@model AABC.Web.App.Staffing.Models.ProvidersTabVM
+<div class="section-expander" id="root">
+    <div class="section-expander-header" style="position:relative">
+        <span>Timeline</span>
+        <div style="position: absolute;right: 10px;top: 10px;">
+            <button type="button" class="dxbButton_Aqua dxbButtonSys dxbTSys" data-bind="click:toggleNotes">
+                <div class="dxb">
+                    <div class="dx-vam">
+                        <!-- ko if: showNotes -->
+                        Hide Notes
+                        <!-- /ko -->
+                        <!-- ko ifnot: showNotes -->
+                        Show Notes
+                        <!-- /ko -->
+                    </div>
+                </div>
+            </button>
+        </div>
+    </div>
+    <div class="section-expander-content">
+        
+        <div class="main-container page__container">
+            <div class="timeline">
+                <!-- ko foreach: { data: years, as: 'year' } -->
+                <div class="timeline__group">
+                    <span class="timeline__year" data-bind="text:year"></span>
+                    <!-- ko foreach: { data: $root.getDates(year), as: '$month' } -->
+                    <span class="timeline__month_header" data-bind="text:$month.month.format('MMM')"></span>
+                    <!-- ko foreach: { data: $month.dates, as: '$date' } -->
+                    <div class="timeline__box">
+                        <div class="timeline__date_wrapper">
+                            <div class="timeline__date">
+                                <span class="timeline__day" data-bind="text:$date.format('D')"></span>
+                                <span class="timeline__month" data-bind="text:$date.format('MMM')"></span>
+                            </div>
+                        </div>
+                        <div class="timeline__post">
+                            <div class="timeline__content">
+                                <!-- ko foreach: { data: $root.getEntries($date), as: 'e' } -->
+                                <div class="timeline__item" data-bind="css: e.source">
+                                    <div class="timeline__item_time">
+                                        <span class="bullet" data-bind="attr:{title:e.source}">&#9632;</span>
+                                        <span class="time" data-bind="text:e.date.format('h:mm a')"></span>
+                                    </div>
+                                    <div class="timeline__item_body">
+                                        <!-- ko if: e.author && e.author.length > 0 -->
+                                        <div>
+                                            <em><span data-bind="text:e.author"></span> wrote:</em>
+                                        </div>
+                                        <!-- /ko -->
+                                        <div><strong data-bind="text:title"></strong></div>
+                                        <div data-bind="text:notes"></div>
+                                    </div>
+                                </div>
+                                <!-- /ko -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
+                <!-- /ko -->
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+        App.NavBar.InitView(@Html.Raw(Json.Encode(Model.Base)));
+    });
+</script>
+<script type="text/javascript" id="dxss_Timeline">
+    $(function () {
+        $.getScript("/Scripts/Pages/Timeline.js").done(function () {
+            var vm = new TimelineVM(@(Model.CaseID));
+            vm.load().done(function () {
+                var element = $("#root")[0];
+                ko.cleanNode(element);
+                ko.applyBindings(vm, element);
+            });
+        });
+    });
+</script>

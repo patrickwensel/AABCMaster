@@ -1,0 +1,87 @@
+<div id="dashboard-hours-eligibility" style="padding: 10px;">
+
+    <h1>Hours Entry Eligiblity Status</h1>
+
+    <p><em>(all analysis performed based on the current date)</em></p>
+    <p>This page shows the various states of cases which are eligible for hours entry.</p>
+    <p>Issues listed here will prevent providers and staff from entering hours correctly.</p>
+    <p>All items should be resolved, and this page should be checked often to ensure problem-free hours entry for providers.</p>
+    
+    <div style="margin: 30px 0px 30px 0px;"><hr /></div>
+
+    <h2>Eligible Cases without Active Insurance</h2>
+    <div id="container-no-active-insurance" style="margin-left: 15px;">
+
+        <div data-bind="visible: hasActiveInsuranceItems">
+            <div data-bind="template: { name: 'insurance-issue-template', foreach: activeInsuranceIssues }"></div>
+            <script type="text/html" id="insurance-issue-template">
+                <div>
+                    <a data-bind="attr: { href: '/Case/' + CaseID + '/Manage/Insurance' }"><span data-bind="text: PatientName"></span></a>
+                </div>
+            </script>
+        </div>
+        <div data-bind="visible: !hasActiveInsuranceItems()">
+            <p>All set!  No cases found that don't have active insurance</p>
+        </div>
+
+    </div>
+
+    <h2>Eligible Cases without Active Authorizations</h2>
+    <div id="container-no-active-auths" style="margin-left: 15px;">
+
+        <div data-bind="visible: hasActiveAuthItems">
+            <div data-bind="template: { name: 'auth-issue-template', foreach: activeAuthorizationIssues }"></div>
+            <script type="text/html" id="auth-issue-template">
+                <div>
+                    <a data-bind="attr: { href: '/Case/' + CaseID + '/Manage/Summary' }"><span data-bind="text: PatientName"></span></a>
+                </div>
+            </script>
+        </div>
+        <div data-bind="visible: !hasActiveAuthItems()">
+            <p>All set!  No cases found that don't have active authorizations</p>
+        </div>
+
+    </div>
+
+    <h2>Eligible Authorizations without Insurance Match Rules</h2>
+    <div id="container-auths-without-rules" style="margin-left: 15px;">
+
+        <div data-bind="visible: hasAuthsWithoutRules">
+            <div data-bind="template: { name: 'rule-issue-template', foreach: activeRuleIssues }"></div>
+            <script type="text/html" id="rule-issue-template">
+                <div>
+                    <a data-bind="attr: { href: '/Case/' + CaseID + '/Manage/Summary' }"><span data-bind="text: PatientName + ' (' + AuthorizationCode + ')'"></span></a>
+                </div>
+            </script>
+        </div>
+        <div data-bind="visible: !hasAuthsWithoutRules()">
+            <p>All set!  No authorizations found that are missing insurance match rules</p>
+        </div>
+
+    </div>
+        
+</div>
+
+<script type="text/javascript" id="dxss_w40dbvr589vtu5u2m03489">
+    
+    $.getScript('/client/scripts/app/homeHoursEligibility.js', function () {
+        $.ajax({
+            url: '/Home/HoursEligibility/GetModel',
+            type: 'GET',
+            success: function(data) {
+                var vm = window.aabc.home.hoursEligibility;
+                var root = document.getElementById('dashboard-hours-eligibility');
+
+                //console.log(data);
+
+                window.aabc.home.hoursEligibility.initialize(data);
+
+                ko.cleanNode(root);
+                ko.applyBindings(vm, root);
+            }
+        });
+
+        App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+    });
+
+</script>

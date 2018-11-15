@@ -1,0 +1,28 @@
+@model List<AABC.Web.App.Models.InsuranceCostListItem>
+
+
+
+@Html.DevExpress().GridView(
+    s => {
+
+        s.Name = "DashboardYakovInsCostGrid";
+
+        s.CallbackRouteValues = new { Controller = "Home", Action = "DashboardYakovInsCostGridCallback" };
+
+        s.SettingsBehavior.AllowSort = true;
+        s.SettingsBehavior.AllowGroup = false;
+        s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+        s.Columns.Add("PatientName").Width = 150;
+
+
+        var col = s.Columns.Add("Total");
+        col.PropertiesEdit.DisplayFormatString = "c";
+        col.Width = 75;
+
+        s.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total").DisplayFormat = "c";
+        s.SummaryText = "Total ";
+
+        s.Settings.ShowFooter = true;
+
+    }
+).Bind(Model).GetHtml()

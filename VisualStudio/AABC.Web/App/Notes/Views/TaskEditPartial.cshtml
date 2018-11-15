@@ -1,0 +1,42 @@
+﻿@model AABC.DomainServices.Notes.NoteTaskDTO
+@{
+    string rowId = Guid.NewGuid().ToString();
+}
+<tr id="taskrow_@rowId" class="dxgvDataRow_Aqua TaskRow">
+    <td class='dxgv'>
+        <input type="hidden" class="TaskID" name="TaskID_@rowId" value="@Model.ID" />
+        <input type="hidden" class="TaskAction" name="TaskAction_@rowId" value="edit" />
+        @Html.DevExpress().TextBox(s => {
+            s.Name = "TaskDescription_" + rowId;
+            s.ControlStyle.CssClass = "TaskDescription";
+            s.Width = Unit.Percentage(100);
+        }).Bind(Model.Description).GetHtml()
+    </td>
+    <td class="dxgv">
+        @Html.DevExpress().DateEdit(s => {
+            s.Name = "TaskDueDate_" + rowId;
+            s.ControlStyle.CssClass = "TaskDueDate";
+            s.Width = Unit.Pixel(100);
+        }).Bind(Model.DueDate).GetHtml()
+    </td>
+    <td class="dxgv">
+        @Html.DevExpress().ComboBox(s => {
+            s.Name = "AssignedTo_" + rowId;
+            s.ControlStyle.CssClass = "TaskAssignTo";
+            s.Width = Unit.Pixel(125);
+            s.Properties.TextField = "CommonName";
+            s.Properties.ValueField = "ID";
+            s.Properties.ValueType = typeof(int);
+            s.Properties.TextFormatString = "{0} {1}";
+            s.Width = Unit.Pixel(150);
+        }).BindList(Model.AssignedToList).Bind(Model.AssignedTo).GetHtml()
+    </td>
+    <td class="dxgv">
+        @Html.DevExpress().Button(s => {
+            s.Name = "TaskDelete_" + rowId;
+            s.Text = "✖";
+            s.Width = Unit.Pixel(25);
+            s.ClientSideEvents.Click = "function(s, e){$('#taskrow_" + rowId + "').find('.TaskAction').val('delete'); $('#taskrow_" + rowId + "').hide();}";
+        }).GetHtml()
+    </td>
+</tr>

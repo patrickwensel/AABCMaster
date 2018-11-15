@@ -1,0 +1,468 @@
+﻿@model AABC.Web.App.Reporting.Models.ReportSelectorVM
+
+<div class="report-selector-container">
+
+    <h1>Reports</h1>
+
+
+
+    <div id="rs-category-billing" class="report-selector-category">
+
+        <h2>Billing</h2>
+
+        <div class="report-selector-reportblock">
+            <h3>Billing Export</h3>
+            <p>Billable Hours Export for MBH Upload (Excel Format)</p>
+
+            <div class="pull-left">
+                @Html.DevExpress().ComboBox(
+                    cb =>
+                    {
+                        cb.Name = "DateSelectorBillingBillingExport";
+                        cb.Properties.TextField = "Display";
+                        cb.Properties.ValueField = "Date";
+                        cb.Properties.ValueType = typeof(DateTime);
+                        cb.PreRender = (sender, e) =>
+                        {
+                            AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model.DefaultDate, "Date");
+                        };
+                        cb.Properties.Caption = "";
+                        cb.Width = 100;
+                    }
+                ).BindList(Model.AvailableDates).GetHtml()
+            </div>
+
+            <div class="pull-left report-selector-button">
+                @Html.DevExpress().Button(
+                    s =>
+                    {
+                        s.Name = "DownloadButtonBillingBillingExport";
+                        s.Text = "Download";
+                        s.ClientSideEvents.Click = "function(s, e) { }";
+                    }
+                ).GetHtml()
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+
+        @*<div class="report-selector-reportblock" style="visibility: hidden">
+                <h3>Providers Without Billing</h3>
+                <p>List of providers with no billing on file for the selected period (Excel Format)</p>
+
+                <div class="pull-left">
+                    @Html.DevExpress().ComboBox(
+                        cb => {
+                            cb.Name = "DateSelectorBillingProvidersWithoutBilling";
+                            cb.Properties.TextField = "Display";
+                            cb.Properties.ValueField = "Date";
+                            cb.Properties.ValueType = typeof(DateTime);
+                            cb.PreRender = (sender, e) => {
+                                AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model.DefaultDate, "Date");
+                            };
+                            cb.Properties.Caption = "";
+                            cb.Width = 100;
+                        }
+                    ).BindList(Model.AvailableDates).GetHtml()
+                </div>
+
+                <div class="pull-left report-selector-button">
+                    @Html.DevExpress().Button(
+                        s => {
+                            s.Name = "DownloadButtonBillingProvidersWithoutBilling";
+                            s.Text = "Download";
+                            s.ClientSideEvents.Click = "function(s, e) { }";
+                        }
+                    ).GetHtml()
+                </div>
+
+            </div>
+            <div class="clearfix"></div>*@
+
+
+
+        <div class="report-selector-reportblock">
+            <h3>Unfinalized Providers</h3>
+            <p>List of providers with no finalizations or unfinalized hours on file for the selected period (Excel Format)</p>
+
+            <div class="pull-left">
+                @Html.DevExpress().ComboBox(
+                    cb =>
+                    {
+                        cb.Name = "DateSelectorBillingUnfinalizedProviders";
+                        cb.Properties.TextField = "Display";
+                        cb.Properties.ValueField = "Date";
+                        cb.Properties.ValueType = typeof(DateTime);
+                        cb.PreRender = (sender, e) =>
+                        {
+                            AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model.DefaultDate, "Date");
+                        };
+                        cb.Properties.Caption = "";
+                        cb.Width = 100;
+                    }
+                ).BindList(Model.AvailableDates).GetHtml()
+            </div>
+
+            <div class="pull-left report-selector-button">
+                @Html.DevExpress().Button(
+                    s =>
+                    {
+                        s.Name = "DownloadButtonBillingUnfinalizedProviders";
+                        s.Text = "Download";
+                        s.ClientSideEvents.Click = "function(s, e) { }";
+                    }
+                ).GetHtml()
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+
+    </div>
+
+
+
+
+    <div id="rs-category-catalyst" class="report-selector-category">
+
+        <h2>Catalyst</h2>
+
+        <div class="report-selector-reportblock">
+            <h3>Catalyst Providers Missing Hours Data Report</h3>
+            <p>Listing of providers, patients and dates where providers do not have hours marked as having data. Excel (.xlsx) format.</p>
+
+            <div class="pull-left">
+                @Html.DevExpress().ComboBox(
+                    cb =>
+                    {
+                        cb.Name = "DateSelectorCatalystProvMissingData";
+                        cb.Properties.TextField = "Display";
+                        cb.Properties.ValueField = "Date";
+                        cb.Properties.ValueType = typeof(DateTime);
+                        cb.PreRender = (sender, e) =>
+                        {
+                            AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model.DefaultDate, "Date");
+                        };
+                        cb.Properties.Caption = "";
+                        cb.Width = 100;
+                    }
+                ).BindList(Model.AvailableDates).GetHtml()
+            </div>
+
+            <div class="pull-left report-selector-button">
+                @Html.DevExpress().Button(
+                    s =>
+                    {
+                        s.Name = "DownloadButtonCatalystProvMissingData";
+                        s.Text = "Download";
+                        s.ClientSideEvents.Click = "function(s, e) { }";
+                    }
+                ).GetHtml()
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+
+
+
+
+
+
+    <div id="rs-category-payroll" class="report-selector-category">
+
+        <h2>Payroll</h2>
+
+        <div class="report-selector-reportblock">
+            <h3>Payroll Export</h3>
+            <p>Payable Hours Totals by Provider (Excel Format)</p>
+
+            <div class="pull-left">
+                @Html.DevExpress().ComboBox(
+                    cb =>
+                    {
+                        cb.Name = "DateSelectorPayrollPayrollHours";
+                        cb.Properties.TextField = "Display";
+                        cb.Properties.ValueField = "Date";
+                        cb.Properties.ValueType = typeof(DateTime);
+                        cb.PreRender = (sender, e) =>
+                        {
+                            AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model.DefaultDate, "Date");
+                        };
+                        cb.Properties.Caption = "";
+                        cb.Width = 100;
+                    }
+                ).BindList(Model.AvailableDates).GetHtml()
+            </div>
+
+            <div class="pull-left report-selector-button">
+                @Html.DevExpress().Button(
+                    s =>
+                    {
+                        s.Name = "DownloadButtonPayrollPayrollHours";
+                        s.Text = "Download";
+                        s.ClientSideEvents.Click = "function(s, e) { }";
+                    }
+                ).GetHtml()
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+
+    <div id="rs-category-approval" class="report-selector-category">
+
+        <h2>Guardian Hours Approval</h2>
+
+        <div class="report-selector-reportblock">
+            <h3>Guardian Hours Approval Report</h3>
+            <p>Guardian Hours Approval by Insurance (.zip of .pdf files)</p>
+
+            <div class="pull-left">
+                @Html.DevExpress().ComboBox(
+                    cb =>
+                    {
+                        cb.Name = "DateSelectorGuardianApprovalHours";
+                        cb.Properties.TextField = "Display";
+                        cb.Properties.ValueField = "Date";
+                        cb.Properties.ValueType = typeof(DateTime);
+                        cb.PreRender = (sender, e) =>
+                        {
+                            AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model.DefaultDate, "Date");
+                        };
+                        cb.Properties.Caption = "";
+                        cb.Width = 100;
+                    }
+                ).BindList(Model.AvailableDates).GetHtml()
+            </div>
+
+            <div class="pull-left" style="padding-left:5px">
+                @Html.DevExpress().ComboBox(
+                    cb =>
+                    {
+                        cb.Name = "InsuranceSelectorGuardianApprovalHours";
+                        cb.Properties.TextField = "Name";
+                        cb.Properties.ValueField = "ID";
+                        cb.Properties.ValueType = typeof(int);
+                        /*cb.PreRender = (sender, e) =>
+                        {
+                            AABC.Web.Helpers.DevEx.ComboPreRenderByField(sender, Model.DefaultDate, "Date");
+                        };*/
+                        cb.Properties.Caption = "";
+                        cb.Width = 200;
+                    }
+                ).BindList(Model.AvailableInsurance).GetHtml()
+            </div>
+
+            <div class="pull-left report-selector-button">
+                @Html.DevExpress().Button(
+                    s =>
+                    {
+                        s.Name = "DownloadButtonGuardianApprovalHours";
+                        s.Text = "Download";
+                        s.ClientSideEvents.Click = "function(s, e) { }";
+                    }
+                ).GetHtml()
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+
+    <div id="rs-category-authrules" class="report-selector-authrules">
+
+        <h2>Insurance Auth Rule</h2>
+
+        <div class="report-selector-reportblock">
+            <h3>Insurance Auth Rule Report</h3>
+            <p></p>
+
+            <div class="pull-left" style="padding-left:5px">
+                @{
+                    var aInsurance = Model.AvailableInsurance.ToList();
+                    aInsurance.Insert(0, new AABC.Web.Models.Patients.InsuranceListItem() { ID = 0, Name = "All" });
+                }
+                @Html.DevExpress().ComboBox(
+                    cb =>
+                    {
+                        cb.Name = "InsuranceSelectorAuthRuleReport";
+                        cb.Properties.TextField = "Name";
+                        cb.Properties.ValueField = "ID";
+                        cb.Properties.ValueType = typeof(int);
+                        cb.Properties.Caption = "";
+                        cb.SelectedIndex = 0;
+                        cb.Width = 200;
+                    }
+                ).BindList(aInsurance).GetHtml()
+            </div>
+
+            <div class="pull-left report-selector-button">
+                @Html.DevExpress().Button(
+                    s =>
+                    {
+                        s.Name = "DownloadButtonInsuranceAuthRuleReport";
+                        s.Text = "Download";
+                        s.ClientSideEvents.Click = "function(s, e) { }";
+                    }
+                ).GetHtml()
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+
+    <div id="rs-category-userstaff" class="report-selector-userstaff">
+
+        <h2>User-Staff Comparison</h2>
+
+        <div class="report-selector-reportblock">
+            <h3>User and Staff Comparison Report</h3>
+            <p></p>
+            <div class="pull-left report-selector-button">
+                @Html.DevExpress().Button(
+                    s =>
+                    {
+                        s.Name = "DownloadButtonUserStaffReport";
+                        s.Text = "Download";
+                        s.ClientSideEvents.Click = "function(s, e) { }";
+                    }
+                ).GetHtml()
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+
+    <div id="rs-table-dump" class="report-table-dump">
+
+        <h2>Table Dump</h2>
+
+        <div class="report-selector-reportblock">
+            <h3>Patients, Referrals and Providers</h3>
+            <p></p>
+            <div class="pull-left report-selector-button">
+                @Html.DevExpress().Button(
+                    s =>
+                    {
+                        s.Name = "DownloadButtonTableDump";
+                        s.Text = "Download";
+                        s.ClientSideEvents.Click = "function(s, e) { }";
+                    }
+                ).GetHtml()
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+
+
+    <div id="rs-hours-and-notes" class="report-hours-and-notes">
+
+        <h2>Notes &amp; Tasks</h2>
+
+        <div class="report-selector-reportblock">
+            <h3>Latest Notes and Tasks Report (Excel)</h3>
+            <p></p>
+            <div class="pull-left report-selector-button">
+                @Html.DevExpress().Button(
+                    s => {
+                        s.Name = "DownloadLatestNotesAndTasks";
+                        s.Text = "Download";
+                        s.ClientSideEvents.Click = "function(s, e) { }";
+                    }
+                ).GetHtml()
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+
+
+    <div id="rs-provider-caseloads" class="report-provider-caseloads">
+
+        <h2>Providers</h2>
+
+        <div class="report-selector-reportblock">
+            <h3>Provider Caseloads</h3>
+            <p></p>
+            <div class="pull-left report-selector-button">
+                @Html.DevExpress().Button(
+                    s => {
+                        s.Name = "DownloadProviderCaseloads";
+                        s.Text = "Download";
+                        s.ClientSideEvents.Click = "function(s, e) { }";
+                    }
+                ).GetHtml()
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+
+
+    <div id="rs-authorization-utilization" class="report-authorization-utilization">
+
+        <h2>Authorizations</h2>
+
+        <div class="report-selector-reportblock">
+            <h3>Authorization Utilization</h3>
+            <p></p>
+            <div class="pull-left report-selector-button">
+                @Html.DevExpress().Button(
+                    s =>
+                    {
+                        s.Name = "DownloadAuthorizationUtilization";
+                        s.Text = "Download";
+                        s.ClientSideEvents.Click = "function(s, e) { }";
+                    }
+                ).GetHtml()
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+
+    <div>
+
+        
+        <h2>Provider App Utilization</h2>
+
+        <div class="report-selector-reportblock">
+            <h3>Utilization Report</h3>
+            <div class="pull-left report-selector-button">
+                @Html.DevExpress().Button(
+                    s => {
+                        s.Name = "ViewProviderAppUtilizationReport";
+                        s.Text = "View";
+                        s.ClientSideEvents.Click = "function(s, e) { window.location.href = 'ProviderAppUtilizationReport'; }";
+                    }
+                ).GetHtml()
+            </div>
+            <div class="clearfix"></div>
+        </div>
+            
+    </div>
+
+    <div class="spacer-10"></div>
+    <div class="spacer-10"></div>
+</div>
+
+
+
+
+<script type="text/javascript" id="dxss_wf0m4f7wo484gm7w0">
+    $(document).ready(function(){
+        window.Reporting.ReportSelector.initialize();
+        App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+    })
+</script>

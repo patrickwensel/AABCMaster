@@ -1,0 +1,63 @@
+﻿@model AABC.Web.App.Hours.Models.EditVM
+
+<div style="padding: 10px;">
+
+
+
+    <h2>Authorization Reports</h2>
+    <hr />
+    <h4>Select your Report</h4>
+
+    @Html.DevExpress().Button(
+        s => {
+            s.Name = "AuthReportInvalidCaseAuths";
+            s.GroupName = "AuthReportSelect";
+            s.Text = "Invalid Case Auths";
+        }
+    ).GetHtml()
+
+    @Html.DevExpress().Button(
+        s => {
+            s.Name = "AuthReportBreakdownByCase";
+            s.GroupName = "AuthReportSelect";
+            s.Text = "Auth Hour Breakdowns";
+        }
+    ).GetHtml()
+    
+    <hr />
+
+
+    <div id="AuthsReportsContentContainer"></div>
+
+</div>
+
+
+
+
+
+
+
+<script type="text/javascript" id="dxss_wfsadfyhw45m7w0">
+
+    $(document).ready(function(){
+        (function () {
+    
+            var code = {
+
+                initialize: function() {
+                    App.DevEx.GetControl("AuthReportInvalidCaseAuths").Click.AddHandler(function(s, e) {
+                        window.Reporting.Authorization.loadInvalidCaseAuths();
+                    });
+                    App.DevEx.GetControl("AuthReportBreakdownByCase").Click.AddHandler(function(s, e) {
+                        window.Reporting.Authorization.loadBreakdownsByCase();
+                    });
+                }
+
+            }
+
+
+            code.initialize();
+            App.NavBar.InitView(@Html.Raw(Json.Encode(ViewBag.Push)));
+        })();
+    })
+</script>

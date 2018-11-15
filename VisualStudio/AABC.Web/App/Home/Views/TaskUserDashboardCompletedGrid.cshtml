@@ -1,0 +1,84 @@
+﻿@model IEnumerable<AABC.DomainServices.Notes.NoteTaskDTO>
+
+@Html.DevExpress().GridView(s=> {
+    s.Name = "TaskUserDashboardCompletedGrid";
+    s.KeyFieldName = "ID";
+    s.Width = Unit.Percentage(100);
+    s.Height = Unit.Percentage(100);
+    s.Settings.VerticalScrollBarMode = ScrollBarMode.Auto;
+    s.Settings.ShowTitlePanel = false;
+    //s.SettingsPager.PageSize = 200;
+    s.SettingsPager.Mode = GridViewPagerMode.ShowAllRecords;
+    s.SettingsLoadingPanel.Mode = GridViewLoadingPanelMode.Disabled;
+    s.SettingsBehavior.AllowSort = true;
+    s.SettingsBehavior.AllowGroup = false;
+    s.SettingsBehavior.AllowFocusedRow = true;
+    s.SettingsBehavior.AllowSelectSingleRowOnly = false;
+
+    // cell/row double click (http://kb.dymeng.com/kb/DevExMVCGridView)
+    s.HtmlDataCellPrepared = (sender, e) =>
+    {
+        e.Cell.Attributes.Add("data-dym-cellClick", "TaskUserDashboardCompletedGrid");
+        e.Cell.Attributes.Add("data-dym-visibleIndex", e.VisibleIndex.ToString());
+        e.Cell.Attributes.Add("data-dym-fieldName", e.DataColumn.FieldName);
+    };
+    s.Columns.Add(col =>
+    {
+        col.Name = "SourceType";
+        col.Caption = "Source";
+        col.FieldName = "SourceType";
+        col.Width = 90;
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+    s.Columns.Add(col =>
+    {
+        col.Name = "DueDate";
+        col.Caption = "Due Date";
+        col.FieldName = "DueDate";
+        col.PropertiesEdit.DisplayFormatString = "d";
+        col.Width = 90;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
+        col.CellStyle.HorizontalAlign = HorizontalAlign.Center;
+    });
+    s.Columns.Add(col =>
+    {
+        col.Name = "PatientName";
+        col.Width = 175;
+        col.Caption = "Patient";
+        col.FieldName = "PatientName";
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Left;
+    });
+    s.Columns.Add(col =>
+    {
+        col.Name = "Description";
+        col.Caption = "Description";
+        col.FieldName = "Description";
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Left;
+    });
+    s.Columns.Add(col =>
+    {
+        col.Name = "AssignedToName";
+        col.Width = 175;
+        col.Caption = "Assigned To";
+        col.FieldName = "AssignedToName";
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Left;
+    });
+    s.Columns.Add(col =>
+    {
+        col.Name = "CompletedByName";
+        col.Width = 175;
+        col.Caption = "Completed By";
+        col.FieldName = "CompletedByName";
+        col.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        col.HeaderStyle.HorizontalAlign = HorizontalAlign.Left;
+    });
+}).Bind(Model).GetHtml()
+
+
+
+

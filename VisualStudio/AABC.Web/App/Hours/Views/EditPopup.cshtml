@@ -1,0 +1,237 @@
+﻿@model AABC.Web.App.Hours.Models.EditPopupVM
+
+@{ 
+    var m = Model;
+}
+
+<style>#form-layout-table > td { padding-left: 15px;}</style>
+
+<table>
+<tr>
+    <td>
+<table id="form-layout-table">
+
+    <tr><td>ID:</td><td>
+        @Html.DevExpress().TextBox(s=> {
+            s.Name = "ctlID";
+            s.Enabled = false;
+        }).Bind(m.ID).GetHtml()</td></tr>
+
+    <tr><td>Date Created:</td><td>
+        @Html.DevExpress().TextBox(s => {
+            s.Name = "ctlDateCreated";
+            s.Enabled = false;
+        }).Bind(m.DateCreated).GetHtml()</td></tr>
+    
+    <tr><td>Patient:</td>
+        <td>
+            @Html.DevExpress().TextBox(s => {
+                s.Name = "ctlPatientName";
+                s.Enabled = false;
+            }).Bind(m.PatientName).GetHtml()</td></tr>
+
+    <tr><td>Provider:</td><td>
+            @Html.DevExpress().TextBox(s => {
+    s.Name = "ctlProviderName";
+    s.Enabled = false;
+}).Bind(m.ProviderName).GetHtml()
+        </td>
+    </tr>
+
+    <tr>
+        <td>Status:</td>
+        <td>
+            @Html.DevExpress().ComboBox(s => {
+           s.Name = "ctlStatus";
+           s.Properties.ValueType = typeof(AABC.Domain.Cases.AuthorizationHoursStatus);
+           s.Properties.Items.Add("Not Committed", AABC.Domain.Cases.AuthorizationHoursStatus.Pending);
+           s.Properties.Items.Add("Committed", AABC.Domain.Cases.AuthorizationHoursStatus.ComittedByProvider);
+           s.Properties.Items.Add("Finalized", AABC.Domain.Cases.AuthorizationHoursStatus.FinalizedByProvider);
+           s.Properties.Items.Add("Scrubbed", AABC.Domain.Cases.AuthorizationHoursStatus.ScrubbedByAdmin);
+       }).Bind(Model.Status).GetHtml()
+        </td>
+    </tr>
+    
+    <tr><td>Date:</td><td>
+@Html.DevExpress().DateEdit(s=> {
+    s.Name = "ctlDate";
+    s.Properties.DisplayFormatString = "d";
+}).Bind(m.Date).GetHtml()</td></tr>
+
+
+    <tr><td>Time In:</td><td>
+@Html.DevExpress().TimeEdit(s=> { s.Name = "ctlTimeIn"; s.Properties.DisplayFormatString = "t"; }).Bind(m.TimeIn).GetHtml()</td></tr>
+
+
+
+    <tr><td>Time Out:</td><td>
+@Html.DevExpress().TimeEdit(s=> { s.Name = "ctlTimeOut"; s.Properties.DisplayFormatString = "t"; }).Bind(m.TimeOut).GetHtml()</td></tr>
+
+
+
+    <tr><td>Total Hours:</td><td>
+@Html.DevExpress().TextBox(s=> { s.Name = "ctlTotalHours"; }).Bind(m.TotalHours).GetHtml()</td></tr>
+
+
+
+    <tr>
+        <td>Service:</td>
+        <td>
+            @Html.DevExpress().ComboBox(s => {
+           s.Name = "ctlServiceID";
+           s.Properties.ValueField = "ID";
+           s.Properties.TextField = "Code";
+           s.Properties.ValueType = typeof(int);
+           s.Properties.Columns.Add("Code");
+           s.Properties.Columns.Add("Name");
+           s.PreRender = (sender, e) => {
+               MVCxComboBox cb = sender as MVCxComboBox;
+               cb.SelectedItem = cb.Items.FindByValue(Model.ServiceID);
+           };
+       }).BindList(Model.ServicesList).Bind(Model.ServiceID).GetHtml()
+        </td>
+    </tr>
+
+
+
+
+    @{
+        string notesStyle = "";
+        if(Model.ExtendedNotes != null && String.IsNullOrEmpty(Model.Notes))
+        {
+            notesStyle = "display: none";
+        }
+    <tr style="@notesStyle"><td valign="top">Notes:</td><td>
+@Html.DevExpress().Memo(s => { s.Name = "ctlNotes"; s.Properties.Rows = 4; s.Width = Unit.Percentage(100); }).Bind(m.Notes).GetHtml()</td></tr>
+    }
+
+
+
+    <tr><td>Billable:</td><td>
+@Html.DevExpress().TextBox(s=> { s.Name = "ctlBillableHours";; }).Bind(m.BillableHours).GetHtml()</td></tr>
+    <tr><td>Billing Ref:</td><td>
+@Html.DevExpress().TextBox(s=> { s.Name = "ctlBillingRef"; }).Bind(m.BillingRef).GetHtml()</td></tr>
+    <tr><td>Payable:</td><td>
+@Html.DevExpress().TextBox(s=> { s.Name = "ctlPayableHours"; }).Bind(m.PayableHours).GetHtml()</td></tr>
+    <tr><td>Has Data:</td><td>
+@Html.DevExpress().CheckBox(s=> { s.Name = "ctlHasCatalystData"; }).Bind(m.HasCatalystData).GetHtml()</td></tr>
+    <tr><td>SSG Parent:</td><td>
+@Html.DevExpress().TextBox(s=> { s.Name = "ctlSSGParentID"; }).Bind(m.SSGParentID).GetHtml()</td></tr>
+    
+    <tr>
+        <td>Service Loc:</td>
+        <td>
+            @Html.DevExpress().ComboBox(s => {
+           s.Name = "ctlServiceLocationID";
+           s.Properties.ValueField = "ID";
+           s.Properties.TextField = "Name";
+           s.Properties.ValueType = typeof(int);
+           s.PreRender = (sender, e) => {
+               MVCxComboBox cb = sender as MVCxComboBox;
+               cb.SelectedItem = cb.Items.FindByValue(Model.ServiceLocationID);
+           };
+       }).BindList(Model.ServiceLocationsList).Bind(Model.ServiceLocationID).GetHtml()
+        </td>
+    </tr>
+
+    <tr style="height:35px">
+        <td>Authorization:</td>
+        <td style="padding:5px">
+
+            @Model.Authorizations
+
+        </td>
+    </tr>
+    
+
+</table>
+        </td>
+
+    @if (Model.ExtendedNotes != null)
+    {
+    <td>
+
+        <div style="margin-top: 0px;  max-height: 467px; width:350px; overflow: auto;">
+
+            @foreach (var group in Model.ExtendedNotes)
+            {
+
+                <ul class="question-list">
+                    <li>
+                        <h4 style="padding: 0; margin: 0; margin-bottom: 5px;">@group.Key</h4>
+                        <ul>
+                            @foreach (var item in group.Value)
+                            {
+                                <li>
+                                    @item.Template.Text: <br />
+                                    @Html.DevExpress().TextBox(
+                         s =>
+                         {
+                             s.Name = "qtb_" + item.TemplateID;
+                             s.Width = Unit.Percentage(100);
+                             s.Attributes.Add("data-dym-qtemplateID", item.TemplateID.ToString());
+                             s.Attributes.Add("data-dym-qnoteID", item.ID.ToString());
+                         }
+                        ).Bind(item.Answer).GetHtml()
+
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                </ul>
+            }
+
+        </div>
+
+
+    </td>
+    }
+    </tr>
+
+    <tr>
+        <td colspan="2" align="right">
+            <div class="spacer-10"></div>
+            <table>
+                <tr>
+                    <td>
+                        @Html.DevExpress().Button(s =>
+           {
+               s.Name = "btnCancel";
+               s.Text = "Cancel";
+           }).GetHtml()
+                    </td>
+                    <td style="padding-left: 5px;">
+                        @Html.DevExpress().Button(s =>
+           {
+               s.Name = "btnSave";
+               s.Text = "Save";
+           }).GetHtml()
+
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+</table>
+
+<script type="text/javascript" id="dxss_203958v23048572bn03">HoursEdit.Editor.InitializePopup();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,14 @@
+﻿@model ModelStateDictionary
+
+@if (!Model.IsValid) {
+    <div class="@(Html.ViewData.ModelState.IsValid ? "validation-summary-value" : "validation-summary-errors") alert alert-danger"
+         data-valmsg-summary="true">
+
+        <ul>
+            @foreach (var err in Model.SelectMany(kv => kv.Value.Errors)) {
+                <li>@err.ErrorMessage</li>
+            }
+        </ul>
+
+    </div>
+}
